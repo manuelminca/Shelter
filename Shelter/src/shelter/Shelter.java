@@ -29,6 +29,10 @@ public class Shelter extends javax.swing.JFrame {
 
         icon = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        textprueba = new javax.swing.JTextField();
+        botonprueba = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        textarea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -36,6 +40,30 @@ public class Shelter extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Athelas", 0, 24)); // NOI18N
         jLabel1.setText("Shelter");
+
+        textprueba.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textpruebaActionPerformed(evt);
+            }
+        });
+        textprueba.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textpruebaKeyPressed(evt);
+            }
+        });
+
+        botonprueba.setText("jButton1");
+        botonprueba.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonpruebaActionPerformed(evt);
+            }
+        });
+
+        textarea.setColumns(20);
+        textarea.setRows(5);
+        textarea.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        textarea.setEnabled(false);
+        jScrollPane1.setViewportView(textarea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -46,20 +74,50 @@ public class Shelter extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(icon))
-                .addContainerGap(695, Short.MAX_VALUE))
+                .addGap(72, 72, 72)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(textprueba, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(botonprueba, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(355, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(icon)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addContainerGap(424, Short.MAX_VALUE))
+                .addGap(11, 11, 11)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addComponent(textprueba, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(botonprueba)
+                .addContainerGap(126, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void botonpruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonpruebaActionPerformed
+        // TODO add your handling code here:
+        
+        textarea.setEditable(false);
+        textarea.setText(textarea.getText() + textprueba.getText() + "\n");
+        
+        
+        
+    }//GEN-LAST:event_botonpruebaActionPerformed
+
+    private void textpruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textpruebaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textpruebaActionPerformed
+
+    private void textpruebaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textpruebaKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textpruebaKeyPressed
 
     /**
      * @param args the command line arguments
@@ -97,7 +155,11 @@ public class Shelter extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonprueba;
     private javax.swing.JLabel icon;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea textarea;
+    private javax.swing.JTextField textprueba;
     // End of variables declaration//GEN-END:variables
 }
