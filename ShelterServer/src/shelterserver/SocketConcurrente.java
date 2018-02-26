@@ -24,7 +24,7 @@ public class SocketConcurrente {
                 Socket skCliente = skServidor.accept(); // Crea objeto
                 System.out.println("Sirviendo cliente...");
 
-                Thread t = new SocketThread(skCliente, "3000", "4000");
+                Thread t = new SocketThread(skCliente);
                 t.start();
             }
         } catch (Exception e) {

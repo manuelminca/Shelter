@@ -5,28 +5,52 @@
  */
 package shelter;
 
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import static jdk.nashorn.internal.objects.NativeError.printStackTrace;
 
 /**
  *
  * @author minguez
  */
 public class Shelter extends javax.swing.JFrame {
-
+    
+    private String username;
+    private ClienteSocket objCliente;
     /**
      * Creates new form Shelter
      */
     public Shelter() {
-        System.out.println("Estoy en el constructor");
+        username = "manu";
         initComponents();
-        inicio();
+        try {
+            inicio();
+        } catch (Exception e) {
+            printStackTrace(e);
+            System.out.println("Ha saltado excepcion en el inicio()");
+        }
+        
+        
     }
 
-    public void inicio(){
-         Socket socket = new Socket();
-         System.out.println("Estoy aqui");
-         String cadena = socket.test();
+    public void inicio() {
+
+        try {
+            InetAddress address = InetAddress.getLocalHost();
+            String hostIP = address.getHostAddress();
+            String hostName = address.getHostName();
+            System.out.println("IP: " + hostIP + "\n" + "Name: " + hostName);
+            objCliente = new ClienteSocket();
+            objCliente.iniciaConexion(hostIP, "3000", username); //llamamos a registrar el usuario en el servidor
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(Shelter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -141,7 +165,14 @@ public class Shelter extends javax.swing.JFrame {
 
     private void botonpruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonpruebaActionPerformed
         textarea.setText(textarea.getText() + textprueba.getText() + "\n");
-        textprueba.setText("");   
+        
+        //Enviamos la cadena al servidor
+        String cadena = username + "@usuario2@" + textprueba.getText();
+        
+        objCliente.procesaPeticion(cadena);
+        textprueba.setText("");
+        
+        
     }//GEN-LAST:event_botonpruebaActionPerformed
 
     private void textpruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textpruebaActionPerformed
@@ -149,9 +180,9 @@ public class Shelter extends javax.swing.JFrame {
     }//GEN-LAST:event_textpruebaActionPerformed
 
     private void textpruebaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textpruebaKeyPressed
-        if(evt.getKeyCode() == 10){
-        textarea.setText(textarea.getText() + textprueba.getText() + "\n");
-        textprueba.setText("");
+        if (evt.getKeyCode() == 10) {
+            textarea.setText(textarea.getText() + textprueba.getText() + "\n");
+            textprueba.setText("");
         }
 
     }//GEN-LAST:event_textpruebaKeyPressed
