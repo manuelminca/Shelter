@@ -23,6 +23,7 @@ public class Shelter extends javax.swing.JFrame {
     public void inicio(){
          Socket socket = new Socket();
          System.out.println("Estoy aqui");
+         String cadena = socket.test();
     }
     /**
      * This method is called from within the constructor to initialize the form.
