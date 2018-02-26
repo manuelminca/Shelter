@@ -25,11 +25,11 @@ public class SocketThread extends Thread {
     private Socket skCliente;
     private String ipUsuario;
     private String puertoUsuario;
-    List<Cliente> clientes; 
+    final static List<Cliente> clientes = new ArrayList<Cliente>(); //Aqui se guardan las ip, los puertos y el nombre de usuario, pienso que tambien deberiamos guardar el socket
+    //abierto correspondiente para directamente buscar por username y mandar la info al socket
 
     public SocketThread(Socket p_cliente) {
         this.skCliente = p_cliente;
-        clientes = new ArrayList<Cliente>();
     }
 
     public String leerSocket(Socket socket) throws IOException {
@@ -50,44 +50,50 @@ public class SocketThread extends Thread {
         flujo.writeUTF(datos);
     }
 
-    private void addUsuario(String[] partes){
+    private void addUsuario(String[] partes) {
         String nuevoUsuario = partes[0];
         boolean aux = false;
         for (Cliente cliente : clientes) {
-        if (cliente.getUsername().equals(partes[0])) {
-            aux = true;
+            if (cliente.getUsername().equals(partes[0])) {
+                aux = true;
+            }
         }
-        }
-        
-        if(!aux){
+
+        if (!aux) {
             //añadir el usuario a la lista de usuarios conectados 
-            Cliente cliente = new Cliente();
-            cliente.setIp(partes[1]);
-            cliente.setPuerto(partes[2]);
-            cliente.setUsername(partes[3]);
-            
-            clientes.add(cliente); //añadimos el cliente a la lista de clientes cuando no esta previamente registrado
+
+            Socket socket;
+            try {
+                socket = new Socket(partes[1], Integer.parseInt(partes[2]));
+                Cliente cliente = new Cliente(partes[1], partes[2], partes[3], socket);
+
+                clientes.add(cliente); //añadimos el cliente a la lista de clientes cuando no esta previamente registrado
+            } catch (IOException ex) {
+                Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
     }
-    
-    public void procesaCadena(String mensaje){
-        
+
+    public void procesaCadena(String mensaje) {
+
         String[] partes = mensaje.split("@");
-        if(partes[0].equals("REGISTRO")){
+        if (partes[0].equals("REGISTRO")) {
             addUsuario(partes);
         }
-        
-        
-        
+
+        //Aqui tenemos que mirar ahora si es un mensaje normal de chat y entonces buscar el usuario y enviarselo a esa direccion
+        //Como sabemos el puerto e ip del usuario tenemos que enviarle al socket correspondiente
     }
+
     public void run() {
-        
+
         System.out.println("Comienza el run()");
-        
+
         try {
             String mensaje = leerSocket(skCliente); //de primeras recibimos la cadena para registrar el usuario
-            procesaCadena(mensaje); //cuando esto acabe ya hay un elemento mas en el arraylist con ip, puerto y nombre de usuario
-            
+            procesaCadena(mensaje); //cuando esto acabe ya hay un elemento mas en el arraylist con ip, puerto, nombre de usuario y socket
+
         } catch (IOException ex) {
             Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
         }

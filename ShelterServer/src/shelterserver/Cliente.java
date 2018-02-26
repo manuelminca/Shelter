@@ -5,6 +5,8 @@
  */
 package shelterserver;
 
+import java.net.Socket;
+
 /**
  *
  * @author minguez
@@ -13,7 +15,19 @@ public class Cliente {
     private String ip;
     private String puerto;
     private String username;
+    private Socket socket;
 
+    public Cliente(String ip, String puerto, String username, Socket socket) {
+        this.ip = ip;
+        this.puerto = puerto;
+        this.username = username;
+        this.socket = socket;
+    }
+
+    
+    
+    
+    
     public String getIp() {
         return ip;
     }
@@ -37,6 +51,16 @@ public class Cliente {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+    
+    
     
     
     
