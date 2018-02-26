@@ -15,12 +15,14 @@ public class Shelter extends javax.swing.JFrame {
      * Creates new form Shelter
      */
     public Shelter() {
+        System.out.println("Estoy en el constructor");
         initComponents();
         inicio();
     }
 
     public void inicio(){
-
+         Socket socket = new Socket();
+         System.out.println("Estoy aqui");
     }
     /**
      * This method is called from within the constructor to initialize the form.
