@@ -5,6 +5,8 @@
  */
 package shelter;
 
+import java.net.Socket;
+
 /**
  *
  * @author minguez
@@ -21,8 +23,8 @@ public class Shelter extends javax.swing.JFrame {
     }
 
     public void inicio(){
-         Socket socket = new Socket();
-         System.out.println("Estoy aqui");
+       
+         
     }
     /**
      * This method is called from within the constructor to initialize the form.

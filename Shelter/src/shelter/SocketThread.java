@@ -9,8 +9,8 @@ package shelter;
  *
  * @author minguez
  */
-public class Socket {
-    public String test(){
-        return "test";
+public class SocketThread extends Thread{
+    public SocketThread(int puerto){
+        
     }
 }
