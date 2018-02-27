@@ -20,6 +20,8 @@ import java.util.logging.Logger;
  *
  * @author minguez
  */
+
+//hilo del socke
 public class SocketThread extends Thread {
 
     private Socket skCliente;
@@ -64,7 +66,9 @@ public class SocketThread extends Thread {
 
             Socket socket;
             try {
-                socket = new Socket(partes[1], Integer.parseInt(partes[2]));
+                int puerto = Integer.parseInt(partes[2]);
+                System.out.println(puerto);
+                socket = new Socket(partes[1], skCliente.getPort());
                 Cliente cliente = new Cliente(partes[1], partes[2], partes[3], socket);
 
                 clientes.add(cliente); //añadimos el cliente a la lista de clientes cuando no esta previamente registrado
@@ -92,9 +96,14 @@ public class SocketThread extends Thread {
 
         try {
             String mensaje = leerSocket(skCliente); //de primeras recibimos la cadena para registrar el usuario
+            System.out.println("cadena recibida de  " + skCliente.getInetAddress().getHostName()
+                        +":" + skCliente.getPort());
             procesaCadena(mensaje); //cuando esto acabe ya hay un elemento mas en el arraylist con ip, puerto, nombre de usuario y socket
+            System.out.println("termina el run()");
 
         } catch (IOException ex) {
+            System.out.println("cdsfsdf el run()");
+
             Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

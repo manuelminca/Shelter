@@ -37,7 +37,6 @@ public class Shelter extends javax.swing.JFrame {
     }
 
     public void inicio() {
-
         try {
             InetAddress address = InetAddress.getLocalHost();
             String hostIP = address.getHostAddress();

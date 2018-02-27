@@ -21,7 +21,9 @@ public class ClienteSocket {
     
     public ClienteSocket() {
         try{
-            socket = new Socket("localhost", 4000);
+            final int puerto = 4000;
+            socket = new Socket("192.168.1.3",puerto);
+            System.out.println(socket.getPort());
         }catch(Exception e){
             System.out.println("ERROR LANZADO");
         }
@@ -58,8 +60,8 @@ public class ClienteSocket {
             
             String cadena = "REGISTRO@" + ip + "@" + puerto + "@" + username;
             
-            System.out.println(cadena);
-            
+            System.out.println("cadena que le paso al servidor: " + cadena);
+            System.out.println("puesrto: " + socket.getPort());
             escribirSocket(socket, cadena);
            
         }catch(Exception e){

@@ -11,6 +11,8 @@ import java.net.*;
  *
  * @author minguez
  */
+
+//crea los hilos del socket
 public class SocketConcurrente {
 
     public void inicio() {
@@ -22,7 +24,8 @@ public class SocketConcurrente {
 
             for (;;) {
                 Socket skCliente = skServidor.accept(); // Crea objeto
-                System.out.println("Sirviendo cliente...");
+                System.out.println("Cliente: " + skCliente.getInetAddress().getHostName()
+                        +":" + skCliente.getPort()+ " conectado.");
 
                 Thread t = new SocketThread(skCliente);
                 t.start();
@@ -30,5 +33,7 @@ public class SocketConcurrente {
         } catch (Exception e) {
             System.out.println("Error: " + e.toString());
         }
+        System.out.println("Termino icinicio");
+
     }
 }

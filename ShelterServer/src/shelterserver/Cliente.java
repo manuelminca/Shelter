@@ -11,6 +11,9 @@ import java.net.Socket;
  *
  * @author minguez
  */
+
+
+// informacion del cliuente
 public class Cliente {
     private String ip;
     private String puerto;
@@ -24,10 +27,6 @@ public class Cliente {
         this.socket = socket;
     }
 
-    
-    
-    
-    
     public String getIp() {
         return ip;
     }
