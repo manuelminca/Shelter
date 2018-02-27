@@ -5,6 +5,7 @@
  */
 package shelter;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -19,7 +20,9 @@ import static jdk.nashorn.internal.objects.NativeError.printStackTrace;
 public class Shelter extends javax.swing.JFrame {
     
     private String username;
-    private ClienteSocket objCliente;
+    private  ClienteSocket objCliente;
+    
+    Thread hilodeEscucha;
     /**
      * Creates new form Shelter
      */
@@ -36,15 +39,17 @@ public class Shelter extends javax.swing.JFrame {
         
     }
 
-    public void inicio() {
-
+    public void inicio() throws IOException {
         try {
             InetAddress address = InetAddress.getLocalHost();
             String hostIP = address.getHostAddress();
             String hostName = address.getHostName();
             System.out.println("IP: " + hostIP + "\n" + "Name: " + hostName);
             objCliente = new ClienteSocket();
+            
             objCliente.iniciaConexion(hostIP, "3000", username); //llamamos a registrar el usuario en el servidor
+            objCliente.iniciaServidor();
+            
         } catch (UnknownHostException ex) {
             Logger.getLogger(Shelter.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -68,6 +73,7 @@ public class Shelter extends javax.swing.JFrame {
         textarea = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -96,7 +102,7 @@ public class Shelter extends javax.swing.JFrame {
 
         textarea.setColumns(20);
         textarea.setRows(5);
-        textarea.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        textarea.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         textarea.setEnabled(false);
         jScrollPane1.setViewportView(textarea);
 
@@ -120,6 +126,13 @@ public class Shelter extends javax.swing.JFrame {
                 .addContainerGap(327, Short.MAX_VALUE))
         );
 
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -135,17 +148,28 @@ public class Shelter extends javax.swing.JFrame {
                             .addComponent(icon))))
                 .addGap(86, 86, 86)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(textprueba)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(botonprueba)
-                .addGap(99, 99, 99))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(textprueba)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(botonprueba)
+                        .addGap(99, 99, 99))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(116, 116, 116)
+                        .addComponent(jButton1)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(icon)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(icon))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -169,8 +193,14 @@ public class Shelter extends javax.swing.JFrame {
         //Enviamos la cadena al servidor
         String cadena = "MENSAJE@" + username + "@" + textprueba.getText();
         
-        //objCliente.procesaPeticion(cadena);
+        objCliente.procesaPeticion(cadena);
         textprueba.setText("");
+        
+        String msj = objCliente.escuchaServidor();
+        
+        
+        System.out.println(msj);
+        textarea.setText(textarea.getText() + msj + "\n");
         
         
     }//GEN-LAST:event_botonpruebaActionPerformed
@@ -186,6 +216,10 @@ public class Shelter extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_textpruebaKeyPressed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -218,6 +252,9 @@ public class Shelter extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Shelter().setVisible(true);
+                
+                //String mensaje = objCliente.escuchaServidor();
+                
             }
         });
     }
@@ -225,6 +262,7 @@ public class Shelter extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonprueba;
     private javax.swing.JLabel icon;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
