@@ -16,7 +16,9 @@ public class ShelterServer {
      */
     public static void main(String[] args) {
         //Pagina para crear y el siguiente video usar la BD https://www.youtube.com/watch?v=HLx1ySEVAgQ
-        System.out.println("Hola Mundo");
+        
+        SocketConcurrente sk_concurrente = new SocketConcurrente();
+        sk_concurrente.inicio();
              
     }
     
