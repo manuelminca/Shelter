@@ -53,11 +53,16 @@ public class SocketThread extends Thread {
     }
 
     private void addUsuario(String[] partes) {
-        String nuevoUsuario = partes[0];
+        String nuevoUsuario = partes[3];
         boolean aux = false;
-        for (Cliente cliente : clientes) {
-            if (cliente.getUsername().equals(partes[0])) {
-                aux = true;
+
+        System.out.println(clientes.size());
+
+        if (clientes.size() != 0) {
+            for (Cliente cliente : clientes) {
+                if (cliente.getUsername().equals(partes[3])) {
+                    aux = true;
+                }
             }
         }
 
@@ -66,28 +71,32 @@ public class SocketThread extends Thread {
 
             Socket socket;
             try {
-                int puerto = Integer.parseInt(partes[2]);
-                System.out.println(puerto);
-                socket = new Socket(partes[1], skCliente.getPort());
+                socket = new Socket(partes[1], Integer.parseInt(partes[2])); //socket = new Socket(partes[1], Integer.parseInt(partes[2]));
                 Cliente cliente = new Cliente(partes[1], partes[2], partes[3], socket);
-
                 clientes.add(cliente); //añadimos el cliente a la lista de clientes cuando no esta previamente registrado
+                System.out.println("Cliente " + partes[3] + " añadido al arraylist");
             } catch (IOException ex) {
                 Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
+          
     }
 
-    public void procesaCadena(String mensaje) {
-
+    public void procesaCadena(String mensaje) throws IOException {
+        System.out.println("entramos en procesa cadena con el mensaje " + mensaje);
         String[] partes = mensaje.split("@");
         if (partes[0].equals("REGISTRO")) {
             addUsuario(partes);
+        }else if (partes[0].equals("MENSAJE")){
+            //Aqui tenemos que mirar ahora si es un mensaje normal de chat y entonces buscar el usuario y enviarselo a esa direccion
+            //Como sabemos el puerto e ip del usuario tenemos que enviarle al socket correspondiente
+            
+            escribirSocket(clientes.get(0).getSocket(), "Hola soy el servidor tio");
+               
         }
 
-        //Aqui tenemos que mirar ahora si es un mensaje normal de chat y entonces buscar el usuario y enviarselo a esa direccion
-        //Como sabemos el puerto e ip del usuario tenemos que enviarle al socket correspondiente
+        
     }
 
     public void run() {
@@ -99,8 +108,7 @@ public class SocketThread extends Thread {
             System.out.println("cadena recibida de  " + skCliente.getInetAddress().getHostName()
                         +":" + skCliente.getPort());
             procesaCadena(mensaje); //cuando esto acabe ya hay un elemento mas en el arraylist con ip, puerto, nombre de usuario y socket
-            System.out.println("termina el run()");
-
+            System.out.println("salimos de procesacadena");
         } catch (IOException ex) {
             System.out.println("cdsfsdf el run()");
 

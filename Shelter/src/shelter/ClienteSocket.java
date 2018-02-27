@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
@@ -17,22 +18,24 @@ import java.net.Socket;
  * @author minguez
  */
 public class ClienteSocket {
-    private Socket socket;
-    
+
+    private Socket socketServidor;
+
     public ClienteSocket() {
-        try{
-            final int puerto = 4000;
-            socket = new Socket("192.168.1.3",puerto);
-            System.out.println(socket.getPort());
-        }catch(Exception e){
+        try {
+            socketServidor = new Socket("localhost", 4000);
+        } catch (Exception e) {
             System.out.println("ERROR LANZADO");
         }
-        
+
     }
-    
-    public String leerSocket(Socket socket, String datos) throws IOException {
+
+    public String leerSocket(Socket socket) throws IOException {
+        String datos;
+
         InputStream aux = socket.getInputStream();
         DataInputStream flujo = new DataInputStream(aux);
+        datos = new String();
         datos = flujo.readUTF();
         return datos;
     }
@@ -44,30 +47,36 @@ public class ClienteSocket {
         flujo.writeUTF(datos);
     }
 
-    public void cierraSocket() throws IOException{
-        socket.close();
+    public void cierraSocket() throws IOException {
+        socketServidor.close();
     }
-    
+
     public void procesaPeticion(String cadena) {
         try {
-            escribirSocket(socket, cadena);
+            escribirSocket(socketServidor, cadena);
         } catch (Exception e) {
             System.out.println("ERROR LANZADO en Procesa Cadena");
-        }   
+        }
     }
+
+    
+    
+    public void iniciaServidor() throws IOException{
+        ServerSocket skServidor = new ServerSocket(3000);
+        Socket socketCliente = skServidor.accept();
+    }
+    
+    
     public void iniciaConexion(String ip, String puerto, String username) {
-        try{
-            
+        try {
+
             String cadena = "REGISTRO@" + ip + "@" + puerto + "@" + username;
-            
-            System.out.println("cadena que le paso al servidor: " + cadena);
-            System.out.println("puesrto: " + socket.getPort());
-            escribirSocket(socket, cadena);
-           
-        }catch(Exception e){
+            System.out.println(cadena);
+            escribirSocket(socketServidor, cadena);
+        } catch (Exception e) {
             System.out.println("ERROR LANZADO");
         }
-        
+
     }
 
 }

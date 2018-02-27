@@ -49,7 +49,7 @@ public class Shelter extends javax.swing.JFrame {
         }
        
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -166,9 +166,9 @@ public class Shelter extends javax.swing.JFrame {
         textarea.setText(textarea.getText() + textprueba.getText() + "\n");
         
         //Enviamos la cadena al servidor
-        String cadena = username + "@usuario2@" + textprueba.getText();
+        String cadena = "MENSAJE@" + username + "@" + textprueba.getText();
         
-        objCliente.procesaPeticion(cadena);
+        //objCliente.procesaPeticion(cadena);
         textprueba.setText("");
         
         
