@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,6 +22,7 @@ import java.net.Socket;
 public class ClienteSocket {
 
     private Socket socketServidor;
+    private Socket socketCliente;
 
     public ClienteSocket() {
         try {
@@ -27,6 +30,7 @@ public class ClienteSocket {
         } catch (Exception e) {
             System.out.println("ERROR LANZADO");
         }
+       
 
     }
 
@@ -62,8 +66,12 @@ public class ClienteSocket {
     
     
     public void iniciaServidor() throws IOException{
-        ServerSocket skServidor = new ServerSocket(3000);
-        Socket socketCliente = skServidor.accept();
+        try{
+            ServerSocket skServidor = new ServerSocket(3000);
+            socketCliente = skServidor.accept();
+        }catch (Exception e) {
+            System.out.println("ERROR a iniciar servidor");
+        }
     }
     
     
@@ -72,11 +80,25 @@ public class ClienteSocket {
 
             String cadena = "REGISTRO@" + ip + "@" + puerto + "@" + username;
             System.out.println(cadena);
+            //PETA AQUI
             escribirSocket(socketServidor, cadena);
         } catch (Exception e) {
             System.out.println("ERROR LANZADO");
         }
 
+    }
+    
+    public String escuchaServidor(){
+        while(true){
+            String mensaje = "";
+            try {
+                System.out.println("vamos a leer socket");
+                mensaje  = leerSocket(socketCliente);
+            } catch (IOException ex) {
+                Logger.getLogger(ClienteSocket.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return mensaje;
+        }
     }
 
 }
