@@ -20,7 +20,7 @@ public class Cliente {
     private String username;
     private Socket socket;
 
-    public Cliente(String ip, String puerto, String username, Socket socket) {
+    public Cliente(String ip, String puerto, String username) {
         this.ip = ip;
         this.puerto = puerto;
         this.username = username;

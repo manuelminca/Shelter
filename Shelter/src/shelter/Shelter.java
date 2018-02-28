@@ -47,9 +47,11 @@ public class Shelter extends javax.swing.JFrame {
             System.out.println("IP: " + hostIP + "\n" + "Name: " + hostName);
             objCliente = new ClienteSocket();
             
-            objCliente.iniciaConexion(hostIP, "3000", username); //llamamos a registrar el usuario en el servidor
-            objCliente.iniciaServidor();
-            
+            objCliente.iniciaConexion(hostIP, "4000", username); //llamamos a registrar el usuario en el servidor
+            System.out.println("estoy aqui");
+            //objCliente.iniciaServidor();
+            objCliente.escuchaServidor();
+
         } catch (UnknownHostException ex) {
             Logger.getLogger(Shelter.class.getName()).log(Level.SEVERE, null, ex);
         }
