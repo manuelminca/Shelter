@@ -106,5 +106,22 @@ public class ClienteSocket {
             return mensaje;
         }
     }
+    
+    public String escuchaServidor(javax.swing.JTextArea texArea){
+
+        while(true){
+            String mensaje = "";
+            try {
+                System.out.println("vamos a leer socket");
+                mensaje  = leerSocket(socketServidor);
+                texArea.setText(texArea.getText() + mensaje + "\n");
+                //enviarMensaje(mensaje);
+                //textarea.setText(textarea.getText() + msj + "\n");
+            } catch (IOException ex) {
+                Logger.getLogger(ClienteSocket.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return mensaje;
+        }
+    }
 
 }
