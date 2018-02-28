@@ -76,28 +76,26 @@ public class SocketThread extends Thread implements Observer{
         if (!aux) {
             //añadir el usuario a la lista de usuarios conectados 
 
-            Socket socket;
-                //socket = new Socket(partes[1], Integer.parseInt(partes[2])); //socket = new Socket(partes[1], Integer.parseInt(partes[2]));
-                Cliente cliente = new Cliente(partes[1], partes[2], partes[3]);
-                clientes.add(cliente); //añadimos el cliente a la lista de clientes cuando no esta previamente registrado
-                System.out.println("Cliente " + partes[3] + " añadido al arraylist");
-                mensajes.setMensaje("usuario recibido");
+            //Socket socket;
+            //socket = new Socket(partes[1], Integer.parseInt(partes[2])); //socket = new Socket(partes[1], Integer.parseInt(partes[2]));
+            Cliente cliente = new Cliente(partes[1], partes[2], partes[3]);
+            clientes.add(cliente); //añadimos el cliente a la lista de clientes cuando no esta previamente registrado
+            System.out.println("Cliente " + partes[3] + " añadido al arraylist");
+            mensajes.setMensaje("usuario recibido");
 
         }
           
     }
 
     public void procesaCadena(String mensaje) throws IOException {
-        System.out.println("entramos en procesa cadena con el mensaje " + mensaje);
-        String[] partes = mensaje.split("@");
+        String[] partes = mensaje.split(":");
         if (partes[0].equals("REGISTRO")) {
             addUsuario(partes);
-        }else if (partes[0].equals("MENSAJE")){
-
-            System.out.println("Comienza el asdsa()");
+        }else {
+            mensajes.setMensaje(mensaje);
             //Aqui tenemos que mirar ahora si es un mensaje normal de chat y entonces buscar el usuario y enviarselo a esa direccion
             //Como sabemos el puerto e ip del usuario tenemos que enviarle al socket correspondiente   
-            escribirSocket(clientes.get(0).getSocket(), "Hola soy el servidor tio");
+            //escribirSocket(clientes.get(0).getSocket(), "Hola soy el servidor tio");
          
         }
 
@@ -113,7 +111,6 @@ public class SocketThread extends Thread implements Observer{
             //decimos los metodos observados
             mensajes.addObserver(this);
 
-            //FALLA AQUI, EL MENSAJE DEL SOCKET SI QUE SE ENVIA BIEN
             while(true){
                 String mensaje = leerSocket(skCliente); //de primeras recibimos la cadena para registrar el usuario
                 System.out.println("cadena recibida de  " + skCliente.getInetAddress().getHostName()

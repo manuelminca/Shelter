@@ -27,7 +27,7 @@ public class Shelter extends javax.swing.JFrame {
      * Creates new form Shelter
      */
     public Shelter() {
-        username = "manu";
+        username = "amiguis";
         initComponents();
         try {
             inicio();
@@ -204,7 +204,6 @@ public class Shelter extends javax.swing.JFrame {
         textarea.setText(textarea.getText() + textprueba.getText() + "\n");
         
         //Enviamos la cadena al servidor
-        //String cadena = "Mensaje@" + username + "@" + textprueba.getText();
         String cadena = username + ": " +   textprueba.getText();
 
         objCliente.procesaPeticion(cadena);
