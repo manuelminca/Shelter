@@ -24,6 +24,8 @@ public class MensajesChat extends Observable{
     }
     
     public void setMensaje(String mensaje){
+        System.out.println("set");
+
         this.mensaje = mensaje;
         // Indica que el mensaje ha cambiado
         this.setChanged();

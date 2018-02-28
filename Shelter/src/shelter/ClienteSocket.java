@@ -80,7 +80,6 @@ public class ClienteSocket {
 
             String cadena = "REGISTRO@" + ip + "@" + puerto + "@" + username;
             System.out.println(cadena);
-            //PETA AQUI
             escribirSocket(socketServidor, cadena);
         } catch (Exception e) {
             System.out.println("ERROR LANZADO");
@@ -89,6 +88,8 @@ public class ClienteSocket {
     }
     
     public String escuchaServidor(){
+        System.out.println("vamos a leer socket");
+
         while(true){
             String mensaje = "";
             try {
