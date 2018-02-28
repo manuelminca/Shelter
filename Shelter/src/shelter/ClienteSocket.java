@@ -62,8 +62,6 @@ public class ClienteSocket {
             System.out.println("ERROR LANZADO en Procesa Cadena");
         }
     }
-
-    
     
     public void iniciaServidor() throws IOException{
         try{

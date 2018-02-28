@@ -96,11 +96,9 @@ public class SocketThread extends Thread implements Observer{
 
             System.out.println("Comienza el asdsa()");
             //Aqui tenemos que mirar ahora si es un mensaje normal de chat y entonces buscar el usuario y enviarselo a esa direccion
-            //Como sabemos el puerto e ip del usuario tenemos que enviarle al socket correspondiente
-            String mensajeRecibido =  "Hola soy el servidor tio";
-            mensajes.setMensaje(mensajeRecibido);
-            //escribirSocket(clientes.get(0).getSocket(),);
-               
+            //Como sabemos el puerto e ip del usuario tenemos que enviarle al socket correspondiente   
+            escribirSocket(clientes.get(0).getSocket(), "Hola soy el servidor tio");
+         
         }
 
         
