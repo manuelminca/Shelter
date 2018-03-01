@@ -81,7 +81,7 @@ public class SocketThread extends Thread implements Observer{
             Cliente cliente = new Cliente(partes[1], partes[2], partes[3]);
             clientes.add(cliente); //añadimos el cliente a la lista de clientes cuando no esta previamente registrado
             System.out.println("Cliente " + partes[3] + " añadido al arraylist");
-            mensajes.setMensaje("usuario recibido");
+            mensajes.setMensaje("");
 
         }
           
@@ -110,16 +110,15 @@ public class SocketThread extends Thread implements Observer{
         try {
             //decimos los metodos observados
             mensajes.addObserver(this);
+            String mensaje = "";
+            
 
             while(true){
-                String mensaje = leerSocket(skCliente); //de primeras recibimos la cadena para registrar el usuario
-                System.out.println("cadena recibida de  " + skCliente.getInetAddress().getHostName()
-                        +":" + skCliente.getPort());
-  
+                mensaje = leerSocket(skCliente); //de primeras recibimos la cadena para registrar el usuario  
                 procesaCadena(mensaje); //cuando esto acabe ya hay un elemento mas en el arraylist con ip, puerto, nombre de usuario y socket
             }           
         } catch (IOException ex) {
-
+            
             Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

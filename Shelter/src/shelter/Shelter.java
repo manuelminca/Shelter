@@ -18,11 +18,12 @@ import static jdk.nashorn.internal.objects.NativeError.printStackTrace;
  * @author minguez
  */
 public class Shelter extends javax.swing.JFrame {
-    
+
     private String username;
-    private  ClienteSocket objCliente;
-    
+    private ClienteSocket objCliente;
+
     Thread hilodeEscucha;
+
     /**
      * Creates new form Shelter
      */
@@ -35,8 +36,7 @@ public class Shelter extends javax.swing.JFrame {
             printStackTrace(e);
             System.out.println("Ha saltado excepcion en el inicio()");
         }
-        
-        
+
     }
 
     public void inicio() throws IOException {
@@ -57,9 +57,9 @@ public class Shelter extends javax.swing.JFrame {
         } catch (UnknownHostException ex) {
             Logger.getLogger(Shelter.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -130,7 +130,7 @@ public class Shelter extends javax.swing.JFrame {
                 .addContainerGap(327, Short.MAX_VALUE))
         );
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Recibe mensaje");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -191,29 +191,22 @@ public class Shelter extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void actualizarTextArea(){
+    private void actualizarTextArea() {
         textarea.setText(textarea.getText() + textprueba.getText() + "\n");
-        
+
         //Enviamos la cadena al servidor
-       
         String msj = objCliente.escuchaServidor();
-        
+
         textarea.setText(textarea.getText() + msj + "\n");
     }
     private void botonpruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonpruebaActionPerformed
-        textarea.setText(textarea.getText() + textprueba.getText() + "\n");
-        
+        textarea.setText("Yo: " + textarea.getText() + textprueba.getText() + "\n");
         //Enviamos la cadena al servidor
         //String cadena = "Mensaje@" + username + "@" + textprueba.getText();
-        String cadena = username + ": " +   textprueba.getText();
+        String cadena = username + ": " + textprueba.getText();
 
         objCliente.procesaPeticion(cadena);
         textprueba.setText("");
-        String msj = objCliente.escuchaServidor();
-        
-        textarea.setText(textarea.getText() + msj + "\n");
-        
-        
     }//GEN-LAST:event_botonpruebaActionPerformed
 
     private void textpruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textpruebaActionPerformed
@@ -228,13 +221,21 @@ public class Shelter extends javax.swing.JFrame {
 
     }//GEN-LAST:event_textpruebaKeyPressed
 
-    
-    public javax.swing.JTextArea getArea(){
+    public javax.swing.JTextArea getArea() {
         return textarea;
     }
-    
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        
+        
+        String msj = objCliente.escuchaServidor();
+        
+        String[] partes = msj.split(":");
+        
+        if(!partes[0].equals(username)){
+            textarea.setText(textarea.getText() + msj + "\n");
+        }        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -268,9 +269,8 @@ public class Shelter extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Shelter().setVisible(true);
-                
+
                 //String mensaje = objCliente.escuchaServidor();
-                
             }
         });
     }
