@@ -92,14 +92,13 @@ public class SocketThread extends Thread implements Observer{
         if (partes[0].equals("REGISTRO")) {
             addUsuario(partes);
         }else {
+            System.out.println("asdasddasd");
             mensajes.setMensaje(mensaje);
             //Aqui tenemos que mirar ahora si es un mensaje normal de chat y entonces buscar el usuario y enviarselo a esa direccion
             //Como sabemos el puerto e ip del usuario tenemos que enviarle al socket correspondiente   
             //escribirSocket(clientes.get(0).getSocket(), "Hola soy el servidor tio");
          
         }
-
-        
     }
 
     @Override

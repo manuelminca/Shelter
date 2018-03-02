@@ -27,6 +27,7 @@ public class SocketConcurrente {
             System.out.println("Escucho el puerto " + puerto);
 
             for (;;) {
+                System.out.println("sdffsd el run()");
                 skCliente = skServidor.accept(); // Crea objeto
                 System.out.println("Cliente: " + skCliente.getInetAddress().getHostName()
                         +":" + skCliente.getPort()+ " conectado.");
