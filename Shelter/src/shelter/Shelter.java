@@ -5,11 +5,17 @@
  */
 package shelter;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -19,27 +25,33 @@ public class Shelter extends javax.swing.JFrame {
 
     /**
      * Creates new form Shelter
-     * 
-     * 
+     *
+     *
      */
-    
     private Usuario usuario;
     private Mensaje mensaje;
     private ConexionServidor cs;
-    
+    GridBagLayout layout = new GridBagLayout();
+
     public Shelter() {
         super("selter");
         this.setVisible(true);
         initComponents();
         //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        usuario = new Usuario(this,true);
+        usuario = new Usuario(this, true);
         usuario.dispose();
         //registro el usuario en servidor
         cs = new ConexionServidor(usuario);
-        mensaje = new Mensaje(this,true,usuario,cs);
+        //mensaje = new Mensaje(this,true,usuario,cs);
+        mensaje = new Mensaje(usuario, cs);
         
         
-        
+        DynamicPanel.setLayout(layout);
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        DynamicPanel.add(mensaje, c);
+        mensaje.setVisible(false);
     }
 
     /**
@@ -51,12 +63,13 @@ public class Shelter extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        labelUsuarios = new java.awt.Label();
+        panelMain = new javax.swing.JPanel();
         button1 = new java.awt.Button();
+        labelUsuarios = new java.awt.Label();
+        jTextField1 = new javax.swing.JTextField();
+        DynamicPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        labelUsuarios.setText("Usuarios conectados");
 
         button1.setLabel("button1");
         button1.addActionListener(new java.awt.event.ActionListener() {
@@ -65,66 +78,97 @@ public class Shelter extends javax.swing.JFrame {
             }
         });
 
+        labelUsuarios.setText("Usuarios conectados");
+
+        jTextField1.setText("jTextField1");
+
+        javax.swing.GroupLayout panelMainLayout = new javax.swing.GroupLayout(panelMain);
+        panelMain.setLayout(panelMainLayout);
+        panelMainLayout.setHorizontalGroup(
+            panelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelMainLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        panelMainLayout.setVerticalGroup(
+            panelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelMainLayout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addComponent(labelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(312, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout DynamicPanelLayout = new javax.swing.GroupLayout(DynamicPanel);
+        DynamicPanel.setLayout(DynamicPanelLayout);
+        DynamicPanelLayout.setHorizontalGroup(
+            DynamicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 577, Short.MAX_VALUE)
+        );
+        DynamicPanelLayout.setVerticalGroup(
+            DynamicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(172, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(169, 169, 169))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panelMain, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DynamicPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(labelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(238, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(DynamicPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addComponent(panelMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        
         mensaje.setVisible(true);
-        
-        
-        System.out.println("adss");
-        
-       
     }//GEN-LAST:event_button1ActionPerformed
-    
-    public String leerSocket(Socket socket) throws IOException {
-        String datos;
+
+    public ObjetoEnvio leerSocket(Socket socket) throws IOException {
+        ObjetoEnvio objeto = null;
 
         InputStream aux = socket.getInputStream();
-        DataInputStream flujo = new DataInputStream(aux);
-        datos = new String();
-        datos = flujo.readUTF();
-        return datos;
+        ObjectInputStream flujo = new ObjectInputStream(aux);
+        try {
+            objeto = (ObjetoEnvio) flujo.readObject();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Shelter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return objeto;
     }
-      
-  
-    
-    public  void recibirMensajesServidor(){
+
+    public void recibirMensajesServidor() {
         Socket socket = cs.getSocket();
-        java.awt.TextArea textChat = mensaje.getJTextArea();
-        
-        String msj;
+        JTextArea textChat = mensaje.getJTextArea();
+
+        ObjetoEnvio objeto;
         // Bucle infinito que recibe mensajes del servidor
         boolean conectado = true;
         while (conectado) {
             try {
-                msj = leerSocket(socket);
-                System.out.println("mensaje " + msj);
-              
-                textChat.append(msj + System.lineSeparator());
+                objeto = leerSocket(socket);
+                textChat.append(objeto.getMensaje() + System.lineSeparator());
                 mensaje.setJTextArea(textChat);
-               
+
             } catch (IOException ex) {
                 System.out.println("Error al leer del stream de entrada: " + ex.getMessage());
                 conectado = false;
@@ -134,18 +178,30 @@ public class Shelter extends javax.swing.JFrame {
             }
         }
     }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
- 
-           Shelter shelter = new Shelter();
-            shelter.recibirMensajesServidor();
-     
+
+        Shelter shelter = new Shelter();
+        shelter.recibirMensajesServidor();
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel DynamicPanel;
     private java.awt.Button button1;
+    private javax.swing.JTextField jTextField1;
     private java.awt.Label labelUsuarios;
+    private javax.swing.JPanel panelMain;
     // End of variables declaration//GEN-END:variables
 }
+
+
+
+
+
+
+
+//VIDEO MUY CLAVE https://www.youtube.com/watch?v=AH4v_rQRyAk&t=1s
