@@ -10,7 +10,10 @@ import java.awt.GridBagLayout;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
@@ -140,29 +143,30 @@ public class Shelter extends javax.swing.JFrame {
         mensaje.setVisible(true);
     }//GEN-LAST:event_button1ActionPerformed
 
-    public String leerSocket(Socket socket) throws IOException {
-        String datos;
+    public ObjetoEnvio leerSocket(Socket socket) throws IOException {
+        ObjetoEnvio objeto = null;
 
         InputStream aux = socket.getInputStream();
-        DataInputStream flujo = new DataInputStream(aux);
-        datos = new String();
-        datos = flujo.readUTF();
-        return datos;
+        ObjectInputStream flujo = new ObjectInputStream(aux);
+        try {
+            objeto = (ObjetoEnvio) flujo.readObject();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Shelter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return objeto;
     }
 
     public void recibirMensajesServidor() {
         Socket socket = cs.getSocket();
         JTextArea textChat = mensaje.getJTextArea();
 
-        String msj;
+        ObjetoEnvio objeto;
         // Bucle infinito que recibe mensajes del servidor
         boolean conectado = true;
         while (conectado) {
             try {
-                msj = leerSocket(socket);
-                System.out.println("mensaje " + msj);
-
-                textChat.append(msj + System.lineSeparator());
+                objeto = leerSocket(socket);
+                textChat.append(objeto.getMensaje() + System.lineSeparator());
                 mensaje.setJTextArea(textChat);
 
             } catch (IOException ex) {

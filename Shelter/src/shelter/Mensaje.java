@@ -62,31 +62,7 @@ public class Mensaje extends javax.swing.JPanel {
     }
     
     public ConexionServidor getCS(){return cs;}
-    
-    public void recibirMensajesServidor(){
-        
-
-        String mensaje;
-        // Bucle infinito que recibe mensajes del servidor
-        boolean conectado = true;
-        while (conectado) {
-            try {
-                mensaje = leerSocket(socket);
-                System.out.println("mensaje " + mensaje);
-                textChat.append(mensaje + System.lineSeparator());
-                 
-                setVisible(true);
-            } catch (IOException ex) {
-                System.out.println("Error al leer del stream de entrada: " + ex.getMessage());
-                conectado = false;
-            } catch (NullPointerException ex) {
-                System.out.println("El socket no se creo correctamente. ");
-                conectado = false;
-            }
-        }
-    }
-
-
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -105,9 +81,7 @@ public class Mensaje extends javax.swing.JPanel {
         textChat.setRows(5);
         jScrollPane1.setViewportView(textChat);
 
-        jTextField1.setText("jTextField1");
-
-        jButton1.setText("jButton1");
+        jButton1.setText("Envía");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -116,9 +90,9 @@ public class Mensaje extends javax.swing.JPanel {
             .addComponent(jScrollPane1)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addGap(0, 8, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,7 +102,7 @@ public class Mensaje extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addGap(0, 8, Short.MAX_VALUE))
+                .addGap(0, 11, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
