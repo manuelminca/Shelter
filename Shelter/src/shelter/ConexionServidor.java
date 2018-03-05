@@ -1,75 +1,85 @@
-
 package shelter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextField;
 
 /**
  */
-
-
-public class ConexionServidor implements ActionListener{
-    
+public class ConexionServidor implements ActionListener {
 
     private Usuario usuario;
     private Socket socket;
     private JTextField tfMensaje;
-    
-    
-    public void escribirSocket(Socket socket, String datos) throws IOException {
 
-        OutputStream aux = socket.getOutputStream();
-        DataOutputStream flujo = new DataOutputStream(aux);
-        flujo.writeUTF(datos);
+    public void escribirSocket(Socket socket, ObjetoEnvio objeto) {
+
+        ObjectOutputStream flujo = null;
+        try {
+            OutputStream aux = socket.getOutputStream();
+            flujo = new ObjectOutputStream(aux);
+            flujo.writeObject(objeto);
+        } catch (Exception ex) {
+            System.out.println("Fallo en envia socket de Conexion servidor");
+        }
+
     }
-    
+
     //registra el usuario en el servidor
     public ConexionServidor(Usuario usuario) {
         this.usuario = usuario;
         String user = usuario.getUsuario();
         String ip = usuario.getIP();
         int port = usuario.getPuerto();
-        
+
         try {
-            socket = new Socket(ip,port);
+            socket = new Socket(ip, port);
             System.out.println("Socket creado correctamente.");
             //registro al usuario en el servidor
-            String mensaje = "REGISTRO: " + ip +  ":" + port + ":" + user;
-            escribirSocket(socket,mensaje);
+            String mensaje = "REGISTRO: " + ip + ":" + port + ":" + user;
+
+            ObjetoEnvio objeto = new ObjetoEnvio();
+            objeto.setMensaje(mensaje);
+            objeto.setEmisor(user);
             
+            System.out.println(objeto.getMensaje());
+            System.out.println(objeto.getEmisor());
+            
+            
+            escribirSocket(socket, objeto);
+
         } catch (IOException ex) {
             System.out.println("Error al crear socket");
         }
-        
+
     }
-    
-    public void setJTextField(JTextField tfMensaje){
+
+    public void setJTextField(JTextField tfMensaje) {
         this.tfMensaje = tfMensaje;
     }
-    
-    public Socket getSocket(){return socket;}
-    
-    
-    
-    
+
+    public Socket getSocket() {
+        return socket;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println("0");
         String user = usuario.getUsuario();
-        
-        try {
-            escribirSocket(socket,user + ": " + tfMensaje.getText() );
-            tfMensaje.setText("");
-        } catch (IOException ex) {
-            System.out.println("Error al intentar enviar un mensaje: " + ex.getMessage());
-        }
+
+        ObjetoEnvio objeto = new ObjetoEnvio();
+        objeto.setEmisor(user);
+        objeto.setMensaje(user + ": " + tfMensaje.getText());
+        escribirSocket(socket, objeto);
+        tfMensaje.setText("");
+
     }
-
-
 
 }

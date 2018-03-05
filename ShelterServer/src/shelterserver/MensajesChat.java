@@ -14,23 +14,20 @@ import java.util.Observable;
 
 public class MensajesChat extends Observable{
 
-    private String mensaje;
     
-    public MensajesChat(){
+    private ObjetoEnvio objeto;
+        
+    public ObjetoEnvio getObjeto(){
+        return objeto;
     }
     
-    public String getMensaje(){
-        return mensaje;
-    }
-    
-    public void setMensaje(String mensaje){
-        System.out.println("set");
+    public void setObjeto(ObjetoEnvio objeto){
 
-        this.mensaje = mensaje;
+        this.objeto = objeto;
         // Indica que el mensaje ha cambiado
         this.setChanged();
         // Notifica a los observadores que el mensaje ha cambiado y se lo pasa
         // (Internamente notifyObservers llama al metodo update del observador)
-        this.notifyObservers(this.getMensaje());
+        this.notifyObservers(this.getObjeto());
     }
 }

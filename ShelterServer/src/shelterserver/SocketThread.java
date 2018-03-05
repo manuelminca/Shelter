@@ -9,6 +9,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import static java.lang.Math.log;
 import java.net.Socket;
@@ -33,7 +35,7 @@ public class SocketThread extends Thread implements Observer{
     private MensajesChat mensajes;
     
 
-    final static List<Cliente> clientes = new ArrayList<Cliente>(); //Aqui se guardan las ip, los puertos y el nombre de usuario, pienso que tambien deberiamos guardar el socket
+    final static List<String> clientes = new ArrayList<String>(); //Aqui se guardan las ip, los puertos y el nombre de usuario, pienso que tambien deberiamos guardar el socket
     //abierto correspondiente para directamente buscar por username y mandar la info al socket
 
     public SocketThread(Socket p_cliente,MensajesChat mensaje) {
@@ -41,33 +43,31 @@ public class SocketThread extends Thread implements Observer{
         this.mensajes = mensaje;
     }
 
-    public String leerSocket(Socket socket) throws IOException {
-        String datos;
-
+    public ObjetoEnvio leerSocket(Socket socket) throws IOException, ClassNotFoundException {
         InputStream aux = socket.getInputStream();
-        DataInputStream flujo = new DataInputStream(aux);
-        datos = new String();
-        datos = flujo.readUTF();
-        return datos;
+        ObjectInputStream flujo = new ObjectInputStream(aux);
+        ObjetoEnvio objeto;
+        objeto = (ObjetoEnvio) flujo.readObject();
+        return objeto;
     }
-
+    
+    
+    
     //le envio la informacion al cliente
-    public void escribirSocket(Socket socket, String datos) throws IOException {
+    public void escribirSocket(Socket socket, ObjetoEnvio objeto) throws IOException {
 
         OutputStream aux = socket.getOutputStream();
-        DataOutputStream flujo = new DataOutputStream(aux);
-        flujo.writeUTF(datos);
+        ObjectOutputStream flujo = new ObjectOutputStream(aux);
+        flujo.writeObject(objeto);
     }
 
-    private void addUsuario(String[] partes) {
-        String nuevoUsuario = partes[3];
+    private void addUsuario(ObjetoEnvio objeto) {
+      
         boolean aux = false;
 
-        System.out.println(clientes.size());
-
         if (clientes.size() != 0) {
-            for (Cliente cliente : clientes) {
-                if (cliente.getUsername().equals(partes[3])) {
+            for (String cliente : clientes) {
+                if (cliente.equals(objeto.getEmisor())) {
                     aux = true;
                 }
             }
@@ -75,25 +75,31 @@ public class SocketThread extends Thread implements Observer{
 
         if (!aux) {
             //añadir el usuario a la lista de usuarios conectados 
-
-            //Socket socket;
-            //socket = new Socket(partes[1], Integer.parseInt(partes[2])); //socket = new Socket(partes[1], Integer.parseInt(partes[2]));
-            Cliente cliente = new Cliente(partes[1], partes[2], partes[3]);
-            clientes.add(cliente); //añadimos el cliente a la lista de clientes cuando no esta previamente registrado
-            System.out.println("Cliente " + partes[3] + " añadido al arraylist");
-            mensajes.setMensaje("");
+            devolverUsuarios();
 
         }
           
     }
+    
+    
+    public void devolverUsuarios(){
+        ObjetoEnvio obj = new ObjetoEnvio();
+        String cadenaClientes = "";
+            for(int i = 0;i<clientes.size(); i++){
+                cadenaClientes += clientes.get(i) + ":";
+            }
+            
+            obj.setMensaje(cadenaClientes);
+            mensajes.setObjeto(obj);
+    }
 
-    public void procesaCadena(String mensaje) throws IOException {
-        String[] partes = mensaje.split(":");
+    public void procesaCadena(ObjetoEnvio objeto) throws IOException {
+        String[] partes = objeto.getMensaje().split(":");
         if (partes[0].equals("REGISTRO")) {
-            addUsuario(partes);
+            addUsuario(objeto);
         }else {
             System.out.println("asdasddasd");
-            mensajes.setMensaje(mensaje);
+            mensajes.setObjeto(objeto);
             //Aqui tenemos que mirar ahora si es un mensaje normal de chat y entonces buscar el usuario y enviarselo a esa direccion
             //Como sabemos el puerto e ip del usuario tenemos que enviarle al socket correspondiente   
             //escribirSocket(clientes.get(0).getSocket(), "Hola soy el servidor tio");
@@ -109,25 +115,23 @@ public class SocketThread extends Thread implements Observer{
         try {
             //decimos los metodos observados
             mensajes.addObserver(this);
-            String mensaje = "";
+            ObjetoEnvio objeto = new ObjetoEnvio();
             
 
             while(true){
-                mensaje = leerSocket(skCliente); //de primeras recibimos la cadena para registrar el usuario  
-                procesaCadena(mensaje); //cuando esto acabe ya hay un elemento mas en el arraylist con ip, puerto, nombre de usuario y socket
+                objeto = leerSocket(skCliente); //de primeras recibimos la cadena para registrar el usuario  
+                procesaCadena(objeto); //cuando esto acabe ya hay un elemento mas en el arraylist con ip, puerto, nombre de usuario y socket
             }           
-        } catch (IOException ex) {
-            
-            Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            System.out.println("Ha fallado el try del run()");
         }
     }
     
     @Override
     public void update(Observable o,Object arg) {
         try {
-            // Envia el mensaje al cliente
-            System.out.println("update " + arg.toString());
-            escribirSocket(skCliente,arg.toString());
+            // Envia el mensaje al cliente            
+            escribirSocket(skCliente, (ObjetoEnvio) arg);
         } catch (IOException ex) {
             System.out.println("Error al enviar mensaje al cliente (" + ex.getMessage() + ").");
         }
