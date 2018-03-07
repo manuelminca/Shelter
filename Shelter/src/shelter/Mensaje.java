@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import javax.swing.JTextArea;
+import static shelter.AES.doEncryptedAES;
 
 /**
  *
@@ -38,6 +39,7 @@ public class Mensaje extends javax.swing.JPanel {
         cs.setJTextField(jTextField1);
         
         jButton1.addActionListener(cs);
+        jTextField1.addActionListener(cs);
         //this.setVisible(true);
     }    
     
