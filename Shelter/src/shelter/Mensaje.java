@@ -20,7 +20,7 @@ import javax.swing.JTextArea;
 public class Mensaje extends javax.swing.JPanel {
 
     /**
-     * Creates new form Mensaje2
+     * Creates new form Mensaje
      */
     
     private Usuario usuario;

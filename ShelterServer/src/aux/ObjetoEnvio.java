@@ -6,7 +6,8 @@
 package aux;
 
 import java.io.Serializable;
-import java.util.Observable;
+import java.io.UnsupportedEncodingException;
+
 
 /**
  *
@@ -27,6 +28,7 @@ public class ObjetoEnvio implements Serializable{
     }
 
     public String getMensaje() {
+        
         return mensaje;
     }
 
@@ -37,16 +39,12 @@ public class ObjetoEnvio implements Serializable{
     public void setReceptor(String receptor) {
         this.receptor = receptor;
     }
-
+    
     public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
+        this.mensaje = mensaje;  
     }
     
     
-    
-    
-    
-    
-    
+ 
     
 }

@@ -6,7 +6,22 @@
 package aux;
 
 import java.io.Serializable;
-import java.util.Observable;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.BadPaddingException;
+
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import org.apache.commons.codec.binary.Base64;
+import static org.apache.commons.codec.binary.Base64.decodeBase64;
+import static org.apache.commons.codec.binary.Base64.encodeBase64;
+ 
+
 
 /**
  *
@@ -27,7 +42,8 @@ public class ObjetoEnvio implements Serializable{
     }
 
     public String getMensaje() {
-        return mensaje;
+        
+        return mensaje;  
     }
 
     public void setEmisor(String emisor) {
@@ -37,14 +53,10 @@ public class ObjetoEnvio implements Serializable{
     public void setReceptor(String receptor) {
         this.receptor = receptor;
     }
-
+    
     public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
+        this.mensaje = mensaje; 
     }
-    
-    
-    
-    
     
     
     
