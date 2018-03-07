@@ -3,7 +3,6 @@ package shelter;
 import aux.ObjetoEnvio;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -83,5 +82,6 @@ public class ConexionServidor implements ActionListener {
         escribirSocket(socket, objeto);
         tfMensaje.setText("");
     }
+    
 
 }

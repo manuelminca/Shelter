@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import javax.swing.JTextArea;
+import static shelter.AES.doEncryptedAES;
 
 /**
  *
