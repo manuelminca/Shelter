@@ -5,6 +5,7 @@
  */
 package shelter;
 
+import aux.ObjetoEnvio;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.DataInputStream;

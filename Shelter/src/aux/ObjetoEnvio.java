@@ -3,15 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package shelterserver;
+package aux;
 
+import java.io.Serializable;
 import java.util.Observable;
 
 /**
  *
  * @author minguez
  */
-public class ObjetoEnvio {
+public class ObjetoEnvio implements Serializable{
     
     private String emisor;
     private String receptor;

@@ -9,6 +9,7 @@ package shelterserver;
  *
  * @author rafaelsoriadiez
  */
+import aux.ObjetoEnvio;
 import java.util.Observable;
 
 

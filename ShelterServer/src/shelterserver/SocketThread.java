@@ -5,6 +5,7 @@
  */
 package shelterserver;
 
+import aux.ObjetoEnvio;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -48,6 +49,7 @@ public class SocketThread extends Thread implements Observer{
         ObjectInputStream flujo = new ObjectInputStream(aux);
         ObjetoEnvio objeto;
         objeto = (ObjetoEnvio) flujo.readObject();
+        System.out.println("5");
         return objeto;
     }
     
@@ -72,7 +74,6 @@ public class SocketThread extends Thread implements Observer{
                 }
             }
         }
-
         if (!aux) {
             //añadir el usuario a la lista de usuarios conectados 
             devolverUsuarios();
@@ -85,12 +86,12 @@ public class SocketThread extends Thread implements Observer{
     public void devolverUsuarios(){
         ObjetoEnvio obj = new ObjetoEnvio();
         String cadenaClientes = "";
-            for(int i = 0;i<clientes.size(); i++){
-                cadenaClientes += clientes.get(i) + ":";
-            }
-            
-            obj.setMensaje(cadenaClientes);
-            mensajes.setObjeto(obj);
+        for(int i = 0;i<clientes.size(); i++){
+            cadenaClientes += clientes.get(i) + ":";
+        }
+
+        obj.setMensaje(cadenaClientes);
+        mensajes.setObjeto(obj);
     }
 
     public void procesaCadena(ObjetoEnvio objeto) throws IOException {
@@ -113,13 +114,17 @@ public class SocketThread extends Thread implements Observer{
         System.out.println("Comienza el run()");
 
         try {
+            System.out.println("0");
             //decimos los metodos observados
             mensajes.addObserver(this);
+            System.out.println("1");
             ObjetoEnvio objeto = new ObjetoEnvio();
-            
+            System.out.println("2");
 
             while(true){
+                System.out.println("3");
                 objeto = leerSocket(skCliente); //de primeras recibimos la cadena para registrar el usuario  
+                System.out.println("4");
                 procesaCadena(objeto); //cuando esto acabe ya hay un elemento mas en el arraylist con ip, puerto, nombre de usuario y socket
             }           
         } catch (Exception ex) {
