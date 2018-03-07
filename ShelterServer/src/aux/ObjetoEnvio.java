@@ -42,11 +42,4 @@ public class ObjetoEnvio implements Serializable{
         this.mensaje = mensaje;
     }
     
-    
-    
-    
-    
-    
-    
-    
 }

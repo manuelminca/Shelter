@@ -32,6 +32,7 @@ public class Shelter extends javax.swing.JFrame {
     private Usuario usuario;
     private Mensaje mensaje;
     private ConexionServidor cs;
+    private String key;
     GridBagLayout layout = new GridBagLayout();
 
     public Shelter() {
@@ -42,7 +43,7 @@ public class Shelter extends javax.swing.JFrame {
         usuario = new Usuario(this, true);
         usuario.dispose();
         //registro el usuario en servidor
-        cs = new ConexionServidor(usuario);
+        cs = new ConexionServidor(usuario, key);
         //mensaje = new Mensaje(this,true,usuario,cs);
         mensaje = new Mensaje(usuario, cs);
         
@@ -167,7 +168,7 @@ public class Shelter extends javax.swing.JFrame {
         while (conectado) {
             try {
                 objeto = leerSocket(socket);
-                textChat.append(objeto.getMensaje() + System.lineSeparator());
+                textChat.append(objeto.getMensaje(key) + System.lineSeparator());
                 mensaje.setJTextArea(textChat);
 
             } catch (IOException ex) {
