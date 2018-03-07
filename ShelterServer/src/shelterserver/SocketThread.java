@@ -35,9 +35,10 @@ public class SocketThread extends Thread implements Observer{
     //private String puertoUsuario;
     private MensajesChat mensajes;
     
-
-    final static List<String> clientes = new ArrayList<String>(); //Aqui se guardan las ip, los puertos y el nombre de usuario, pienso que tambien deberiamos guardar el socket
-    //abierto correspondiente para directamente buscar por username y mandar la info al socket
+    // los chats abiertos
+    final static List<ObjetoEnvio> objetos = new ArrayList<ObjetoEnvio>();
+    // todos los usuarios
+    final static List<String> clientes = new ArrayList<String>(); 
 
     public SocketThread(Socket p_cliente,MensajesChat mensaje) {
         this.skCliente = p_cliente;
@@ -64,9 +65,7 @@ public class SocketThread extends Thread implements Observer{
     }
 
     private void addUsuario(ObjetoEnvio objeto) {
-      
         boolean aux = false;
-
         if (clientes.size() != 0) {
             for (String cliente : clientes) {
                 if (cliente.equals(objeto.getEmisor())) {
@@ -74,16 +73,25 @@ public class SocketThread extends Thread implements Observer{
                 }
             }
         }
-        if (!aux) {
-            //añadir el usuario a la lista de usuarios conectados 
-            devolverUsuarios();
-
+        if (!aux){
+            
+            clientes.add(objeto.getEmisor());
+            objeto.setMensaje("");
+            //recojo el usuario
+            String user = objeto.getEmisor();
+            objeto.setEmisor("servidor");
+            objeto.setReceptor(user);
+            objeto.setTipo("ACK");
+            String mensaje = "Usuario " + user + "registrado";
+            objeto.setMensaje("Usuario " + user + "registrado");
+            
+            mensajes.setObjeto(objeto);
         }
-          
     }
     
     
     public void devolverUsuarios(){
+        
         ObjetoEnvio obj = new ObjetoEnvio();
         String cadenaClientes = "";
         for(int i = 0;i<clientes.size(); i++){
@@ -95,36 +103,27 @@ public class SocketThread extends Thread implements Observer{
     }
 
     public void procesaCadena(ObjetoEnvio objeto) throws IOException {
-        String[] partes = objeto.getMensaje().split(":");
-        if (partes[0].equals("REGISTRO")) {
+        
+        String tipo = objeto.getTipo();
+        System.out.println("tipo: " + tipo);
+        if (tipo.equals("REGISTRO")) {
             addUsuario(objeto);
-        }else {
-            System.out.println("asdasddasd");
+        }else if(tipo.equals("LISTAR")){
+            devolverUsuarios();
             mensajes.setObjeto(objeto);
-            //Aqui tenemos que mirar ahora si es un mensaje normal de chat y entonces buscar el usuario y enviarselo a esa direccion
-            //Como sabemos el puerto e ip del usuario tenemos que enviarle al socket correspondiente   
-            //escribirSocket(clientes.get(0).getSocket(), "Hola soy el servidor tio");
          
-        }
+        }else  mensajes.setObjeto(objeto);
     }
 
     @Override
     public void run() {
-
-        System.out.println("Comienza el run()");
-
         try {
-            System.out.println("0");
             //decimos los metodos observados
             mensajes.addObserver(this);
-            System.out.println("1");
             ObjetoEnvio objeto = new ObjetoEnvio();
-            System.out.println("2");
-
+            
             while(true){
-                System.out.println("3");
                 objeto = leerSocket(skCliente); //de primeras recibimos la cadena para registrar el usuario  
-                System.out.println("4");
                 procesaCadena(objeto); //cuando esto acabe ya hay un elemento mas en el arraylist con ip, puerto, nombre de usuario y socket
             }           
         } catch (Exception ex) {
@@ -134,8 +133,7 @@ public class SocketThread extends Thread implements Observer{
     
     @Override
     public void update(Observable o,Object arg) {
-        try {
-            // Envia el mensaje al cliente            
+        try {  
             escribirSocket(skCliente, (ObjetoEnvio) arg);
         } catch (IOException ex) {
             System.out.println("Error al enviar mensaje al cliente (" + ex.getMessage() + ").");
