@@ -38,6 +38,7 @@ public class Mensaje extends javax.swing.JPanel {
         cs.setJTextField(jTextField1);
         
         jButton1.addActionListener(cs);
+        jTextField1.addActionListener(cs);
         //this.setVisible(true);
     }    
     
