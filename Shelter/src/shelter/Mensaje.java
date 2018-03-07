@@ -8,6 +8,7 @@ package shelter;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.net.Socket;
 import javax.swing.JTextArea;
 
@@ -18,7 +19,7 @@ import javax.swing.JTextArea;
 public class Mensaje extends javax.swing.JPanel {
 
     /**
-     * Creates new form Mensaje2
+     * Creates new form Mensaje
      */
     
     private Usuario usuario;
@@ -39,14 +40,12 @@ public class Mensaje extends javax.swing.JPanel {
         //this.setVisible(true);
     }    
     
-    public String leerSocket(Socket socket) throws IOException {
-        String datos;
-
+    public ObjetoEnvio leerSocket(Socket socket) throws IOException, ClassNotFoundException {
         InputStream aux = socket.getInputStream();
-        DataInputStream flujo = new DataInputStream(aux);
-        datos = new String();
-        datos = flujo.readUTF();
-        return datos;
+        ObjectInputStream flujo = new ObjectInputStream(aux);
+        ObjetoEnvio objeto;
+        objeto = (ObjetoEnvio) flujo.readObject();
+        return objeto;
     }
     
     public void iniciarMensajes(){

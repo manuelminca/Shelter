@@ -25,7 +25,13 @@ public class ConexionServidor implements ActionListener {
         try {
             OutputStream aux = socket.getOutputStream();
             flujo = new ObjectOutputStream(aux);
-            flujo.writeObject(objeto);
+            System.out.println("antes de enviar en conexion servidor");
+            
+            Object parseado = (Object) objeto;
+            
+            flujo.writeObject(parseado);
+            System.out.println("despues de enviar en conexion servidor");
+
         } catch (Exception ex) {
             System.out.println("Fallo en envia socket de Conexion servidor");
         }
@@ -51,8 +57,6 @@ public class ConexionServidor implements ActionListener {
             
             System.out.println(objeto.getMensaje());
             System.out.println(objeto.getEmisor());
-            
-            
             escribirSocket(socket, objeto);
 
         } catch (IOException ex) {

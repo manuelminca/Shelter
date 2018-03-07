@@ -199,9 +199,4 @@ public class Shelter extends javax.swing.JFrame {
 }
 
 
-
-
-
-
-
 //VIDEO MUY CLAVE https://www.youtube.com/watch?v=AH4v_rQRyAk&t=1s
