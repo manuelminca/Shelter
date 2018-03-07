@@ -159,6 +159,8 @@ public class Shelter extends javax.swing.JFrame {
         }
         return objeto;
     }
+    
+   
 
     public void recibirMensajesServidor() {
         Socket socket = cs.getSocket();
@@ -170,12 +172,15 @@ public class Shelter extends javax.swing.JFrame {
         while (conectado) {
             try {
                 objeto = leerSocket(socket);
+                if(objeto.getTipo().equals("ACK")){
+                   
+                }else{
+                    String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
+                    textChat.append(mensajeDescifrado + System.lineSeparator());
+                    mensaje.setJTextArea(textChat);
+                }
                 
-                String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
-                
-                
-                textChat.append(mensajeDescifrado + System.lineSeparator());
-                mensaje.setJTextArea(textChat);
+             
 
             } catch (IOException ex) {
                 System.out.println("Error al leer del stream de entrada: " + ex.getMessage());
