@@ -13,4 +13,4 @@ B la recibe y ya sabra como poder comunicarse entre ellos.
 
 Cuando un cliente A quiere hablar de nuevo con uno B si ya tiene el servidor la contraseña de la conversación se la da a los clientes sin tener que generarse una nueva contraseña.
 
-Así resolvemos el problema con la BD ya que una conversación siempre va a tener la misma céntraseña AES de principio a fin
+Así resolvemos el problema con la BD ya que una conversación siempre va a tener la misma contraseña AES de principio a fin
