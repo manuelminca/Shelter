@@ -1,9 +1,11 @@
 package shelter;
 
+import aux.ObjetoEnvio;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -21,11 +23,12 @@ public class ConexionServidor implements ActionListener {
 
     public void escribirSocket(Socket socket, ObjetoEnvio objeto) {
 
-        ObjectOutputStream flujo = null;
+        //OutputStream flujo = null;
+        ObjectOutputStream oos = null;
         try {
-            OutputStream aux = socket.getOutputStream();
-            flujo = new ObjectOutputStream(aux);
-            flujo.writeObject(objeto);
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println(objeto);
+            oos.writeObject(objeto);
         } catch (Exception ex) {
             System.out.println("Fallo en envia socket de Conexion servidor");
         }
@@ -48,7 +51,7 @@ public class ConexionServidor implements ActionListener {
             ObjetoEnvio objeto = new ObjetoEnvio();
             objeto.setMensaje(mensaje);
             objeto.setEmisor(user);
-            
+            objeto.setReceptor("");
             System.out.println(objeto.getMensaje());
             System.out.println(objeto.getEmisor());
             
