@@ -20,6 +20,7 @@ public class ConexionServidor implements ActionListener {
     private Usuario usuario;
     private Socket socket;
     private JTextField tfMensaje;
+    private String key;
 
     public void escribirSocket(Socket socket, ObjetoEnvio objeto) {
 
@@ -36,7 +37,7 @@ public class ConexionServidor implements ActionListener {
     }
 
     //registra el usuario en el servidor
-    public ConexionServidor(Usuario usuario) {
+    public ConexionServidor(Usuario usuario, String key) {
         this.usuario = usuario;
         String user = usuario.getUsuario();
         String ip = usuario.getIP();
@@ -49,10 +50,10 @@ public class ConexionServidor implements ActionListener {
             String mensaje = "REGISTRO: " + ip + ":" + port + ":" + user;
 
             ObjetoEnvio objeto = new ObjetoEnvio();
-            objeto.setMensaje(mensaje);
+            objeto.setMensaje(mensaje, key);
             objeto.setEmisor(user);
             objeto.setReceptor("");
-            System.out.println(objeto.getMensaje());
+            System.out.println(objeto.getMensaje(key));
             System.out.println(objeto.getEmisor());
             
             
@@ -79,10 +80,9 @@ public class ConexionServidor implements ActionListener {
 
         ObjetoEnvio objeto = new ObjetoEnvio();
         objeto.setEmisor(user);
-        objeto.setMensaje(user + ": " + tfMensaje.getText());
+        objeto.setMensaje(user + ": " + tfMensaje.getText(), key);
         escribirSocket(socket, objeto);
         tfMensaje.setText("");
-
     }
 
 }
