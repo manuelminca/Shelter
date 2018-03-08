@@ -90,16 +90,18 @@ public class SocketThread extends Thread implements Observer{
     }
     
     
-    public void devolverUsuarios(){
+    public void devolverUsuarios(ObjetoEnvio objeto){
         
-        ObjetoEnvio obj = new ObjetoEnvio();
         String cadenaClientes = "";
         for(int i = 0;i<clientes.size(); i++){
             cadenaClientes += clientes.get(i) + ":";
         }
 
-        obj.setMensaje(cadenaClientes);
-        mensajes.setObjeto(obj);
+        objeto.setMensaje(cadenaClientes);
+        String receptor = objeto.getEmisor();
+        objeto.setEmisor("servirdor");
+        objeto.setReceptor(receptor);
+        mensajes.setObjeto(objeto);
     }
 
     public void procesaCadena(ObjetoEnvio objeto) throws IOException {
@@ -109,9 +111,7 @@ public class SocketThread extends Thread implements Observer{
         if (tipo.equals("REGISTRO")) {
             addUsuario(objeto);
         }else if(tipo.equals("LISTAR")){
-            devolverUsuarios();
-            mensajes.setObjeto(objeto);
-         
+            devolverUsuarios(objeto);         
         }else  mensajes.setObjeto(objeto);
     }
 
