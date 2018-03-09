@@ -5,6 +5,13 @@
  */
 package shelterserver;
 
+import db.Chat;
+import db.Mensaje;
+import db.Usuario;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author minguez
@@ -15,7 +22,6 @@ public class ShelterServer {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //Pagina para crear y el siguiente video usar la BD https://www.youtube.com/watch?v=HLx1ySEVAgQ
         
         SocketConcurrente sk_concurrente = new SocketConcurrente();
         sk_concurrente.inicio();
