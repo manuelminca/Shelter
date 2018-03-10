@@ -113,7 +113,10 @@ public class SocketThread extends Thread implements Observer{
             addUsuario(objeto);
         }else if(tipo.equals("LISTAR")){
             devolverUsuarios(objeto);         
-        }else  mensajes.setObjeto(objeto);
+        }else{
+            
+            mensajes.setObjeto(objeto);
+        }
     }
 
     @Override

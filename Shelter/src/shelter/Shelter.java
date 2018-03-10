@@ -41,6 +41,7 @@ public class Shelter extends javax.swing.JFrame {
     GridBagLayout layout = new GridBagLayout();
     private List<JLabel> labelsUsuarios;
     private int indiceUsuarios;
+    private List<Mensaje> listaMensajes;
 
     public Shelter() {
         super("selter");
@@ -54,7 +55,7 @@ public class Shelter extends javax.swing.JFrame {
         cs = new ConexionServidor(usuario, key);
         //mensaje = new Mensaje(this,true,usuario,cs);
         mensaje = new Mensaje(usuario, cs);
-
+        cs.setMensaje(mensaje);
         DynamicPanel.setLayout(layout);
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
@@ -63,6 +64,8 @@ public class Shelter extends javax.swing.JFrame {
         mensaje.setVisible(false);
 
         labelsUsuarios = new ArrayList<JLabel>();
+        listaMensajes = new ArrayList<Mensaje>(); 
+
         indiceUsuarios = 0;
 
     }
@@ -200,15 +203,31 @@ public class Shelter extends javax.swing.JFrame {
         String[] partes = lista.split(":");
         panelUsuarios.removeAll();
         indiceUsuarios = 0;
+        
         for (int i = 0; i < partes.length; i++) {
             if (!partes[i].equals(usuario.getUsuario())) {
+                
                 String receptor = partes[i];
                 JLabel user = new JLabel(partes[i]);
+                //se crea "mensajes" por cada usuario conectado
+                Mensaje nuevo = new Mensaje(usuario,receptor,cs);
+
+                listaMensajes.add(nuevo);
                 user.addMouseListener(new MouseAdapter(){ 
-                    
-                    public void mouseClicked(MouseEvent e){  
-                        mensaje.setVisible(true);
-                        mensaje.setReceptor(receptor);
+                    public void mouseClicked(MouseEvent e){
+                        System.out.println("lista: " + lista);
+                        //mensaje.setVisible(true);
+                        //mensaje.setReceptor(receptor);
+                        //Mensaje nuevo = new Mensaje(usuario,receptor,cs);
+                        //listaMensajes.add(nuevo);
+                        GridBagConstraints c = new GridBagConstraints();
+                        c.gridx = 0;
+                        c.gridy = 0;
+                        DynamicPanel.add(nuevo, c);
+                        //mensaje = nuevo;
+                        cs.setMensaje(nuevo);
+                        nuevo.setVisible(true);
+                       
                     }  
             }); 
             panelUsuarios.add(user);
@@ -241,12 +260,34 @@ public class Shelter extends javax.swing.JFrame {
         }
         return objeto;
     }
+    
+    
+    public Mensaje buscarMensaje(ObjetoEnvio objeto){
+        System.out.println("estoy comprobando los chat");
+        Mensaje result = new Mensaje();
+        String receptor = objeto.getReceptor();
+        String emisor = objeto.getEmisor();
+        Usuario aux;
+        boolean salir = false;
+        for(int i = 0; i < listaMensajes.size() && !salir;i++){
+            String emisorMensaje = listaMensajes.get(i).getEmisor();
+            String receptorMensaje = listaMensajes.get(i).getReceptor();
+            if(emisor.equals(emisorMensaje) && receptor.equals(receptorMensaje)){
+                System.out.println("estoy comprobando los char");
+                result = listaMensajes.get(i);
+                salir = true;
+            }
+            
+        }
+        return result;
+    }
 
     public void recibirMensajesServidor() {
         Socket socket = cs.getSocket();
         JTextArea textChat = mensaje.getJTextArea();
 
         ObjetoEnvio objeto;
+        Mensaje mensajeActual;
         // Bucle infinito que recibe mensajes del servidor
         boolean conectado = true;
         while (conectado) {
@@ -261,7 +302,9 @@ public class Shelter extends javax.swing.JFrame {
                 } else { //Si es de tipo mensaje
                     String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
                     textChat.append(mensajeDescifrado + System.lineSeparator());
-                    mensaje.setJTextArea(textChat);
+                    mensajeActual = buscarMensaje(objeto);
+                    cs.setMensaje(mensajeActual);
+                    mensajeActual.setJTextArea(textChat);
                 }
 
             } catch (IOException ex) {

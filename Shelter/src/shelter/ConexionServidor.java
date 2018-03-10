@@ -17,6 +17,7 @@ public class ConexionServidor implements ActionListener {
     private Socket socket;
     private JTextField tfMensaje;
     private String key;
+    private Mensaje mensaje;
 
     public void escribirSocket(Socket socket, ObjetoEnvio objeto) {
 
@@ -62,14 +63,17 @@ public class ConexionServidor implements ActionListener {
     public Socket getSocket() {
         return socket;
     }
+    
+    public void setMensaje(Mensaje m){mensaje = m;}
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("0");
+        
         String user = usuario.getUsuario();
-
+        String receptor = mensaje.getReceptor();
         ObjetoEnvio objeto = new ObjetoEnvio();
         objeto.setEmisor(user);
+        objeto.setReceptor(receptor);
         objeto.setTipo("MENSAJE");
         
         String mensajeCifrado = doEncryptedAES(user + ": " + tfMensaje.getText(), key);
