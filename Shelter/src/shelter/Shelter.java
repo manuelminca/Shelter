@@ -8,6 +8,8 @@ package shelter;
 import aux.ObjetoEnvio;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.io.IOException;
 import java.io.InputStream;
@@ -193,23 +195,31 @@ public class Shelter extends javax.swing.JFrame {
 
     private void listarUsuarios(String lista) {
         //Devuelve la lista con los usuarios conectados y lo pone en labels 
-
-        System.out.println(lista);
+        
+        System.out.println("lista: " + lista);
         String[] partes = lista.split(":");
-
+        panelUsuarios.removeAll();
+        indiceUsuarios = 0;
         for (int i = 0; i < partes.length; i++) {
             if (!partes[i].equals(usuario.getUsuario())) {
-
+                String receptor = partes[i];
                 JLabel user = new JLabel(partes[i]);
-
-                panelUsuarios.add(user);
-                labelsUsuarios.add(user);
-                indiceUsuarios++;
-                panelUsuarios.updateUI();
+                user.addMouseListener(new MouseAdapter(){ 
+                    
+                    public void mouseClicked(MouseEvent e){  
+                        mensaje.setVisible(true);
+                        mensaje.setReceptor(receptor);
+                    }  
+            }); 
+            panelUsuarios.add(user);
+            labelsUsuarios.add(user);
+            indiceUsuarios++;
+            panelUsuarios.updateUI();
             }
         }
-
     }
+    
+    
     private void reloadUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reloadUsersMouseClicked
         //pedir la lista de usuarios
         String user = usuario.getUsuario();
@@ -248,7 +258,7 @@ public class Shelter extends javax.swing.JFrame {
                     if (objeto.getReceptor().equals(usuario.getUsuario())) {
                         listarUsuarios(objeto.getMensaje());
                     }
-                } else {
+                } else { //Si es de tipo mensaje
                     String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
                     textChat.append(mensajeDescifrado + System.lineSeparator());
                     mensaje.setJTextArea(textChat);

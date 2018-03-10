@@ -23,6 +23,7 @@ public class Usuario {
     private Connection myObjCon = null;
     private Statement stmt = null; //allows to execute querys in our db the rsult of the query will be a result set
     private ResultSet result = null;
+    private boolean online = false;
 
     public Usuario() throws SQLException {
         try {
@@ -36,11 +37,51 @@ public class Usuario {
 
     public void createUsuario(String usuario) {
         try {
-            stmt.executeUpdate("INSERT INTO ROOT.USUARIO VALUES ('" + usuario + "')");
+            stmt.executeUpdate("INSERT INTO ROOT.USUARIO VALUES ('" + usuario + "', true)");
         } catch (SQLException ex) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
+    public boolean comprobarOnline(String usuario){
+       boolean ok = false;
+        try {
+            String consulta = "SELECT online FROM ROOT.USUARIO WHERE nombre = ?";
+            PreparedStatement st = myObjCon.prepareStatement(consulta);
+            st.setString(1, usuario);
+            result = st.executeQuery();
+            
+            while (result.next()) { 
+                // 1 es el numero de columna
+                ok = result.getBoolean(1);
+            }
+           
+
+            //ok = result.getBoolean("online");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return ok;
+    }
+    
+    
+    public void setOnline(String usuario,boolean estado){
+        try {
+            String consulta = "UPDATE ROOT.USUARIO SET online = ? WHERE nombre = ?";
+            PreparedStatement st = myObjCon.prepareStatement(consulta);
+            st.setBoolean(1, estado);
+            st.setString(2, usuario);
+            st.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    
 
     public void deleteUsuario(String usuario) {
         try {
