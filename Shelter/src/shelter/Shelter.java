@@ -8,16 +8,19 @@ package shelter;
 import aux.ObjetoEnvio;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.List;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
 import static shelter.AES.doDecryptedAES;
- 
+
 /**
  *
  * @author rafaelsoriadiez
@@ -34,6 +37,8 @@ public class Shelter extends javax.swing.JFrame {
     private ConexionServidor cs;
     private String key;
     GridBagLayout layout = new GridBagLayout();
+    private List<JLabel> labelsUsuarios;
+    private int indiceUsuarios;
 
     public Shelter() {
         super("selter");
@@ -47,15 +52,17 @@ public class Shelter extends javax.swing.JFrame {
         cs = new ConexionServidor(usuario, key);
         //mensaje = new Mensaje(this,true,usuario,cs);
         mensaje = new Mensaje(usuario, cs);
-        
-        
+
         DynamicPanel.setLayout(layout);
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
         DynamicPanel.add(mensaje, c);
         mensaje.setVisible(false);
-        
+
+        labelsUsuarios = new ArrayList<JLabel>();
+        indiceUsuarios = 0;
+
     }
 
     /**
@@ -70,7 +77,11 @@ public class Shelter extends javax.swing.JFrame {
         panelMain = new javax.swing.JPanel();
         button1 = new java.awt.Button();
         labelUsuarios = new java.awt.Label();
-        jTextField1 = new javax.swing.JTextField();
+        icono = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        reloadUsers = new javax.swing.JLabel();
+        scrollPane = new javax.swing.JScrollPane();
+        panelUsuarios = new javax.swing.JPanel();
         DynamicPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -84,29 +95,63 @@ public class Shelter extends javax.swing.JFrame {
 
         labelUsuarios.setText("Usuarios conectados");
 
-        jTextField1.setText("jTextField1");
+        icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shelter/img/home (1).png"))); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("PingFang SC", 0, 24)); // NOI18N
+        jLabel1.setText("Shelter");
+
+        reloadUsers.setText("Reload");
+        reloadUsers.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reloadUsersMouseClicked(evt);
+            }
+        });
+
+        panelUsuarios.setLayout(new java.awt.GridLayout(0, 1));
+        scrollPane.setViewportView(panelUsuarios);
 
         javax.swing.GroupLayout panelMainLayout = new javax.swing.GroupLayout(panelMain);
         panelMain.setLayout(panelMainLayout);
         panelMainLayout.setHorizontalGroup(
             panelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMainLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(40, 40, 40)
                 .addGroup(panelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel1)
+                    .addComponent(icono))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelMainLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41))
+            .addGroup(panelMainLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelMainLayout.createSequentialGroup()
+                        .addComponent(labelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelMainLayout.createSequentialGroup()
+                        .addGroup(panelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(reloadUsers)
+                            .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         panelMainLayout.setVerticalGroup(
             panelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMainLayout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addComponent(labelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(icono)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(312, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
+                .addComponent(reloadUsers)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout DynamicPanelLayout = new javax.swing.GroupLayout(DynamicPanel);
@@ -143,9 +188,36 @@ public class Shelter extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
-        
         mensaje.setVisible(true);
     }//GEN-LAST:event_button1ActionPerformed
+
+    private void listarUsuarios(String lista) {
+        //Devuelve la lista con los usuarios conectados y lo pone en labels 
+
+        System.out.println(lista);
+        String[] partes = lista.split(":");
+
+        for (int i = 0; i < partes.length; i++) {
+            if (!partes[i].equals(usuario.getUsuario())) {
+
+                JLabel user = new JLabel(partes[i]);
+
+                panelUsuarios.add(user);
+                labelsUsuarios.add(user);
+                indiceUsuarios++;
+                panelUsuarios.updateUI();
+            }
+        }
+
+    }
+    private void reloadUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reloadUsersMouseClicked
+        //pedir la lista de usuarios
+        String user = usuario.getUsuario();
+
+        ObjetoEnvio objeto = new ObjetoEnvio(user, "servidor", "", "LISTAR");
+        Socket socket = cs.getSocket();
+        cs.escribirSocket(socket, objeto);
+    }//GEN-LAST:event_reloadUsersMouseClicked
 
     public ObjetoEnvio leerSocket(Socket socket) throws IOException {
         ObjetoEnvio objeto = null;
@@ -159,8 +231,6 @@ public class Shelter extends javax.swing.JFrame {
         }
         return objeto;
     }
-    
-   
 
     public void recibirMensajesServidor() {
         Socket socket = cs.getSocket();
@@ -172,15 +242,17 @@ public class Shelter extends javax.swing.JFrame {
         while (conectado) {
             try {
                 objeto = leerSocket(socket);
-                if(objeto.getTipo().equals("ACK")){
-                   
-                }else{
+                if (objeto.getTipo().equals("ACK")) {
+
+                } else if (objeto.getTipo().equals("LISTAR")) {
+                    if (objeto.getReceptor().equals(usuario.getUsuario())) {
+                        listarUsuarios(objeto.getMensaje());
+                    }
+                } else {
                     String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
                     textChat.append(mensajeDescifrado + System.lineSeparator());
                     mensaje.setJTextArea(textChat);
                 }
-                
-             
 
             } catch (IOException ex) {
                 System.out.println("Error al leer del stream de entrada: " + ex.getMessage());
@@ -191,7 +263,6 @@ public class Shelter extends javax.swing.JFrame {
             }
         }
     }
-    
 
     /**
      * @param args the command line arguments
@@ -206,9 +277,13 @@ public class Shelter extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel DynamicPanel;
     private java.awt.Button button1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel icono;
+    private javax.swing.JLabel jLabel1;
     private java.awt.Label labelUsuarios;
     private javax.swing.JPanel panelMain;
+    private javax.swing.JPanel panelUsuarios;
+    private javax.swing.JLabel reloadUsers;
+    private javax.swing.JScrollPane scrollPane;
     // End of variables declaration//GEN-END:variables
 }
 
