@@ -25,24 +25,38 @@ public class Mensaje extends javax.swing.JPanel {
      */
     
     private Usuario usuario;
+    private String emisor;
     private String receptor;
     private ConexionServidor cs;
-    private Socket socket;
+    
+    
+    public Mensaje(){}
     
     public Mensaje(Usuario usuario,ConexionServidor cs) {
         initComponents();
         
         this.usuario = usuario;
         this.cs = cs;
-        //this.socket = cs.getSocket();
-        //le paso el texto
         System.out.println("recibiendo asdadsads...");
         cs.setJTextField(jTextField1);
         
         jButton1.addActionListener(cs);
         jTextField1.addActionListener(cs);
-        //this.setVisible(true);
-    }    
+    } 
+    
+    
+    public Mensaje(Usuario us,String r,ConexionServidor cs){
+        initComponents();
+        usuario = us;
+        emisor = us.getUsuario();
+        receptor = r;
+        this.cs = cs;
+        cs.setJTextField(jTextField1);
+        
+        jButton1.addActionListener(cs);
+        jTextField1.addActionListener(cs);
+        setVisible(false);
+    }
     
     public ObjetoEnvio leerSocket(Socket socket) throws IOException, ClassNotFoundException {
         InputStream aux = socket.getInputStream();
@@ -55,6 +69,10 @@ public class Mensaje extends javax.swing.JPanel {
     public void iniciarMensajes(){
         this.setVisible(true);
     }
+    
+    public Usuario getUsuario(){return usuario;}
+    public String getReceptor(){return receptor;}
+    public String getEmisor(){return emisor;}
     
     public void setJTextArea(JTextArea textChat){
         this.textChat = textChat;
