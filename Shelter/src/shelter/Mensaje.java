@@ -64,6 +64,8 @@ public class Mensaje extends javax.swing.JPanel {
         return textChat;
     }
     
+    public void setReceptor(String r){receptor = r;}
+    
     public ConexionServidor getCS(){return cs;}
    
     /**
