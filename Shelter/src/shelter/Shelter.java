@@ -35,6 +35,7 @@ public class Shelter extends javax.swing.JFrame {
      *
      */
     private Usuario usuario;
+    //el mensaje Actual del usuario
     private Mensaje mensaje;
     private ConexionServidor cs;
     private String key;
@@ -204,30 +205,32 @@ public class Shelter extends javax.swing.JFrame {
         panelUsuarios.removeAll();
         indiceUsuarios = 0;
         
+        
         for (int i = 0; i < partes.length; i++) {
             if (!partes[i].equals(usuario.getUsuario())) {
                 
                 String receptor = partes[i];
                 JLabel user = new JLabel(partes[i]);
-                //se crea "mensajes" por cada usuario conectado
-                Mensaje nuevo = new Mensaje(usuario,receptor,cs);
-
-                listaMensajes.add(nuevo);
+                //se crea "la conversacion" por cada usuario conectado
                 user.addMouseListener(new MouseAdapter(){ 
                     public void mouseClicked(MouseEvent e){
-                        System.out.println("lista: " + lista);
-                        //mensaje.setVisible(true);
-                        //mensaje.setReceptor(receptor);
-                        //Mensaje nuevo = new Mensaje(usuario,receptor,cs);
-                        //listaMensajes.add(nuevo);
+                        Mensaje nuevo;
+                        nuevo = buscarUsuario(receptor);
+                        //creamos el mensaje para que no ve vaya siempre
+                        //cada vez que le damos click
+                        if(nuevo == null){
+                            nuevo = new Mensaje(usuario,receptor,cs);
+                            listaMensajes.add(nuevo);
+                        }
+                        mensaje = nuevo;
+                        cs.setMensaje(mensaje);
                         GridBagConstraints c = new GridBagConstraints();
                         c.gridx = 0;
                         c.gridy = 0;
-                        DynamicPanel.add(nuevo, c);
+                        DynamicPanel.add(mensaje, c);
                         //mensaje = nuevo;
                         cs.setMensaje(nuevo);
-                        nuevo.setVisible(true);
-                       
+                        mensaje.setVisible(true);
                     }  
             }); 
             panelUsuarios.add(user);
@@ -236,6 +239,23 @@ public class Shelter extends javax.swing.JFrame {
             panelUsuarios.updateUI();
             }
         }
+    }
+    
+    private Mensaje buscarUsuario(String receptor){
+        
+        Mensaje result = null;
+        String emisor = usuario.getUsuario();
+        boolean salir = false;
+        for(int i = 0; i < listaMensajes.size() && !salir;i++){
+            String emisorMensaje = listaMensajes.get(i).getEmisor();
+            String receptorMensaje = listaMensajes.get(i).getReceptor();
+            //Lo cambiaria por ID, ya que cuandl sea grupo...
+            if(emisor.equals(emisorMensaje) && receptor.equals(receptorMensaje)) {
+                result = listaMensajes.get(i);
+                salir = true;
+            }
+        }
+        return result;
     }
     
     
@@ -248,18 +268,10 @@ public class Shelter extends javax.swing.JFrame {
         cs.escribirSocket(socket, objeto);
     }//GEN-LAST:event_reloadUsersMouseClicked
 
-    public ObjetoEnvio leerSocket(Socket socket) throws IOException {
-        ObjetoEnvio objeto = null;
-
-        InputStream aux = socket.getInputStream();
-        ObjectInputStream flujo = new ObjectInputStream(aux);
-        try {
-            objeto = (ObjetoEnvio) flujo.readObject();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Shelter.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return objeto;
-    }
+    
+    
+    
+    
     
     
     public Mensaje buscarMensaje(ObjetoEnvio objeto){
@@ -272,7 +284,9 @@ public class Shelter extends javax.swing.JFrame {
         for(int i = 0; i < listaMensajes.size() && !salir;i++){
             String emisorMensaje = listaMensajes.get(i).getEmisor();
             String receptorMensaje = listaMensajes.get(i).getReceptor();
-            if(emisor.equals(emisorMensaje) && receptor.equals(receptorMensaje)){
+            //Lo cambiaria por ID, ya que cuandl sea grupo...
+            if((emisor.equals(emisorMensaje) && receptor.equals(receptorMensaje))
+            || (emisor.equals(receptorMensaje) && receptor.equals(emisorMensaje))) {
                 System.out.println("estoy comprobando los char");
                 result = listaMensajes.get(i);
                 salir = true;
@@ -292,7 +306,7 @@ public class Shelter extends javax.swing.JFrame {
         boolean conectado = true;
         while (conectado) {
             try {
-                objeto = leerSocket(socket);
+                objeto = cs.leerSocket(socket);
                 if (objeto.getTipo().equals("ACK")) {
 
                 } else if (objeto.getTipo().equals("LISTAR")) {
@@ -302,9 +316,12 @@ public class Shelter extends javax.swing.JFrame {
                 } else { //Si es de tipo mensaje
                     String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
                     textChat.append(mensajeDescifrado + System.lineSeparator());
+                    //ciframos
                     mensajeActual = buscarMensaje(objeto);
+                    //actualizamos el mensaje del cs
                     cs.setMensaje(mensajeActual);
-                    mensajeActual.setJTextArea(textChat);
+                    //mostramos el mensajeActual
+                    mensaje.setJTextArea(textChat);
                 }
 
             } catch (IOException ex) {
