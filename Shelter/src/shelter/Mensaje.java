@@ -28,7 +28,7 @@ public class Mensaje extends javax.swing.JPanel {
     private String emisor;
     private String receptor;
     private ConexionServidor cs;
-    
+
     
     public Mensaje(){}
     

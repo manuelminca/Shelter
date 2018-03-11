@@ -4,8 +4,12 @@ import aux.ObjetoEnvio;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextField;
 import static shelter.AES.doEncryptedAES;
 
@@ -31,6 +35,19 @@ public class ConexionServidor implements ActionListener {
             System.out.println("Fallo en envia socket de Conexion servidor");
         }
 
+    }
+    
+    public ObjetoEnvio leerSocket(Socket socket) throws IOException {
+        ObjetoEnvio objeto = null;
+
+        InputStream aux = socket.getInputStream();
+        ObjectInputStream flujo = new ObjectInputStream(aux);
+        try {
+            objeto = (ObjetoEnvio) flujo.readObject();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Shelter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return objeto;
     }
 
     //registra el usuario en el servidor
