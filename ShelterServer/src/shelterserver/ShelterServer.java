@@ -6,6 +6,7 @@
 package shelterserver;
 
 import db.Chat;
+import db.Clave;
 import db.Mensaje;
 import db.Usuario;
 import java.sql.SQLException;
@@ -22,6 +23,8 @@ public class ShelterServer {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
+        Clave clave = new Clave();
+        System.out.println(clave.comprobarClave("sfgs")); 
         
         SocketConcurrente sk_concurrente = new SocketConcurrente();
         sk_concurrente.inicio();
