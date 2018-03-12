@@ -8,6 +8,8 @@ package shelter;
 import aux.ObjetoEnvio;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,12 +35,14 @@ public class Shelter extends javax.swing.JFrame {
      *
      */
     private Usuario usuario;
+    //el mensaje Actual del usuario
     private Mensaje mensaje;
     private ConexionServidor cs;
     private String key;
     GridBagLayout layout = new GridBagLayout();
     private List<JLabel> labelsUsuarios;
     private int indiceUsuarios;
+    private List<Mensaje> listaMensajes;
 
     public Shelter() {
         super("selter");
@@ -52,7 +56,7 @@ public class Shelter extends javax.swing.JFrame {
         cs = new ConexionServidor(usuario, key);
         //mensaje = new Mensaje(this,true,usuario,cs);
         mensaje = new Mensaje(usuario, cs);
-
+        cs.setMensaje(mensaje);
         DynamicPanel.setLayout(layout);
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
@@ -61,6 +65,8 @@ public class Shelter extends javax.swing.JFrame {
         mensaje.setVisible(false);
 
         labelsUsuarios = new ArrayList<JLabel>();
+        listaMensajes = new ArrayList<Mensaje>(); 
+
         indiceUsuarios = 0;
 
     }
@@ -193,23 +199,66 @@ public class Shelter extends javax.swing.JFrame {
 
     private void listarUsuarios(String lista) {
         //Devuelve la lista con los usuarios conectados y lo pone en labels 
-
-        System.out.println(lista);
+        
+        System.out.println("lista: " + lista);
         String[] partes = lista.split(":");
-
+        panelUsuarios.removeAll();
+        indiceUsuarios = 0;
+        
+        
         for (int i = 0; i < partes.length; i++) {
             if (!partes[i].equals(usuario.getUsuario())) {
-
+                
+                String receptor = partes[i];
                 JLabel user = new JLabel(partes[i]);
-
-                panelUsuarios.add(user);
-                labelsUsuarios.add(user);
-                indiceUsuarios++;
-                panelUsuarios.updateUI();
+                //se crea "la conversacion" por cada usuario conectado
+                user.addMouseListener(new MouseAdapter(){ 
+                    public void mouseClicked(MouseEvent e){
+                        Mensaje nuevo;
+                        nuevo = buscarUsuario(receptor);
+                        //creamos el mensaje para que no ve vaya siempre
+                        //cada vez que le damos click
+                        if(nuevo == null){
+                            nuevo = new Mensaje(usuario,receptor,cs);
+                            listaMensajes.add(nuevo);
+                        }
+                        mensaje = nuevo;
+                        cs.setMensaje(mensaje);
+                        GridBagConstraints c = new GridBagConstraints();
+                        c.gridx = 0;
+                        c.gridy = 0;
+                        DynamicPanel.add(mensaje, c);
+                        //mensaje = nuevo;
+                        cs.setMensaje(nuevo);
+                        mensaje.setVisible(true);
+                    }  
+            }); 
+            panelUsuarios.add(user);
+            labelsUsuarios.add(user);
+            indiceUsuarios++;
+            panelUsuarios.updateUI();
             }
         }
-
     }
+    
+    private Mensaje buscarUsuario(String receptor){
+        
+        Mensaje result = null;
+        String emisor = usuario.getUsuario();
+        boolean salir = false;
+        for(int i = 0; i < listaMensajes.size() && !salir;i++){
+            String emisorMensaje = listaMensajes.get(i).getEmisor();
+            String receptorMensaje = listaMensajes.get(i).getReceptor();
+            //Lo cambiaria por ID, ya que cuandl sea grupo...
+            if(emisor.equals(emisorMensaje) && receptor.equals(receptorMensaje)) {
+                result = listaMensajes.get(i);
+                salir = true;
+            }
+        }
+        return result;
+    }
+    
+    
     private void reloadUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reloadUsersMouseClicked
         //pedir la lista de usuarios
         String user = usuario.getUsuario();
@@ -219,17 +268,32 @@ public class Shelter extends javax.swing.JFrame {
         cs.escribirSocket(socket, objeto);
     }//GEN-LAST:event_reloadUsersMouseClicked
 
-    public ObjetoEnvio leerSocket(Socket socket) throws IOException {
-        ObjetoEnvio objeto = null;
-
-        InputStream aux = socket.getInputStream();
-        ObjectInputStream flujo = new ObjectInputStream(aux);
-        try {
-            objeto = (ObjetoEnvio) flujo.readObject();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Shelter.class.getName()).log(Level.SEVERE, null, ex);
+    
+    
+    
+    
+    
+    
+    public Mensaje buscarMensaje(ObjetoEnvio objeto){
+        System.out.println("estoy comprobando los chat");
+        Mensaje result = new Mensaje();
+        String receptor = objeto.getReceptor();
+        String emisor = objeto.getEmisor();
+        Usuario aux;
+        boolean salir = false;
+        for(int i = 0; i < listaMensajes.size() && !salir;i++){
+            String emisorMensaje = listaMensajes.get(i).getEmisor();
+            String receptorMensaje = listaMensajes.get(i).getReceptor();
+            //Lo cambiaria por ID, ya que cuandl sea grupo...
+            if((emisor.equals(emisorMensaje) && receptor.equals(receptorMensaje))
+            || (emisor.equals(receptorMensaje) && receptor.equals(emisorMensaje))) {
+                System.out.println("estoy comprobando los char");
+                result = listaMensajes.get(i);
+                salir = true;
+            }
+            
         }
-        return objeto;
+        return result;
     }
 
     public void recibirMensajesServidor() {
@@ -237,20 +301,26 @@ public class Shelter extends javax.swing.JFrame {
         JTextArea textChat = mensaje.getJTextArea();
 
         ObjetoEnvio objeto;
+        Mensaje mensajeActual;
         // Bucle infinito que recibe mensajes del servidor
         boolean conectado = true;
         while (conectado) {
             try {
-                objeto = leerSocket(socket);
+                objeto = cs.leerSocket(socket);
                 if (objeto.getTipo().equals("ACK")) {
 
                 } else if (objeto.getTipo().equals("LISTAR")) {
                     if (objeto.getReceptor().equals(usuario.getUsuario())) {
                         listarUsuarios(objeto.getMensaje());
                     }
-                } else {
+                } else { //Si es de tipo mensaje
                     String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
                     textChat.append(mensajeDescifrado + System.lineSeparator());
+                    //ciframos
+                    mensajeActual = buscarMensaje(objeto);
+                    //actualizamos el mensaje del cs
+                    cs.setMensaje(mensajeActual);
+                    //mostramos el mensajeActual
                     mensaje.setJTextArea(textChat);
                 }
 

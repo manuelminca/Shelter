@@ -81,6 +81,7 @@ public class SocketThread extends Thread implements Observer{
             String user = objeto.getEmisor();
             objeto.setEmisor("servidor");
             objeto.setReceptor(user);
+            //ACK ok del servidor que se ha registrado
             objeto.setTipo("ACK");
             String mensaje = "Usuario " + user + "registrado";
             objeto.setMensaje("Usuario " + user + "registrado");
@@ -112,7 +113,10 @@ public class SocketThread extends Thread implements Observer{
             addUsuario(objeto);
         }else if(tipo.equals("LISTAR")){
             devolverUsuarios(objeto);         
-        }else  mensajes.setObjeto(objeto);
+        }else{
+            
+            mensajes.setObjeto(objeto);
+        }
     }
 
     @Override

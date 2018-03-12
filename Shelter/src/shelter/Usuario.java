@@ -35,6 +35,7 @@ public class Usuario extends javax.swing.JDialog {
     public String getIP(){return ip;}
     public int getPuerto(){return puerto;}
 
+
  
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

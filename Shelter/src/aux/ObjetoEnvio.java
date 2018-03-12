@@ -20,6 +20,8 @@ public class ObjetoEnvio implements Serializable{
     private String receptor;
     private String mensaje;
     private String tipo;
+    // id de la conversación
+    //private int id;
     
     
     public ObjetoEnvio(String emisor,String receptor,String mensaje,String tipo){
