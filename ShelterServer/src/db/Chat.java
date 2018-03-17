@@ -29,14 +29,16 @@ public class Chat {
         }
     }
 
-    public void createChat() {
+    public int createChat() {
+        int ultimo = 0;
+        int id_num = -1;
         try {
-            int ultimo = 0;
+            
             result = stmt.executeQuery("SELECT * FROM ROOT.CHAT");
             while(result.next()){
                 ultimo = result.getInt("ID");
             }
-            int id_num = ultimo + 1;
+            id_num = ultimo + 1;
             String id = id_num + "";
             String sql = "INSERT INTO ROOT.CHAT VALUES(" + id + ")";
             stmt.executeUpdate(sql);
@@ -45,6 +47,8 @@ public class Chat {
         } catch (SQLException ex) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return id_num;
     }
 
     public void deleteChat(int id) {
