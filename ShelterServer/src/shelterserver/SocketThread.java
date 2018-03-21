@@ -117,9 +117,12 @@ public class SocketThread extends Thread implements Observer{
         try {
             con = new Conversacion();
             int chat = con.existeChat(objeto.getEmisor(), objeto.getReceptor(), objeto.getMensaje());
+            //obtenemos la key
+            String key = con.devolverKey(chat, objeto.getEmisor());
             Mensaje msj = new Mensaje();
+            //obtenemos los mensajes
             String conversacion = msj.getMensajes(chat);
-            
+            conversacion = key +  ":" + conversacion;
             ObjetoEnvio obj = new ObjetoEnvio("Servidor", objeto.getEmisor(), conversacion, "CHAT");
             mensajes.setObjeto(obj);
         } catch (SQLException ex) {
@@ -151,12 +154,7 @@ public class SocketThread extends Thread implements Observer{
             try {
                 Conversacion con = new Conversacion();
                 int chat = con.existeChat(objeto.getEmisor(), objeto.getReceptor());
-                
-                System.out.println(chat);
-                System.out.println(objeto.getEmisor());
-                System.out.println(objeto.getReceptor());
-                
-                
+
                 Mensaje msj = new Mensaje();
                 msj.createMensaje(objeto.getMensaje(), chat);
                 
