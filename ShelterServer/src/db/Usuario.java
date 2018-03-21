@@ -102,6 +102,24 @@ public class Usuario {
     }
     
     
+    public boolean buscarUsuario(String usuario){
+        boolean encontrado = false;
+        try {
+            String consulta = "SELECT  NOMBRE FROM ROOT.USUARIO WHERE NOMBRE = ?";
+            PreparedStatement st = myObjCon.prepareStatement(consulta);
+            st.setString(1, usuario);
+            result = st.executeQuery();
+            while (result.next()) { 
+                if(result.getString(1).equals(usuario)) encontrado = true;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return encontrado;
+    }
+    
+    
 
     public void deleteUsuario(String usuario) {
         try {
