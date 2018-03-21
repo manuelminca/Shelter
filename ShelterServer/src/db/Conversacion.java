@@ -59,17 +59,23 @@ public class Conversacion {
             String usuarios = "";
             
             
-            String consulta = "SELECT CHAT FROM ROOT.CONVERSACION WHERE USUARIO = ?";
-            PreparedStatement st1 = myObjCon.prepareStatement(consulta);
-            PreparedStatement st2 = myObjCon.prepareStatement(consulta);
+            String consulta1 = "SELECT CHAT FROM ROOT.CONVERSACION WHERE USUARIO = ?";
+
+            PreparedStatement st1 = myObjCon.prepareStatement(consulta1);
             st1.setString(1, user1);
-            st2.setString(1, user2);
             ResultSet result1 = st1.executeQuery();
-            ResultSet result2 = st2.executeQuery();            
             while(result1.next()){
+                String consulta2 = "SELECT CHAT FROM ROOT.CONVERSACION WHERE USUARIO = ?";
+                PreparedStatement st2 = myObjCon.prepareStatement(consulta2);
+                st2.setString(1, user2);
+                ResultSet result2 = st2.executeQuery();            
+
                 while(result2.next()){
-                
+                    int a = result1.getInt("CHAT");
+                    int b = result2.getInt("CHAT");
+                    
                     if(result1.getInt("CHAT") == result2.getInt("CHAT")){
+                        System.out.println("DEBERIA ENTRAR AQUI");
                         return result1.getInt("CHAT");
                     }
                 }  
