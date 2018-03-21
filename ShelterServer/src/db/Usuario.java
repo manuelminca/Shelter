@@ -44,6 +44,26 @@ public class Usuario {
     }
     
     
+    public String devolverUsuario() {
+         String cadena = "";
+        try {
+           
+            String consulta = "SELECT  NOMBRE FROM ROOT.USUARIO WHERE online = ?";
+            PreparedStatement st = myObjCon.prepareStatement(consulta);
+            st.setBoolean(1, true);
+            result = st.executeQuery();
+            
+            while (result.next()) { 
+               
+                cadena += result.getString(1) + ":";
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return cadena;
+    }
+    
+    
     public boolean comprobarOnline(String usuario){
        boolean ok = false;
         try {
