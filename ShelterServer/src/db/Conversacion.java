@@ -53,7 +53,7 @@ public class Conversacion {
         
     }
     
-    public int existeChat(String user1, String user2){
+    public int existeChat(String user1, String user2, String key){
 
         try {
             String usuarios = "";
@@ -83,8 +83,8 @@ public class Conversacion {
 
             Chat chat = new Chat();
             int id_chat = chat.createChat();
-            createConversacion(id_chat, user1);
-            createConversacion(id_chat, user2);
+            createConversacion(id_chat, user1, key);
+            createConversacion(id_chat, user2, key);
             return id_chat;
             
             
@@ -95,15 +95,49 @@ public class Conversacion {
     }
     
     
+    public int existeChat(String user1, String user2){
+
+        try {
+            String usuarios = "";
+            
+            
+            String consulta1 = "SELECT CHAT FROM ROOT.CONVERSACION WHERE USUARIO = ?";
+
+            PreparedStatement st1 = myObjCon.prepareStatement(consulta1);
+            st1.setString(1, user1);
+            ResultSet result1 = st1.executeQuery();
+            while(result1.next()){
+                String consulta2 = "SELECT CHAT FROM ROOT.CONVERSACION WHERE USUARIO = ?";
+                PreparedStatement st2 = myObjCon.prepareStatement(consulta2);
+                st2.setString(1, user2);
+                ResultSet result2 = st2.executeQuery();            
+
+                while(result2.next()){
+                    int a = result1.getInt("CHAT");
+                    int b = result2.getInt("CHAT");
+                    
+                    if(result1.getInt("CHAT") == result2.getInt("CHAT")){
+                        return result1.getInt("CHAT");
+                    }
+                }  
+            }            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
+    }
     
-        public int createConversacion(int chat, String usuario) {
+    
+    
+        public int createConversacion(int chat, String usuario, String key) {
         int ultimo = 0;
         int id_num = -1;
         try {
             
             String id = chat + "";
             
-            String sql = "INSERT INTO ROOT.CONVERSACION VALUES('"+ usuario +"'," + id + ")";
+            String sql = "INSERT INTO ROOT.CONVERSACION VALUES('"+ usuario +"'," + id + ",'"+ key +"')";
             stmt.executeUpdate(sql);
             
      

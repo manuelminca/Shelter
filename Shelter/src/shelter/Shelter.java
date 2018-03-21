@@ -207,7 +207,7 @@ public class Shelter extends javax.swing.JFrame {
     private void iniciarConversacion(String receptor){
         mensaje.setVisible(true);
         mensaje.getJTextArea().setText("");
-        ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, "", "CHAT");
+        ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, key, "CHAT");
         cs.escribirSocket(obj);
     }
     
@@ -286,7 +286,7 @@ public class Shelter extends javax.swing.JFrame {
                         textChat.append(objeto.getMensaje());
                         mensaje.setJTextArea(chat);
                     }
-                } else if(objeto.getEmisor().equals(usuario.getUsuario()) || objeto.getReceptor().equals(usuario.getUsuario())) {
+                } else if((objeto.getEmisor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getReceptor())) || (objeto.getReceptor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getEmisor()))) {
                     String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
                      System.out.println("mensajeDescifrado: " + mensajeDescifrado);
                     textChat.append(mensajeDescifrado + System.lineSeparator());
