@@ -6,6 +6,8 @@
 package shelterserver;
 
 import aux.ObjetoEnvio;
+import db.Conversacion;
+import db.Mensaje;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import static java.lang.Math.log;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -100,11 +103,28 @@ public class SocketThread extends Thread implements Observer{
 
         objeto.setMensaje(cadenaClientes);
         String receptor = objeto.getEmisor();
-        objeto.setEmisor("servirdor");
+        objeto.setEmisor("servidor");
         objeto.setReceptor(receptor);
         mensajes.setObjeto(objeto);
     }
 
+    
+    public void iniciarChat(ObjetoEnvio objeto){
+        
+        Conversacion con;
+        try {
+            con = new Conversacion();
+            int chat = con.existeChat(objeto.getEmisor(), objeto.getReceptor());
+            Mensaje msj = new Mensaje();
+            String conversacion = msj.getMensajes(chat);
+            
+            ObjetoEnvio obj = new ObjetoEnvio("Servidor", objeto.getEmisor(), conversacion, "CHAT");
+            mensajes.setObjeto(obj);
+        } catch (SQLException ex) {
+            Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        
+    }
     public void procesaCadena(ObjetoEnvio objeto) throws IOException {
         
         String tipo = objeto.getTipo();
@@ -113,9 +133,27 @@ public class SocketThread extends Thread implements Observer{
             addUsuario(objeto);
         }else if(tipo.equals("LISTAR")){
             devolverUsuarios(objeto);         
+        }else if(tipo.equals("CHAT")){
+            iniciarChat(objeto);       
         }else{
             
-            mensajes.setObjeto(objeto);
+            try {
+                Conversacion con = new Conversacion();
+                int chat = con.existeChat(objeto.getEmisor(), objeto.getReceptor());
+                
+                System.out.println(chat);
+                System.out.println(objeto.getEmisor());
+                System.out.println(objeto.getReceptor());
+                
+                
+                Mensaje msj = new Mensaje();
+                msj.createMensaje(objeto.getMensaje(), chat);
+                
+                
+                mensajes.setObjeto(objeto);
+            } catch (SQLException ex) {
+                Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -124,11 +162,11 @@ public class SocketThread extends Thread implements Observer{
         try {
             //decimos los metodos observados
             mensajes.addObserver(this);
-            ObjetoEnvio objeto = new ObjetoEnvio();
+            ObjetoEnvio objeto;
             
             while(true){
-                objeto = leerSocket(skCliente); //de primeras recibimos la cadena para registrar el usuario  
-                procesaCadena(objeto); //cuando esto acabe ya hay un elemento mas en el arraylist con ip, puerto, nombre de usuario y socket
+                objeto = leerSocket(skCliente);
+                procesaCadena(objeto); 
             }           
         } catch (Exception ex) {
             System.out.println("Ha fallado el try del run()");
