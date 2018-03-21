@@ -52,21 +52,23 @@ public class Mensaje {
         }
     }
 
-    public void getMensajes(int chat) {
+    public String getMensajes(int chat) {
+        String msj = "";
         try {
             PreparedStatement st = myObjCon.prepareStatement("SELECT MENSAJE FROM ROOT.MENSAJE WHERE chat = ?");
             st.setInt(1, chat);
             result = st.executeQuery();
-            String msj = "";
+            
             while(result.next()){
                 msj = msj + result.getString("MENSAJE") + "\n";
             }
-            System.out.println(msj);
+            
             
             
         } catch (SQLException ex) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return msj;
     }
 
 }

@@ -43,7 +43,7 @@ public class Shelter extends javax.swing.JFrame {
     private List<JLabel> labelsUsuarios;
     private int indiceUsuarios;
     private List<Mensaje> listaMensajes;
-    GridBagConstraints c = new GridBagConstraints();
+
 
     public Shelter() {
         super("selter");
@@ -66,8 +66,6 @@ public class Shelter extends javax.swing.JFrame {
         mensaje.setVisible(false);
 
         labelsUsuarios = new ArrayList<JLabel>();
-        listaMensajes = new ArrayList<Mensaje>(); 
-
         indiceUsuarios = 0;
 
     }
@@ -198,6 +196,13 @@ public class Shelter extends javax.swing.JFrame {
         mensaje.setVisible(true);
     }//GEN-LAST:event_button1ActionPerformed
 
+    
+    private void iniciarConversacion(String receptor){
+        mensaje.setVisible(true);
+        ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, "", "CHAT");
+        cs.escribirSocket(obj);
+    }
+    
     private void listarUsuarios(String lista) {
         //Devuelve la lista con los usuarios conectados y lo pone en labels 
         
@@ -205,7 +210,6 @@ public class Shelter extends javax.swing.JFrame {
         String[] partes = lista.split(":");
         panelUsuarios.removeAll();
         indiceUsuarios = 0;
-        
         
         for (int i = 0; i < partes.length; i++) {
             if (!partes[i].equals(usuario.getUsuario())) {
@@ -215,29 +219,8 @@ public class Shelter extends javax.swing.JFrame {
                 //se crea "la conversacion" por cada usuario conectado
                 user.addMouseListener(new MouseAdapter(){ 
                     public void mouseClicked(MouseEvent e){
-                        //ocultamos el mensaje actual
-                        mensaje.setVisible(false);
-                        Mensaje nuevo;
-                        //busco el nuevo, y direcamente estoy en el mensaje
-                        nuevo = buscarUsuario(receptor);
-                       
-                        //creamos el mensaje para que no ve vaya siempre
-                        //cada vez que le damos click
-                        if(nuevo == null){
-                            nuevo = new Mensaje(usuario,receptor,cs);
-                            listaMensajes.add(nuevo);
-                        }
-                        
-                        //copiamos el mensaje de la conversacion abierta
-                        mensaje = nuevo;
-                        //cs.setMensaje(mensaje);
-                        //GridBagConstraints c = new GridBagConstraints();
-                        //c.gridx = 0;
-                        //c.gridy = 0;
-                        DynamicPanel.add(mensaje, c);
-                        //acutalizamos el mensaje de la actualización;
-                        cs.setMensaje(mensaje);
-                        mensaje.setVisible(true);
+                        mensaje.setReceptor(receptor);
+                        iniciarConversacion(receptor);
                     }  
             }); 
             panelUsuarios.add(user);
@@ -248,6 +231,7 @@ public class Shelter extends javax.swing.JFrame {
         }
     }
     
+    /*
     private Mensaje buscarUsuario(String receptor){
         
         Mensaje result = null;
@@ -264,6 +248,7 @@ public class Shelter extends javax.swing.JFrame {
         }
         return result;
     }
+    */
     
     
     private void reloadUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reloadUsersMouseClicked
@@ -271,10 +256,15 @@ public class Shelter extends javax.swing.JFrame {
         String user = usuario.getUsuario();
 
         ObjetoEnvio objeto = new ObjetoEnvio(user, "servidor", "", "LISTAR");
-        Socket socket = cs.getSocket();
-        cs.escribirSocket(socket, objeto);
+        cs.escribirSocket(objeto);
     }//GEN-LAST:event_reloadUsersMouseClicked
 
+    
+    
+    
+    
+    
+    /*
     public Mensaje buscarMensaje(ObjetoEnvio objeto){
       
         Mensaje result = null;
@@ -301,13 +291,13 @@ public class Shelter extends javax.swing.JFrame {
         }
         return result;
     }
+    */
 
-    public void recibirMensajesServidor() {
+        public void recibirMensajesServidor() {
         Socket socket = cs.getSocket();
         JTextArea textChat = mensaje.getJTextArea();
 
         ObjetoEnvio objeto;
-        Mensaje mensajeActual;
         // Bucle infinito que recibe mensajes del servidor
         boolean conectado = true;
         while (conectado) {
@@ -319,19 +309,20 @@ public class Shelter extends javax.swing.JFrame {
                     if (objeto.getReceptor().equals(usuario.getUsuario())) {
                         listarUsuarios(objeto.getMensaje());
                     }
-                } else { //Si es de tipo mensaje
+                } 
+                else if (objeto.getTipo().equals("CHAT")) {
+                    
+                    System.out.println("LLEGA MENSAJE DE TIPO CHAT");
+                    
+                    if (objeto.getReceptor().equals(usuario.getUsuario())) {
+                        JTextArea chat=new JTextArea();
+                        textChat.append(objeto.getMensaje());
+                        mensaje.setJTextArea(chat);
+                    }
+                } else {
                     String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
                      System.out.println("mensajeDescifrado: " + mensajeDescifrado);
                     textChat.append(mensajeDescifrado + System.lineSeparator());
-                    //ciframos
-                    mensajeActual = buscarMensaje(objeto);
-                    mensaje = mensajeActual;
-                    //actualizamos el mensaje del cs
-                    cs.setMensaje(mensaje);
-                    //mostramos el mensajeActual
-                    System.out.println("emisor: " + mensaje.getEmisor());
-                    System.out.println("receptor: " + mensaje.getReceptor());
-                    textChat = mensaje.getJTextArea();
                     mensaje.setJTextArea(textChat);
                 }
 

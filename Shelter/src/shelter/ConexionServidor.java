@@ -23,7 +23,7 @@ public class ConexionServidor implements ActionListener {
     private String key;
     private Mensaje mensaje;
 
-    public void escribirSocket(Socket socket, ObjetoEnvio objeto) {
+    public void escribirSocket(ObjetoEnvio objeto) {
 
         //OutputStream flujo = null;
         ObjectOutputStream oos = null;
@@ -65,7 +65,7 @@ public class ConexionServidor implements ActionListener {
             //String mensaje = "REGISTRO: " + ip + ":" + port + ":" + user;
 
             ObjetoEnvio objeto = new ObjetoEnvio(user,"servidor","","REGISTRO");
-            escribirSocket(socket, objeto);
+            escribirSocket(objeto);
 
         } catch (IOException ex) {
             System.out.println("Error al crear socket");
@@ -96,7 +96,7 @@ public class ConexionServidor implements ActionListener {
         String mensajeCifrado = doEncryptedAES(user + ": " + tfMensaje.getText(), key);
         
         objeto.setMensaje(mensajeCifrado);
-        escribirSocket(socket, objeto);
+        escribirSocket(objeto);
         tfMensaje.setText("");
     }
     

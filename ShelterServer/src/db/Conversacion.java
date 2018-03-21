@@ -52,5 +52,60 @@ public class Conversacion {
     public void getChats(String user) {
         
     }
+    
+    public int existeChat(String user1, String user2){
+
+        try {
+            String usuarios = "";
+            
+            
+            String consulta = "SELECT CHAT FROM ROOT.CONVERSACION WHERE USUARIO = ?";
+            PreparedStatement st1 = myObjCon.prepareStatement(consulta);
+            PreparedStatement st2 = myObjCon.prepareStatement(consulta);
+            st1.setString(1, user1);
+            st2.setString(1, user2);
+            ResultSet result1 = st1.executeQuery();
+            ResultSet result2 = st2.executeQuery();            
+            while(result1.next()){
+                while(result2.next()){
+                
+                    if(result1.getInt("CHAT") == result2.getInt("CHAT")){
+                        return result1.getInt("CHAT");
+                    }
+                }  
+            }
+
+            Chat chat = new Chat();
+            int id_chat = chat.createChat();
+            createConversacion(id_chat, user1);
+            createConversacion(id_chat, user2);
+            return id_chat;
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
+    }
+    
+    
+    
+        public int createConversacion(int chat, String usuario) {
+        int ultimo = 0;
+        int id_num = -1;
+        try {
+            
+            String id = chat + "";
+            
+            String sql = "INSERT INTO ROOT.CONVERSACION VALUES('"+ usuario +"'," + id + ")";
+            stmt.executeUpdate(sql);
+            
+     
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return id_num;
+    }
 
 }
