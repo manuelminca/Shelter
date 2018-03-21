@@ -116,7 +116,7 @@ public class SocketThread extends Thread implements Observer{
         Conversacion con;
         try {
             con = new Conversacion();
-            int chat = con.existeChat(objeto.getEmisor(), objeto.getReceptor());
+            int chat = con.existeChat(objeto.getEmisor(), objeto.getReceptor(), objeto.getMensaje());
             Mensaje msj = new Mensaje();
             String conversacion = msj.getMensajes(chat);
             
