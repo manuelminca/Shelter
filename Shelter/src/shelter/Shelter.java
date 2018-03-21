@@ -48,7 +48,6 @@ public class Shelter extends javax.swing.JFrame {
     private int indiceUsuarios;
     private List<Mensaje> listaMensajes;
 
-
     public Shelter() {
         super("selter");
         this.setVisible(true);
@@ -72,22 +71,17 @@ public class Shelter extends javax.swing.JFrame {
         labelsUsuarios = new ArrayList<JLabel>();
         indiceUsuarios = 0;
         labelUsuario.setText("Usuario: " + usuario.getUsuario());
-        
-        
+
         //SALIMOS
-         addWindowListener(new WindowAdapter() {
+        addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 ObjetoEnvio objeto = new ObjetoEnvio(usuario.getUsuario(), "", "", "SALIR");
                 cs.escribirSocket(objeto);
-               
+
             }
         });
-        
-        
-   
 
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -203,47 +197,48 @@ public class Shelter extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    private void iniciarConversacion(String receptor){
+    private void iniciarConversacion(String receptor) {
         mensaje.setVisible(true);
         mensaje.getJTextArea().setText("");
         ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, key, "CHAT");
         cs.escribirSocket(obj);
     }
     
+    public void print(String mensaje){
+        System.out.println(mensaje);
+    }
+
     private void listarUsuarios(String lista) {
         //Devuelve la lista con los usuarios conectados y lo pone en labels 
-        
+
         System.out.println("lista: " + lista);
         String[] partes = lista.split(":");
         panelUsuarios.removeAll();
         indiceUsuarios = 0;
-        
+
         for (int i = 0; i < partes.length; i++) {
             if (!partes[i].equals(usuario.getUsuario())) {
-                
+
                 String receptor = partes[i];
                 JLabel user = new JLabel(partes[i]);
                 //se crea "la conversacion" por cada usuario conectado
-                user.addMouseListener(new MouseAdapter(){ 
-                    public void mouseClicked(MouseEvent e){
-                        
+                user.addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent e) {
+
                         mensaje.setReceptor(receptor);
                         iniciarConversacion(receptor);
-                        
-                    }  
-                }); 
-            panelUsuarios.add(user);
-            labelsUsuarios.add(user);
-            indiceUsuarios++;
-            panelUsuarios.updateUI();
+
+                    }
+                });
+                panelUsuarios.add(user);
+                labelsUsuarios.add(user);
+                indiceUsuarios++;
+                panelUsuarios.updateUI();
             }
         }
     }
-    
 
-    
-    
+
     private void reloadUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reloadUsersMouseClicked
         //pedir la lista de usuarios
         String user = usuario.getUsuario();
@@ -254,13 +249,19 @@ public class Shelter extends javax.swing.JFrame {
 
     
     
+    public String prepararChat(String mensaje, String key){
+        String[] partes = mensaje.split("\n");
+       print(mensaje);
+        String resultado = "";
+        for (int i = 0; i < partes.length; i++) {
+            print(partes[i]);
+            resultado = resultado + doDecryptedAES(partes[i], key) + "\n";
+        }
+        return resultado;
+    }
     
     
-    
-   
-    
-
-        public void recibirMensajesServidor() {
+    public void recibirMensajesServidor() {
         Socket socket = cs.getSocket();
         JTextArea textChat = mensaje.getJTextArea();
 
@@ -276,26 +277,27 @@ public class Shelter extends javax.swing.JFrame {
                     if (objeto.getReceptor().equals(usuario.getUsuario())) {
                         listarUsuarios(objeto.getMensaje());
                     }
-                } 
-                else if (objeto.getTipo().equals("CHAT")) {
-                    
+                } else if (objeto.getTipo().equals("CHAT")) {
+
                     System.out.println("LLEGA MENSAJE DE TIPO CHAT");
-                    
+
                     if (objeto.getReceptor().equals(usuario.getUsuario())) {
-                        
+
                         String[] partes = objeto.getMensaje().split(":");
                         key = partes[0];
-                        String texto = doDecryptedAES(objeto.getMensaje(), key);
-                        JTextArea chat=new JTextArea();
+
+                        String texto = prepararChat(partes[1], key);
+
+                        JTextArea chat = new JTextArea();
                         textChat.append(texto);
                         mensaje.setJTextArea(chat);
                     }
-                } else if((objeto.getEmisor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getReceptor())) || (objeto.getReceptor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getEmisor()))) {
+                } else if ((objeto.getEmisor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getReceptor())) || (objeto.getReceptor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getEmisor()))) {
                     String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
-                     System.out.println("mensajeDescifrado: " + mensajeDescifrado);
+                    System.out.println("mensajeDescifrado: " + mensajeDescifrado);
                     textChat.append(mensajeDescifrado + System.lineSeparator());
                     mensaje.setJTextArea(textChat);
-                }else{
+                } else {
                     //Nothing to do here bro
                 }
 
@@ -316,13 +318,8 @@ public class Shelter extends javax.swing.JFrame {
 
         Shelter shelter = new Shelter();
         shelter.recibirMensajesServidor();
-        
-        //boton de eliminar (le envia al servidor que se desconecta)
-        
-        
-           
-        
 
+        //boton de eliminar (le envia al servidor que se desconecta)
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
