@@ -226,8 +226,10 @@ public class Shelter extends javax.swing.JFrame {
                 //se crea "la conversacion" por cada usuario conectado
                 user.addMouseListener(new MouseAdapter(){ 
                     public void mouseClicked(MouseEvent e){
+                        
                         mensaje.setReceptor(receptor);
                         iniciarConversacion(receptor);
+                        
                     }  
                 }); 
             panelUsuarios.add(user);
@@ -238,24 +240,7 @@ public class Shelter extends javax.swing.JFrame {
         }
     }
     
-    /*
-    private Mensaje buscarUsuario(String receptor){
-        
-        Mensaje result = null;
-        String emisor = usuario.getUsuario();
-        boolean salir = false;
-        for(int i = 0; i < listaMensajes.size() && !salir;i++){
-            String emisorMensaje = listaMensajes.get(i).getEmisor();
-            String receptorMensaje = listaMensajes.get(i).getReceptor();
-            //Lo cambiaria por ID, ya que cuandl sea grupo...
-            if(emisor.equals(emisorMensaje) && receptor.equals(receptorMensaje)) {
-                result = listaMensajes.get(i);
-                salir = true;
-            }
-        }
-        return result;
-    }
-    */
+
     
     
     private void reloadUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reloadUsersMouseClicked
@@ -271,34 +256,8 @@ public class Shelter extends javax.swing.JFrame {
     
     
     
-    /*
-    public Mensaje buscarMensaje(ObjetoEnvio objeto){
-      
-        Mensaje result = null;
-        //obtengo los mensajes del objeto Envio
-        String yo = usuario.getUsuario();
-        String receptor = objeto.getReceptor();
-        String emisor = objeto.getEmisor();
-        Usuario aux;
-        boolean salir = false;
-        //busco si estoy en el objeto envio
-        
-        if(emisor.equals(yo) || receptor.equals(yo)){
-            //recorro la lista de mensajes para buscar el mensaje equivalente 
-            for(int i = 0; i < listaMensajes.size() && !salir;i++){
-                String emisorMensaje = listaMensajes.get(i).getEmisor();
-                String receptorMensaje = listaMensajes.get(i).getReceptor();
-                if(emisorMensaje.equals(yo) || receptorMensaje.equals(yo)){
-                    System.out.println("estoy comprobando los char");
-                    result = listaMensajes.get(i);
-                    salir = true;
-                }
-
-            }
-        }
-        return result;
-    }
-    */
+   
+    
 
         public void recibirMensajesServidor() {
         Socket socket = cs.getSocket();
