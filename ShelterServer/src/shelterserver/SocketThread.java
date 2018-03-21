@@ -73,21 +73,23 @@ public class SocketThread extends Thread implements Observer{
         boolean aux = false;
       
 
-            // Creamos en la base de datos el usuario
+        // Creamos en la base de datos el usuario
+        String usuario = objeto.getEmisor();
+        if(us.buscarUsuario(usuario)) us.setOnline(usuario,true);
+        else us.createUsuario(objeto.getEmisor());
+        
+        //aádimos el mensaje en el array (Ver si es util)
+        objeto.setMensaje("");
+        //recojo el usuario
+        String user = objeto.getEmisor();
+        objeto.setEmisor("servidor");
+        objeto.setReceptor(user);
+        //ACK ok del servidor que se ha registrado
+        objeto.setTipo("ACK");
+        String mensaje = "Usuario " + user + "registrado";
+        objeto.setMensaje("Usuario " + user + "registrado");
 
-            us.createUsuario(objeto.getEmisor());
-            //aádimos el mensaje en el array (Ver si es util)
-            objeto.setMensaje("");
-            //recojo el usuario
-            String user = objeto.getEmisor();
-            objeto.setEmisor("servidor");
-            objeto.setReceptor(user);
-            //ACK ok del servidor que se ha registrado
-            objeto.setTipo("ACK");
-            String mensaje = "Usuario " + user + "registrado";
-            objeto.setMensaje("Usuario " + user + "registrado");
-            
-            mensajes.setObjeto(objeto);
+        mensajes.setObjeto(objeto);
      
 
             
