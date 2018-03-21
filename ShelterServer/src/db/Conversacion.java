@@ -66,10 +66,11 @@ public class Conversacion {
             st2.setString(1, user2);
             ResultSet result1 = st1.executeQuery();
             ResultSet result2 = st2.executeQuery();            
-            while(result1.next()){
-                while(result2.next()){
+            while(result1.next()){ //1 2 3 4
+                while(result2.next()){ // 2 3 1 4
                 
                     if(result1.getInt("CHAT") == result2.getInt("CHAT")){
+                        System.out.println("estoy aqui");
                         return result1.getInt("CHAT");
                     }
                 }  

@@ -8,6 +8,7 @@ package shelterserver;
 import aux.ObjetoEnvio;
 import db.Conversacion;
 import db.Mensaje;
+import db.Usuario;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -37,13 +38,14 @@ public class SocketThread extends Thread implements Observer{
     //private String ipUsuario;
     //private String puertoUsuario;
     private MensajesChat mensajes;
+    private Usuario us;
     
-    // los chats abiertos
-    final static List<ObjetoEnvio> objetos = new ArrayList<ObjetoEnvio>();
-    // todos los usuarios
-    final static List<String> clientes = new ArrayList<String>(); 
-
     public SocketThread(Socket p_cliente,MensajesChat mensaje) {
+        try {  
+            this.us = new Usuario();
+        } catch (SQLException ex) {
+            Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.skCliente = p_cliente;
         this.mensajes = mensaje;
     }
@@ -69,16 +71,12 @@ public class SocketThread extends Thread implements Observer{
 
     private void addUsuario(ObjetoEnvio objeto) {
         boolean aux = false;
-        if (clientes.size() != 0) {
-            for (String cliente : clientes) {
-                if (cliente.equals(objeto.getEmisor())) {
-                    aux = true;
-                }
-            }
-        }
-        if (!aux){
-            
-            clientes.add(objeto.getEmisor());
+      
+
+            // Creamos en la base de datos el usuario
+
+            us.createUsuario(objeto.getEmisor());
+            //aádimos el mensaje en el array (Ver si es util)
             objeto.setMensaje("");
             //recojo el usuario
             String user = objeto.getEmisor();
@@ -90,17 +88,19 @@ public class SocketThread extends Thread implements Observer{
             objeto.setMensaje("Usuario " + user + "registrado");
             
             mensajes.setObjeto(objeto);
-        }
+     
+
+            
+        
     }
     
     
     public void devolverUsuarios(ObjetoEnvio objeto){
         
         String cadenaClientes = "";
-        for(int i = 0;i<clientes.size(); i++){
-            cadenaClientes += clientes.get(i) + ":";
-        }
-
+        //buscamos los usuarios online
+        cadenaClientes = us.devolverUsuario();
+      
         objeto.setMensaje(cadenaClientes);
         String receptor = objeto.getEmisor();
         objeto.setEmisor("servidor");
@@ -125,6 +125,12 @@ public class SocketThread extends Thread implements Observer{
         }        
         
     }
+    
+    public void desconectarUsuario(ObjetoEnvio objeto){
+        us.setOnline(objeto.getEmisor(),false);
+       
+    }
+    
     public void procesaCadena(ObjetoEnvio objeto) throws IOException {
         
         String tipo = objeto.getTipo();
@@ -134,7 +140,10 @@ public class SocketThread extends Thread implements Observer{
         }else if(tipo.equals("LISTAR")){
             devolverUsuarios(objeto);         
         }else if(tipo.equals("CHAT")){
-            iniciarChat(objeto);       
+            iniciarChat(objeto);   
+        }else if(tipo.equals("SALIR")){
+            desconectarUsuario(objeto);
+           
         }else{
             
             try {
