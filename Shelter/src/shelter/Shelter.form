@@ -138,9 +138,6 @@
           </SubComponents>
         </Container>
         <Component class="javax.swing.JLabel" name="labelUsuario">
-          <AccessibilityProperties>
-            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=""/>
-          </AccessibilityProperties>
         </Component>
       </SubComponents>
     </Container>
