@@ -114,3 +114,5 @@ java.sql.SQLException: Database 'sample' not found.
 ============= end nested exception, level (1) ===========
 Cleanup action completed
 Sat Mar 17 13:22:19 CET 2018 Thread[DRDAConnThread_3,5,main] (DATABASE = sample), (DRDAID = {3}), Database 'sample' not found.
+----------------------------------------------------------------
+Mon Mar 19 10:13:12 CET 2018: Shutting down Derby engine
