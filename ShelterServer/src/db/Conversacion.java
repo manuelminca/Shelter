@@ -48,6 +48,27 @@ public class Conversacion {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public String devolverKey(int chat,String emisor){
+        String key = "";
+        
+        try {
+            String usuarios = "";
+            result = stmt.executeQuery("SELECT cifrado FROM ROOT.CONVERSACION WHERE CHAT=" + chat + "and USUARIO='" + emisor + "'");
+            while(result.next()){
+                key = result.getString("CIFRADO");
+            }
+
+            System.out.println(usuarios);
+     
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        return key;
+    }
 
     public void getChats(String user) {
         
