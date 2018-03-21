@@ -10,6 +10,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +22,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
+import javax.swing.JOptionPane;
+import javax.swing.JFrame;
 
 import static shelter.AES.doDecryptedAES;
 
@@ -67,8 +71,23 @@ public class Shelter extends javax.swing.JFrame {
 
         labelsUsuarios = new ArrayList<JLabel>();
         indiceUsuarios = 0;
+        labelUsuario.setText("Usuario: " + usuario.getUsuario());
+        
+        
+        //SALIMOS
+         addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                ObjetoEnvio objeto = new ObjetoEnvio(usuario.getUsuario(), "", "", "SALIR");
+                cs.escribirSocket(objeto);
+               
+            }
+        });
+        
+        
+   
 
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -80,23 +99,16 @@ public class Shelter extends javax.swing.JFrame {
     private void initComponents() {
 
         panelMain = new javax.swing.JPanel();
-        button1 = new java.awt.Button();
         labelUsuarios = new java.awt.Label();
         icono = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         reloadUsers = new javax.swing.JLabel();
         scrollPane = new javax.swing.JScrollPane();
         panelUsuarios = new javax.swing.JPanel();
+        labelUsuario = new javax.swing.JLabel();
         DynamicPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        button1.setLabel("button1");
-        button1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button1ActionPerformed(evt);
-            }
-        });
 
         labelUsuarios.setText("Usuarios conectados");
 
@@ -125,10 +137,6 @@ public class Shelter extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(icono))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelMainLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
             .addGroup(panelMainLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,6 +145,7 @@ public class Shelter extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(panelMainLayout.createSequentialGroup()
                         .addGroup(panelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelUsuario)
                             .addComponent(reloadUsers)
                             .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))))
@@ -148,16 +157,18 @@ public class Shelter extends javax.swing.JFrame {
                 .addComponent(icono)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(labelUsuario)
                 .addGap(12, 12, 12)
                 .addComponent(reloadUsers)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
+
+        labelUsuario.getAccessibleContext().setAccessibleName("");
 
         javax.swing.GroupLayout DynamicPanelLayout = new javax.swing.GroupLayout(DynamicPanel);
         DynamicPanel.setLayout(DynamicPanelLayout);
@@ -192,10 +203,6 @@ public class Shelter extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
-        mensaje.setVisible(true);
-    }//GEN-LAST:event_button1ActionPerformed
-
     
     private void iniciarConversacion(String receptor){
         mensaje.setVisible(true);
@@ -222,7 +229,7 @@ public class Shelter extends javax.swing.JFrame {
                         mensaje.setReceptor(receptor);
                         iniciarConversacion(receptor);
                     }  
-            }); 
+                }); 
             panelUsuarios.add(user);
             labelsUsuarios.add(user);
             indiceUsuarios++;
@@ -343,14 +350,20 @@ public class Shelter extends javax.swing.JFrame {
 
         Shelter shelter = new Shelter();
         shelter.recibirMensajesServidor();
+        
+        //boton de eliminar (le envia al servidor que se desconecta)
+        
+        
+           
+        
 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel DynamicPanel;
-    private java.awt.Button button1;
     private javax.swing.JLabel icono;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel labelUsuario;
     private java.awt.Label labelUsuarios;
     private javax.swing.JPanel panelMain;
     private javax.swing.JPanel panelUsuarios;
