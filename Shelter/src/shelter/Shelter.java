@@ -282,8 +282,12 @@ public class Shelter extends javax.swing.JFrame {
                     System.out.println("LLEGA MENSAJE DE TIPO CHAT");
                     
                     if (objeto.getReceptor().equals(usuario.getUsuario())) {
+                        
+                        String[] partes = objeto.getMensaje().split(":");
+                        key = partes[0];
+                        String texto = doDecryptedAES(objeto.getMensaje(), key);
                         JTextArea chat=new JTextArea();
-                        textChat.append(objeto.getMensaje());
+                        textChat.append(texto);
                         mensaje.setJTextArea(chat);
                     }
                 } else if((objeto.getEmisor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getReceptor())) || (objeto.getReceptor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getEmisor()))) {
