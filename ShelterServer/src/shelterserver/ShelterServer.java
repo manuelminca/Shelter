@@ -25,12 +25,6 @@ public class ShelterServer {
      */
     public static void main(String[] args) throws SQLException {
         
-        Conversacion c = new Conversacion();
-        
-        //System.out.println(c.existeChat("Manolo", "Rafa"));
-        //System.out.println(c.existeChat("amiguis", "Rafa"));
-        
-        
         SocketConcurrente sk_concurrente = new SocketConcurrente();
         sk_concurrente.inicio();
     }

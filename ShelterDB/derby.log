@@ -1,14 +1,14 @@
-Wed Mar 21 16:25:04 CET 2018 : Servidor de red Apache Derby: Se ha iniciado 10.10.2.0 - (1582446) y está listo para aceptar las conexiones en el puerto 1527
+Wed Mar 21 17:51:00 CET 2018 : Apache Derby Network Server - 10.10.2.0 - (1582446) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Wed Mar 21 16:25:04 CET 2018:
- Iniciando instancia a816c00e-0162-4929-e0c0-ffffd54e027a de Derby, versión The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): 
-en el directorio de base de datos /Users/rafaelsoriadiez/Documents/Prac_Est_Seg/ShelterDB/ShelterDB con el cargador de clases sun.misc.Launcher$AppClassLoader@66d3c617
-Cargado desde file:/Applications/NetBeans/glassfish-4.1.1/javadb/lib/derby.jar
+Wed Mar 21 17:51:01 CET 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0162-4978-8f85-ffffb4c3d645 
+on database directory /Users/minguez/MEGA/Mega-Universidad/UNIVERSIDAD/CUARTO CURSO/Segundo Cuatrimestre/Estrategias de seguridad/Prácticas/Prac_Est_Seg/ShelterDB/ShelterDB with class loader sun.misc.Launcher$AppClassLoader@66d3c617 
+Loaded from file:/Applications/NetBeans/glassfish-4.1.1/javadb/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_131-b11
 user.dir=/Applications/NetBeans/glassfish-4.1.1/javadb
 os.name=Mac OS X
 os.arch=x86_64
-os.version=10.13.1
-derby.system.home=/Users/rafaelsoriadiez/Documents/Prac_Est_Seg/ShelterDB
-Cargador de clases de base de datos iniciado - derby.database.classpath=''
+os.version=10.13.3
+derby.system.home=/Users/minguez/MEGA/Mega-Universidad/UNIVERSIDAD/CUARTO CURSO/Segundo Cuatrimestre/Estrategias de seguridad/Prácticas/Prac_Est_Seg/ShelterDB
+Database Class Loader started - derby.database.classpath=''
