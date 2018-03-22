@@ -122,7 +122,14 @@ public class SocketThread extends Thread implements Observer{
             Mensaje msj = new Mensaje();
             //obtenemos los mensajes
             String conversacion = msj.getMensajes(chat);
-            conversacion = key +  ":" + conversacion;
+            
+            if(conversacion.equals("")){
+                conversacion = key +  ":\n";
+            }else{
+                conversacion = key +  ":" + conversacion;
+            }
+            
+            
             ObjetoEnvio obj = new ObjetoEnvio("Servidor", objeto.getEmisor(), conversacion, "CHAT");
             mensajes.setObjeto(obj);
         } catch (SQLException ex) {
