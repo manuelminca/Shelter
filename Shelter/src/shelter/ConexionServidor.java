@@ -95,7 +95,7 @@ public class ConexionServidor implements ActionListener {
         objeto.setTipo("MENSAJE");
         
         String mensajeCifrado = doEncryptedAES(user + ": " + tfMensaje.getText(), key);
-                
+        
         objeto.setMensaje(mensajeCifrado);
         escribirSocket(objeto);
         tfMensaje.setText("");
