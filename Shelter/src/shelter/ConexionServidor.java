@@ -62,7 +62,8 @@ public class ConexionServidor implements ActionListener {
             socket = new Socket(ip, port);
             System.out.println("Socket creado correctamente.");
             //registro al usuario en el servidor
-            //String mensaje = "REGISTRO: " + ip + ":" + port + ":" + user;
+            
+            
 
             ObjetoEnvio objeto = new ObjetoEnvio(user,"servidor","","REGISTRO");
             escribirSocket(objeto);
@@ -94,7 +95,7 @@ public class ConexionServidor implements ActionListener {
         objeto.setTipo("MENSAJE");
         
         String mensajeCifrado = doEncryptedAES(user + ": " + tfMensaje.getText(), key);
-        
+                
         objeto.setMensaje(mensajeCifrado);
         escribirSocket(objeto);
         tfMensaje.setText("");

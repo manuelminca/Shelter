@@ -14,16 +14,11 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
-import javax.swing.JOptionPane;
-import javax.swing.JFrame;
+
 
 import static shelter.AES.doDecryptedAES;
 
@@ -47,8 +42,7 @@ public class Shelter extends javax.swing.JFrame {
     private List<JLabel> labelsUsuarios;
     private int indiceUsuarios;
     private List<Mensaje> listaMensajes;
-
-
+    
     public Shelter() {
         super("selter");
         this.setVisible(true);
@@ -68,26 +62,18 @@ public class Shelter extends javax.swing.JFrame {
         c.gridy = 0;
         DynamicPanel.add(mensaje, c);
         mensaje.setVisible(false);
-
-        labelsUsuarios = new ArrayList<JLabel>();
-        indiceUsuarios = 0;
         labelUsuario.setText("Usuario: " + usuario.getUsuario());
-        
-        
+
         //SALIMOS
-         addWindowListener(new WindowAdapter() {
+        addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 ObjetoEnvio objeto = new ObjetoEnvio(usuario.getUsuario(), "", "", "SALIR");
                 cs.escribirSocket(objeto);
-               
+                
             }
         });
         
-        
-   
-
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -203,17 +189,20 @@ public class Shelter extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    private void iniciarConversacion(String receptor){
+    private void iniciarConversacion(String receptor) {
         mensaje.setVisible(true);
         mensaje.getJTextArea().setText("");
         ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, key, "CHAT");
         cs.escribirSocket(obj);
     }
     
+    public void print(String mensaje) {
+        System.out.println(mensaje);
+    }
+    
     private void listarUsuarios(String lista) {
         //Devuelve la lista con los usuarios conectados y lo pone en labels 
-        
+
         System.out.println("lista: " + lista);
         String[] partes = lista.split(":");
         panelUsuarios.removeAll();
@@ -225,45 +214,46 @@ public class Shelter extends javax.swing.JFrame {
                 String receptor = partes[i];
                 JLabel user = new JLabel(partes[i]);
                 //se crea "la conversacion" por cada usuario conectado
-                user.addMouseListener(new MouseAdapter(){ 
-                    public void mouseClicked(MouseEvent e){
+                user.addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent e) {
                         
                         mensaje.setReceptor(receptor);
                         iniciarConversacion(receptor);
                         
-                    }  
-                }); 
-            panelUsuarios.add(user);
-            labelsUsuarios.add(user);
-            indiceUsuarios++;
-            panelUsuarios.updateUI();
+                    }
+                });
+                panelUsuarios.add(user);
+                labelsUsuarios.add(user);
+                indiceUsuarios++;
+                panelUsuarios.updateUI();
             }
         }
     }
     
 
-    
-    
     private void reloadUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reloadUsersMouseClicked
         //pedir la lista de usuarios
         String user = usuario.getUsuario();
-
+        
         ObjetoEnvio objeto = new ObjetoEnvio(user, "servidor", "", "LISTAR");
         cs.escribirSocket(objeto);
     }//GEN-LAST:event_reloadUsersMouseClicked
-
     
+    public String prepararChat(String mensaje, String key) {
+        String[] partes = mensaje.split("\n");
+        print(mensaje);
+        String resultado = "";
+        for (int i = 0; i < partes.length; i++) {
+            print(partes[i]);
+            resultado = resultado + doDecryptedAES(partes[i], key) + "\n";
+        }
+        return resultado;
+    }
     
-    
-    
-    
-   
-    
-
-        public void recibirMensajesServidor() {
+    public void recibirMensajesServidor() {
         Socket socket = cs.getSocket();
         JTextArea textChat = mensaje.getJTextArea();
-
+        
         ObjetoEnvio objeto;
         // Bucle infinito que recibe mensajes del servidor
         boolean conectado = true;
@@ -271,34 +261,43 @@ public class Shelter extends javax.swing.JFrame {
             try {
                 objeto = cs.leerSocket(socket);
                 if (objeto.getTipo().equals("ACK")) {
-
+                    //nothing to do here
                 } else if (objeto.getTipo().equals("LISTAR")) {
                     if (objeto.getReceptor().equals(usuario.getUsuario())) {
                         listarUsuarios(objeto.getMensaje());
                     }
-                } 
-                else if (objeto.getTipo().equals("CHAT")) {
+                } else if (objeto.getTipo().equals("CHAT")) {
                     
                     System.out.println("LLEGA MENSAJE DE TIPO CHAT");
                     
                     if (objeto.getReceptor().equals(usuario.getUsuario())) {
                         
                         String[] partes = objeto.getMensaje().split(":");
+                        
+                        print(partes[0]);
+                        print(partes[1]);
+                        
                         key = partes[0];
-                        String texto = doDecryptedAES(objeto.getMensaje(), key);
-                        JTextArea chat=new JTextArea();
-                        textChat.append(texto);
+                        
+                        String texto = prepararChat(partes[1], key);
+                        
+                        JTextArea chat = new JTextArea();
+                        chat.setText("");
                         mensaje.setJTextArea(chat);
+                        
+                        textChat.setText(texto);
+                        
                     }
-                } else if((objeto.getEmisor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getReceptor())) || (objeto.getReceptor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getEmisor()))) {
+                } else if ((objeto.getEmisor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getReceptor())) ||
+                        (objeto.getReceptor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getEmisor()))) {
                     String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
-                     System.out.println("mensajeDescifrado: " + mensajeDescifrado);
+                    System.out.println("mensajeDescifrado: " + mensajeDescifrado);
                     textChat.append(mensajeDescifrado + System.lineSeparator());
                     mensaje.setJTextArea(textChat);
-                }else{
+                } else {
                     //Nothing to do here bro
                 }
-
+                
             } catch (IOException ex) {
                 System.out.println("Error al leer del stream de entrada: " + ex.getMessage());
                 conectado = false;
@@ -313,16 +312,11 @@ public class Shelter extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-
+        
         Shelter shelter = new Shelter();
         shelter.recibirMensajesServidor();
-        
-        //boton de eliminar (le envia al servidor que se desconecta)
-        
-        
-           
-        
 
+        //boton de eliminar (le envia al servidor que se desconecta)
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
