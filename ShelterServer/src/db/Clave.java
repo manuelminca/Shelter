@@ -5,6 +5,7 @@
  */
 package db;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -34,7 +35,7 @@ public class Clave {
         }
     }
 
-    public void createClave(String usuario, String publica, String privada) {
+    public void createClave(String usuario, BigInteger publica, BigInteger privada, BigInteger modulus) {
 
         if (!comprobarClave(usuario)) {
             try {
@@ -45,7 +46,7 @@ public class Clave {
                 }
                 int id_num = ultimo + 1;
                 String id = id_num + "";
-                String sql = "INSERT INTO ROOT.CLAVE VALUES(" + id + ",'" + usuario + "','" + publica + "','" + privada + "')";
+                String sql = "INSERT INTO ROOT.CLAVE VALUES(" + id + "," + usuario + "," + publica + "," + privada + "," + modulus + ")";
                 stmt.executeUpdate(sql);
 
             } catch (SQLException ex) {
