@@ -63,9 +63,13 @@ public class ConexionServidor implements ActionListener {
             System.out.println("Socket creado correctamente.");
             //registro al usuario en el servidor
             
+            RSA objetoRSA = new RSA(1024);
             
-
-            ObjetoEnvio objeto = new ObjetoEnvio(user,"servidor","","REGISTRO");
+            String claves = objetoRSA.getPublicKey() + ":" + objetoRSA.getPrivateKey() + ":" + objetoRSA.getModulus();
+            
+            
+            
+            ObjetoEnvio objeto = new ObjetoEnvio(user,"servidor",claves,"REGISTRO");
             escribirSocket(objeto);
 
         } catch (IOException ex) {
