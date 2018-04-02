@@ -1,7 +1,7 @@
-Thu Mar 22 18:45:33 CET 2018 : Apache Derby Network Server - 10.10.2.0 - (1582446) started and ready to accept connections on port 1527
+Mon Apr 02 09:34:31 CEST 2018 : Apache Derby Network Server - 10.10.2.0 - (1582446) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Thu Mar 22 18:45:33 CET 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0162-4ed0-db03-ffffb4c3d645 
+Mon Apr 02 09:34:31 CEST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0162-8547-63f9-ffffb4c3d645 
 on database directory /Users/minguez/MEGA/Mega-Universidad/UNIVERSIDAD/CUARTO CURSO/Segundo Cuatrimestre/Estrategias de seguridad/Prácticas/Prac_Est_Seg/ShelterDB/ShelterDB with class loader sun.misc.Launcher$AppClassLoader@66d3c617 
 Loaded from file:/Applications/NetBeans/glassfish-4.1.1/javadb/lib/derby.jar
 java.vendor=Oracle Corporation
@@ -12,28 +12,3 @@ os.arch=x86_64
 os.version=10.13.3
 derby.system.home=/Users/minguez/MEGA/Mega-Universidad/UNIVERSIDAD/CUARTO CURSO/Segundo Cuatrimestre/Estrategias de seguridad/Prácticas/Prac_Est_Seg/ShelterDB
 Database Class Loader started - derby.database.classpath=''
-----------------------------------------------------------------
-Thu Mar 22 20:44:24 CET 2018: Shutting down Derby engine
-----------------------------------------------------------------
-Thu Mar 22 20:44:24 CET 2018:
-Shutting down instance a816c00e-0162-4ed0-db03-ffffb4c3d645 on database directory /Users/minguez/MEGA/Mega-Universidad/UNIVERSIDAD/CUARTO CURSO/Segundo Cuatrimestre/Estrategias de seguridad/Prácticas/Prac_Est_Seg/ShelterDB/ShelterDB with class loader sun.misc.Launcher$AppClassLoader@66d3c617 
-Thu Mar 22 20:44:24 CET 2018 : Unexpected exception:
- {0}
-Thu Mar 22 20:44:24 CET 2018 : For input string: "1 2"
-java.lang.NumberFormatException: For input string: "1 2"
-	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
-	at java.lang.Long.parseLong(Long.java:589)
-	at java.lang.Long.parseLong(Long.java:631)
-	at org.apache.derby.impl.store.raw.log.LogToFile.deleteObsoleteLogfiles(Unknown Source)
-	at org.apache.derby.impl.store.raw.log.LogToFile.stop(Unknown Source)
-	at org.apache.derby.impl.services.monitor.TopService.stop(Unknown Source)
-	at org.apache.derby.impl.services.monitor.TopService.shutdown(Unknown Source)
-	at org.apache.derby.impl.services.monitor.BaseMonitor.shutdown(Unknown Source)
-	at org.apache.derby.impl.services.monitor.BaseMonitor.shutdown(Unknown Source)
-	at org.apache.derby.jdbc.InternalDriver.connect(Unknown Source)
-	at org.apache.derby.jdbc.Driver20.connect(Unknown Source)
-	at org.apache.derby.jdbc.EmbeddedDriver.connect(Unknown Source)
-	at org.apache.derby.impl.drda.NetworkServerControlImpl.blockingStart(Unknown Source)
-	at org.apache.derby.impl.drda.NetworkServerControlImpl.executeWork(Unknown Source)
-	at org.apache.derby.drda.NetworkServerControl.main(Unknown Source)
-Thu Mar 22 20:44:24 CET 2018 : Apache Derby Network Server - 10.10.2.0 - (1582446) shutdown

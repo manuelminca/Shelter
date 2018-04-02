@@ -6,6 +6,7 @@
 package shelterserver;
 
 import aux.ObjetoEnvio;
+import db.Clave;
 import db.Conversacion;
 import db.Mensaje;
 import db.Usuario;
@@ -17,6 +18,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import static java.lang.Math.log;
+import java.math.BigInteger;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -76,7 +78,17 @@ public class SocketThread extends Thread implements Observer{
         // Creamos en la base de datos el usuario
         String usuario = objeto.getEmisor();
         if(us.buscarUsuario(usuario)) us.setOnline(usuario,true);
-        else us.createUsuario(objeto.getEmisor());
+        else{ 
+            us.createUsuario(objeto.getEmisor());
+            try {
+                Clave clave = new Clave();
+                clave.createClave(usuario, objeto.getPublica(), objeto.getPrivada(), objeto.getModulus());
+                 
+            } catch (SQLException ex) {
+                Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
         
         //aádimos el mensaje en el array (Ver si es util)
         objeto.setMensaje("");
