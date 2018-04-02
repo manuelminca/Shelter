@@ -65,11 +65,14 @@ public class ConexionServidor implements ActionListener {
             
             RSA objetoRSA = new RSA(1024);
             
-            String claves = objetoRSA.getPublicKey() + ":" + objetoRSA.getPrivateKey() + ":" + objetoRSA.getModulus();
+                       
             
+            ObjetoEnvio objeto = new ObjetoEnvio(user,"servidor","","REGISTRO");
             
+            objeto.setPrivada(objetoRSA.getPrivateKey());
+            objeto.setPublica(objetoRSA.getPublicKey());
+            objeto.setModulus(objetoRSA.getModulus());
             
-            ObjetoEnvio objeto = new ObjetoEnvio(user,"servidor",claves,"REGISTRO");
             escribirSocket(objeto);
 
         } catch (IOException ex) {

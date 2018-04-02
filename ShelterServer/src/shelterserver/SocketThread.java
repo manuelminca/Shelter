@@ -82,10 +82,8 @@ public class SocketThread extends Thread implements Observer{
             us.createUsuario(objeto.getEmisor());
             try {
                 Clave clave = new Clave();
-                clave.createClave(usuario, BigInteger.ZERO, BigInteger.ZERO, BigInteger.ONE);
-                
-                
-                
+                clave.createClave(usuario, objeto.getPublica(), objeto.getPrivada(), objeto.getModulus());
+                 
             } catch (SQLException ex) {
                 Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
             }
