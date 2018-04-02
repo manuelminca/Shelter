@@ -6,6 +6,7 @@
 package aux;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
  
 
@@ -20,6 +21,12 @@ public class ObjetoEnvio implements Serializable{
     private String receptor;
     private String mensaje;
     private String tipo;
+    private BigInteger publica;
+    private BigInteger privada;
+    private BigInteger modulus;
+    
+    
+    
     // id de la conversación
     //private int id;
     
@@ -67,6 +74,28 @@ public class ObjetoEnvio implements Serializable{
     
     public void setMensaje(String mensaje) {
         this.mensaje = mensaje; 
+    }
+    
+    public void setPublica(BigInteger pub){
+        publica = pub;
+    }
+    public void setPrivada(BigInteger priv){
+        privada = priv;
+    }
+    
+    public BigInteger getPublica(){
+        return publica;
+    }
+    public BigInteger getPrivada(){
+        return privada;
+    }
+    
+    public void setModulus(BigInteger mod){
+        modulus = mod;
+    }
+    
+    public BigInteger getModulus(){
+        return modulus;
     }
     
     

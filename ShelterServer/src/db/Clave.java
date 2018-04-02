@@ -46,7 +46,7 @@ public class Clave {
                 }
                 int id_num = ultimo + 1;
                 String id = id_num + "";
-                String sql = "INSERT INTO ROOT.CLAVE VALUES(" + id + "," + usuario + "," + publica + "," + privada + "," + modulus + ")";
+                String sql = "INSERT INTO ROOT.CLAVE VALUES(" + id + ",'" + usuario + "'," + publica + "," + privada + "," + modulus + ")";
                 stmt.executeUpdate(sql);
 
             } catch (SQLException ex) {
