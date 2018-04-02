@@ -5,6 +5,8 @@
  */
 package shelter;
 
+import static java.lang.Integer.sum;
+import static java.lang.Long.sum;
 import java.math.BigInteger;
 import java.security.*;
 
@@ -39,7 +41,12 @@ public class RSA {
     }
 
     public String decrypt(BigInteger encrypted) {
-
+        BigInteger decrypt = encrypted.modPow(privateKey, modulus);
+        String resultado = new String(decrypt.toByteArray());
+        return resultado;
+    }
+    
+    public String decryptAux(BigInteger encrypted) {
         BigInteger decrypt = encrypted.modPow(privateKey, modulus);
         String resultado = new String(decrypt.toByteArray());
         return resultado;
@@ -68,15 +75,38 @@ public class RSA {
     public void setModulus(BigInteger a) {
         modulus = a;
     }
+    
+    public BigInteger toBigInteger(String foo){
+        return new BigInteger(foo);
+    }
+
+    public String toString(BigInteger bar){
+        return bar.toString();
+    }
 
     //PARA QUE VEAS COMO FUNCIONA RAFA
-    /*
-    public static void main(String[] args) {
+    
+    /*public static void main(String[] args) {
         int N = Integer.parseInt("1024");
         RSA key = new RSA(N);
         System.out.println(key);
 
         BigInteger encrypt = key.encrypt("hola");
+        
+        
+        //DOS FORMAS DE PASARLO A STRING:
+       
+        //String cadena = String.valueOf(encrypt);
+        String cadena = String.valueOf(encrypt);
+        System.out.println("cadena: " + cadena);
+        String cadena1 = encrypt.toString();
+        System.out.println("cadena: " + cadena1);
+        
+        //FORMA DE PASAR STRING A BIGINTEFER
+        BigInteger copia = new BigInteger(cadena1);
+        System.out.println("bi: " + copia);
+        
+      
         String decrypt = key.decrypt(encrypt);
         System.out.println("encrypted = " + encrypt);
 
@@ -88,8 +118,8 @@ public class RSA {
         BigInteger message = new BigInteger(bytes);
         System.out.println("encrypted2 = " + message);
 
-    }
-*/
+    }*/
+    
 
 
 }

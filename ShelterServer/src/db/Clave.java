@@ -34,8 +34,16 @@ public class Clave {
             System.out.println("Ha fallado el constructor de BD/Usuario");
         }
     }
+    
+    public BigInteger toBigInteger(String foo){
+        return new BigInteger(foo);
+    }
 
-    public void createClave(String usuario, BigInteger publica, BigInteger privada, BigInteger modulus) {
+    public String toString(BigInteger bar){
+        return bar.toString();
+    }
+
+    public void createClave(String usuario, String publica, String privada,  String modulus) {
 
         if (!comprobarClave(usuario)) {
             try {
@@ -46,7 +54,7 @@ public class Clave {
                 }
                 int id_num = ultimo + 1;
                 String id = id_num + "";
-                String sql = "INSERT INTO ROOT.CLAVE VALUES(" + id + ",'" + usuario + "'," + publica + "," + privada + "," + modulus + ")";
+                String sql = "INSERT INTO ROOT.CLAVE VALUES(" + id + ",'" + usuario + "','" + publica + "','" + privada + "','" + modulus + "')";
                 stmt.executeUpdate(sql);
 
             } catch (SQLException ex) {
