@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigInteger;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,13 +66,24 @@ public class ConexionServidor implements ActionListener {
             
             RSA objetoRSA = new RSA(1024);
             
+            
                        
             
             ObjetoEnvio objeto = new ObjetoEnvio(user,"servidor","","REGISTRO");
+            //pasamos la privada a string y le encriptados AES
+            BigInteger privada= objetoRSA.getPrivateKey();
+            String stringPrivada = objetoRSA.toString(privada);
+            stringPrivada = doEncryptedAES(stringPrivada,"");
+            //publica
+            BigInteger publica= objetoRSA.getPublicKey();
+            String stringPublica = objetoRSA.toString(publica);
+            //modulus
+            BigInteger modulus= objetoRSA.getModulus();
+            String stringModulus = objetoRSA.toString(modulus);
             
-            objeto.setPrivada(objetoRSA.getPrivateKey());
-            objeto.setPublica(objetoRSA.getPublicKey());
-            objeto.setModulus(objetoRSA.getModulus());
+            objeto.setPrivada(stringPrivada);
+            objeto.setPublica(stringPublica);
+            objeto.setModulus(stringModulus);
             
             escribirSocket(objeto);
 

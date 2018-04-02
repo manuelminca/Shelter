@@ -1,7 +1,7 @@
-Sun Mar 25 17:11:55 CEST 2018 : Servidor de red Apache Derby: Se ha iniciado 10.10.2.0 - (1582446) y está listo para aceptar las conexiones en el puerto 1527
+Mon Apr 02 10:42:18 CEST 2018 : Servidor de red Apache Derby: Se ha iniciado 10.10.2.0 - (1582446) y está listo para aceptar las conexiones en el puerto 1527
 ----------------------------------------------------------------
-Sun Mar 25 17:11:55 CEST 2018:
- Iniciando instancia a816c00e-0162-5db7-467d-ffffd54e027a de Derby, versión The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): 
+Mon Apr 02 10:42:18 CEST 2018:
+ Iniciando instancia a816c00e-0162-8585-72d7-ffffd54e027a de Derby, versión The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): 
 en el directorio de base de datos /Users/rafaelsoriadiez/Documents/Prac_Est_Seg/ShelterDB/ShelterDB con el cargador de clases sun.misc.Launcher$AppClassLoader@66d3c617
 Cargado desde file:/Applications/NetBeans/glassfish-4.1.1/javadb/lib/derby.jar
 java.vendor=Oracle Corporation
@@ -12,65 +12,14 @@ os.arch=x86_64
 os.version=10.13.1
 derby.system.home=/Users/rafaelsoriadiez/Documents/Prac_Est_Seg/ShelterDB
 Cargador de clases de base de datos iniciado - derby.database.classpath=''
-Sun Mar 25 17:11:55 CEST 2018 Thread[DRDAConnThread_2,5,main] (XID = 4907), (SESSIONID = 0), (DATABASE = ShelterDB), (DRDAID = {1}), Cleanup action starting
-java.sql.SQLNonTransientConnectionException: Connection authentication failure occurred.  Reason: Invalid authentication..
-	at org.apache.derby.impl.jdbc.SQLExceptionFactory40.getSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.Util.newEmbedSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.Util.newEmbedSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.Util.generateCsSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.EmbedConnection.newSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.EmbedConnection.checkUserCredentials(Unknown Source)
-	at org.apache.derby.impl.jdbc.EmbedConnection.<init>(Unknown Source)
-	at org.apache.derby.impl.jdbc.EmbedConnection40.<init>(Unknown Source)
-	at org.apache.derby.jdbc.Driver40.getNewEmbedConnection(Unknown Source)
-	at org.apache.derby.jdbc.InternalDriver.connect(Unknown Source)
-	at org.apache.derby.jdbc.Driver20.connect(Unknown Source)
-	at org.apache.derby.jdbc.EmbeddedDriver.connect(Unknown Source)
-	at org.apache.derby.impl.drda.Database.makeConnection(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.getConnFromDatabaseName(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.verifyUserIdPassword(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.parseSECCHK(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.parseDRDAConnection(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.processCommands(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.run(Unknown Source)
-Caused by: java.sql.SQLException: Connection authentication failure occurred.  Reason: Invalid authentication..
-	at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.SQLExceptionFactory40.wrapArgsForTransportAcrossDRDA(Unknown Source)
-	... 19 more
-============= begin nested exception, level (1) ===========
-java.sql.SQLException: Connection authentication failure occurred.  Reason: Invalid authentication..
-	at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.SQLExceptionFactory40.wrapArgsForTransportAcrossDRDA(Unknown Source)
-	at org.apache.derby.impl.jdbc.SQLExceptionFactory40.getSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.Util.newEmbedSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.Util.newEmbedSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.Util.generateCsSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.EmbedConnection.newSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.EmbedConnection.checkUserCredentials(Unknown Source)
-	at org.apache.derby.impl.jdbc.EmbedConnection.<init>(Unknown Source)
-	at org.apache.derby.impl.jdbc.EmbedConnection40.<init>(Unknown Source)
-	at org.apache.derby.jdbc.Driver40.getNewEmbedConnection(Unknown Source)
-	at org.apache.derby.jdbc.InternalDriver.connect(Unknown Source)
-	at org.apache.derby.jdbc.Driver20.connect(Unknown Source)
-	at org.apache.derby.jdbc.EmbeddedDriver.connect(Unknown Source)
-	at org.apache.derby.impl.drda.Database.makeConnection(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.getConnFromDatabaseName(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.verifyUserIdPassword(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.parseSECCHK(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.parseDRDAConnection(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.processCommands(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.run(Unknown Source)
-============= end nested exception, level (1) ===========
-Cleanup action completed
-Sun Mar 25 17:11:55 CEST 2018 Thread[DRDAConnThread_2,5,main] (DATABASE = ShelterDB), (DRDAID = {1}), Connection authentication failure occurred.  Reason: Invalid authentication..
 ----------------------------------------------------------------
-Sun Mar 25 17:18:35 CEST 2018: cerrando motor de Derby
+Mon Apr 02 12:59:49 CEST 2018: cerrando motor de Derby
 ----------------------------------------------------------------
-Sun Mar 25 17:18:35 CEST 2018:
-Cerrando la instancia a816c00e-0162-5db7-467d-ffffd54e027a en el directorio de base de datos /Users/rafaelsoriadiez/Documents/Prac_Est_Seg/ShelterDB/ShelterDB con cargador de clases sun.misc.Launcher$AppClassLoader@66d3c617
-Sun Mar 25 17:18:35 CEST 2018 : Excepción inesperada:
+Mon Apr 02 12:59:49 CEST 2018:
+Cerrando la instancia a816c00e-0162-8585-72d7-ffffd54e027a en el directorio de base de datos /Users/rafaelsoriadiez/Documents/Prac_Est_Seg/ShelterDB/ShelterDB con cargador de clases sun.misc.Launcher$AppClassLoader@66d3c617
+Mon Apr 02 12:59:49 CEST 2018 : Excepción inesperada:
  {0}
-Sun Mar 25 17:18:35 CEST 2018 : For input string: "1 2"
+Mon Apr 02 12:59:49 CEST 2018 : For input string: "1 2"
 java.lang.NumberFormatException: For input string: "1 2"
 	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
 	at java.lang.Long.parseLong(Long.java:589)
@@ -87,4 +36,4 @@ java.lang.NumberFormatException: For input string: "1 2"
 	at org.apache.derby.impl.drda.NetworkServerControlImpl.blockingStart(Unknown Source)
 	at org.apache.derby.impl.drda.NetworkServerControlImpl.executeWork(Unknown Source)
 	at org.apache.derby.drda.NetworkServerControl.main(Unknown Source)
-Sun Mar 25 17:18:35 CEST 2018 : Servidor de red Apache Derby: cierre de 10.10.2.0 - (1582446)
+Mon Apr 02 12:59:49 CEST 2018 : Servidor de red Apache Derby: cierre de 10.10.2.0 - (1582446)

@@ -21,9 +21,9 @@ public class ObjetoEnvio implements Serializable{
     private String receptor;
     private String mensaje;
     private String tipo;
-    private BigInteger publica;
-    private BigInteger privada;
-    private BigInteger modulus;
+    private String publica;
+    private String privada;
+    private String modulus;
     
     
     
@@ -76,29 +76,35 @@ public class ObjetoEnvio implements Serializable{
         this.mensaje = mensaje; 
     }
     
-    public void setPublica(BigInteger pub){
+    public void setPublica(String pub){
         publica = pub;
     }
-    public void setPrivada(BigInteger priv){
+    public void setPrivada(String priv){
         privada = priv;
     }
     
-    public BigInteger getPublica(){
+    public String getPublica(){
         return publica;
     }
-    public BigInteger getPrivada(){
+    public String getPrivada(){
         return privada;
     }
     
-    public void setModulus(BigInteger mod){
+    public void setModulus(String mod){
         modulus = mod;
     }
     
-    public BigInteger getModulus(){
+    public String getModulus(){
         return modulus;
     }
     
-    
+    public BigInteger toBigInteger(String foo){
+        return new BigInteger(foo);
+    }
+
+    public String toString(BigInteger bar){
+        return bar.toString();
+    }
     
     
 }
