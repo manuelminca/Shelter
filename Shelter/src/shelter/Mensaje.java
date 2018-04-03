@@ -32,6 +32,8 @@ public class Mensaje extends javax.swing.JPanel {
     
     public Mensaje(){}
     
+    //cambio realizado
+    
     public Mensaje(Usuario usuario,ConexionServidor cs) {
         initComponents();
         
