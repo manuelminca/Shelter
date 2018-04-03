@@ -50,6 +50,10 @@ public class ConexionServidor implements ActionListener {
         }
         return objeto;
     }
+    
+    public void print(String mensaje){
+        System.out.println(mensaje);
+    }
 
     //registra el usuario en el servidor
     public ConexionServidor(Usuario usuario, String key) {
@@ -68,19 +72,29 @@ public class ConexionServidor implements ActionListener {
             
             
                        
-            
+            //PASAMOS DE BIGINTEGER A STRING
             ObjetoEnvio objeto = new ObjetoEnvio(user,"servidor","","REGISTRO");
             //pasamos la privada a string y le encriptados AES
             BigInteger privada= objetoRSA.getPrivateKey();
+           
             String stringPrivada = objetoRSA.toString(privada);
-            stringPrivada = doEncryptedAES(stringPrivada,"");
+            print("privada sin cifrar:" + stringPrivada);
+            String password = usuario.getPassword();
+            stringPrivada = doEncryptedAES(stringPrivada,password);
+            print("privada con cifrar:" + stringPrivada);
+            
+           
+            
+            
+            
             //publica
             BigInteger publica= objetoRSA.getPublicKey();
             String stringPublica = objetoRSA.toString(publica);
+            print("publica:" + stringPublica);
             //modulus
             BigInteger modulus= objetoRSA.getModulus();
             String stringModulus = objetoRSA.toString(modulus);
-            
+            print("modulus:" + stringModulus);
             objeto.setPrivada(stringPrivada);
             objeto.setPublica(stringPublica);
             objeto.setModulus(stringModulus);

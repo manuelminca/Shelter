@@ -14,6 +14,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.Socket;
 import java.util.ArrayList;
 import javax.swing.JLabel;
@@ -39,9 +40,9 @@ public class Shelter extends javax.swing.JFrame {
     private ConexionServidor cs;
     private String key;
     GridBagLayout layout = new GridBagLayout();
-    private List<JLabel> labelsUsuarios;
     private int indiceUsuarios;
     private List<Mensaje> listaMensajes;
+    RSA rsa;
 
 
     public Shelter() {
@@ -64,6 +65,7 @@ public class Shelter extends javax.swing.JFrame {
         DynamicPanel.add(mensaje, c);
         mensaje.setVisible(false);
         labelUsuario.setText("Usuario: " + usuario.getUsuario());
+        rsa = new RSA(1024);
         
         
         //SALIMOS
@@ -194,6 +196,12 @@ public class Shelter extends javax.swing.JFrame {
 
     
     private void iniciarConversacion(String receptor){
+        
+        String pass = "inventada";
+        
+        BigInteger publica = rsa.getPublicKey();
+        
+        
         mensaje.setVisible(true);
         mensaje.getJTextArea().setText("");
         ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, key, "CHAT");
@@ -220,14 +228,12 @@ public class Shelter extends javax.swing.JFrame {
                 //se crea "la conversacion" por cada usuario conectado
                 user.addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent e) {
-
                         mensaje.setReceptor(receptor);
+                        
                         iniciarConversacion(receptor);
-
                     }
                 });
                 panelUsuarios.add(user);
-                labelsUsuarios.add(user);
                 indiceUsuarios++;
                 panelUsuarios.updateUI();
             }
@@ -256,6 +262,7 @@ public class Shelter extends javax.swing.JFrame {
         return resultado;
     }
     
+
     
     public void recibirMensajesServidor() {
         Socket socket = cs.getSocket();
@@ -268,7 +275,18 @@ public class Shelter extends javax.swing.JFrame {
             try {
                 objeto = cs.leerSocket(socket);
                 if (objeto.getTipo().equals("ACK")) {
-                    //nothing to do here
+                    BigInteger publica;
+                    BigInteger privada;
+                    BigInteger modulus;
+                    
+                    publica = rsa.toBigInteger(objeto.getPublica());
+                    rsa.setPublicKey(publica);                  
+                    String privadaAES  = doDecryptedAES(objeto.getPrivada(), usuario.getPassword());
+                    privada = rsa.toBigInteger(privadaAES);
+                    rsa.setPrivateKey(privada);
+                    modulus = rsa.toBigInteger(objeto.getModulus());
+                    rsa.setModulus(modulus);
+                    
                 } else if (objeto.getTipo().equals("LISTAR")) {
                     if (objeto.getReceptor().equals(usuario.getUsuario())) {
                         listarUsuarios(objeto.getMensaje());
@@ -283,15 +301,11 @@ public class Shelter extends javax.swing.JFrame {
                         
                         print(partes[0]);
                         print(partes[1]);
-                        
                         key = partes[0];
-
                         String texto = prepararChat(partes[1], key);
-
                         JTextArea chat = new JTextArea();
                         textChat.append(texto);
                         mensaje.setJTextArea(chat);
-                        
                         textChat.setText(texto);
                         
                     }
@@ -308,7 +322,7 @@ public class Shelter extends javax.swing.JFrame {
                 System.out.println("Error al leer del stream de entrada: " + ex.getMessage());
                 conectado = false;
             } catch (NullPointerException ex) {
-                System.out.println("El socket no se creo correctamente. ");
+                ex.printStackTrace();
                 conectado = false;
             }
         }
