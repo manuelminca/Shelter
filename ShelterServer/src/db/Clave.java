@@ -54,13 +54,68 @@ public class Clave {
                 }
                 int id_num = ultimo + 1;
                 String id = id_num + "";
-                String sql = "INSERT INTO ROOT.CLAVE VALUES(" + id + ",'" + usuario + "','" + publica + "','" + privada + "','" + modulus + "')";
+                String sql = "INSERT INTO ROOT.CLAVE VALUES(" + id + ",'" + usuario + "','" + privada + "','" + publica + "','" + modulus + "')";
                 stmt.executeUpdate(sql);
 
             } catch (SQLException ex) {
                 Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    
+    public String getPublica(String usuario){
+        String clave = "";
+        try {
+            String consulta = "SELECT clave_publica FROM ROOT.Clave WHERE Usuario = ?";
+            PreparedStatement st = myObjCon.prepareStatement(consulta);
+            st.setString(1, usuario);
+            result = st.executeQuery();
+
+            while (result.next()) {
+                clave = result.getString(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return clave;
+        
+    }
+    
+    public String getPrivada(String usuario){
+        String clave = "";
+        try {
+            String consulta = "SELECT clave_privada FROM ROOT.Clave WHERE Usuario = ?";
+            PreparedStatement st = myObjCon.prepareStatement(consulta);
+            st.setString(1, usuario);
+            result = st.executeQuery();
+
+            while (result.next()) {
+                clave = result.getString(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return clave;
+        
+    }
+    
+    public String getModulus(String usuario){
+        String clave = "";
+        try {
+            String consulta = "SELECT modulus FROM ROOT.Clave WHERE Usuario = ?";
+            PreparedStatement st = myObjCon.prepareStatement(consulta);
+            st.setString(1, usuario);
+            result = st.executeQuery();
+
+            while (result.next()) {
+                clave = result.getString(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return clave;
+        
     }
 
     public boolean comprobarClave(String usuario) {

@@ -57,7 +57,6 @@ public class SocketThread extends Thread implements Observer{
         ObjectInputStream flujo = new ObjectInputStream(aux);
         ObjetoEnvio objeto;
         objeto = (ObjetoEnvio) flujo.readObject();
-        System.out.println("5");
         return objeto;
     }
     
@@ -82,11 +81,7 @@ public class SocketThread extends Thread implements Observer{
             us.createUsuario(usuario);
             try {
                 Clave clave = new Clave();
-                System.out.println("publica: " + objeto.getPublica());
-                System.out.println("privada: " + objeto.getPrivada());
-                System.out.println("mpodulus:" + objeto.getModulus());
                 clave.createClave(usuario, objeto.getPublica(), objeto.getPrivada(), objeto.getModulus());
-                System.out.println("ESTA CHEDO");
                  
             } catch (SQLException ex) {
                 Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
@@ -104,12 +99,20 @@ public class SocketThread extends Thread implements Observer{
         objeto.setTipo("ACK");
         String mensaje = "Usuario " + user + "registrado";
         objeto.setMensaje("Usuario " + user + "registrado");
-
-        mensajes.setObjeto(objeto);
-     
-
-            
         
+        Clave clave;
+        try {
+            clave = new Clave();
+            String modulus = clave.getModulus(user);
+            String privada = clave.getPrivada(user);
+            String publica = clave.getPublica(user);
+            objeto.setModulus(modulus);
+            objeto.setPrivada(privada);
+            objeto.setPublica(publica);
+        } catch (Exception ex) {
+            Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        mensajes.setObjeto(objeto);
     }
     
     
@@ -118,7 +121,7 @@ public class SocketThread extends Thread implements Observer{
         String cadenaClientes = "";
         //buscamos los usuarios online
         cadenaClientes = us.devolverUsuario();
-      
+        System.out.println("cadena: " + cadenaClientes);
         objeto.setMensaje(cadenaClientes);
         String receptor = objeto.getEmisor();
         objeto.setEmisor("servidor");
