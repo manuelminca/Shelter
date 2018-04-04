@@ -71,9 +71,6 @@ public class SocketThread extends Thread implements Observer{
     }
 
     private void addUsuario(ObjetoEnvio objeto) {
-        boolean aux = false;
-      
-
         // Creamos en la base de datos el usuario
         String usuario = objeto.getEmisor();
         if(us.buscarUsuario(usuario)) us.setOnline(usuario,true);
@@ -81,7 +78,7 @@ public class SocketThread extends Thread implements Observer{
             us.createUsuario(usuario);
             try {
                 Clave clave = new Clave();
-                clave.createClave(usuario, objeto.getPublica(), objeto.getPrivada(), objeto.getModulus());
+                clave.createClave(usuario, objeto.getPublicaEmisor(), objeto.getPrivadaEmisor(), objeto.getModulusEmisor());
                  
             } catch (SQLException ex) {
                 Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
@@ -106,9 +103,9 @@ public class SocketThread extends Thread implements Observer{
             String modulus = clave.getModulus(user);
             String privada = clave.getPrivada(user);
             String publica = clave.getPublica(user);
-            objeto.setModulus(modulus);
-            objeto.setPrivada(privada);
-            objeto.setPublica(publica);
+            objeto.setModulusEmisor(modulus);
+            objeto.setPrivadaEmisor(privada);
+            objeto.setPublicaEmisor(publica);
         } catch (Exception ex) {
             Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -128,14 +125,37 @@ public class SocketThread extends Thread implements Observer{
         objeto.setReceptor(receptor);
         mensajes.setObjeto(objeto);
     }
+    
+    public int crearChat(ObjetoEnvio objeto,Conversacion con) throws SQLException{
+        String receptor = objeto.getReceptor();
+        String emisor = objeto.getEmisor();
+        int chat = -1;
+        
+        chat = con.crearChat(emisor, receptor, objeto.getMensaje());
+        Clave clave = new Clave();
+        String publica = clave.getPublica(receptor);
+        String privada = clave.getPrivada(receptor);
+        String modulus = clave.getModulus(receptor);
+        objeto.setPublicaReceptor(publica);
+        objeto.setPrivadaReceptor(privada);
+        objeto.setModulusReceptor(modulus);
+        
+        return chat;
+    }
 
     
     public void iniciarChat(ObjetoEnvio objeto){
         
         Conversacion con;
+        String receptor = objeto.getReceptor();
+        String emisor = objeto.getEmisor();
         try {
             con = new Conversacion();
-            int chat = con.existeChat(objeto.getEmisor(), objeto.getReceptor(), objeto.getMensaje());
+            int chat = con.existeChat(emisor, receptor, objeto.getMensaje());
+            
+            //SI NO EXISTE EL CHAT LO CREAMOS Y CONSEGUIKOS LAS CLAVES DEL RECEPTOR
+            if(chat == -1) chat = crearChat(objeto,con);
+
             //obtenemos la key
             String key = con.devolverKey(chat, objeto.getEmisor());
             Mensaje msj = new Mensaje();
@@ -162,6 +182,23 @@ public class SocketThread extends Thread implements Observer{
        
     }
     
+    
+    /*public void getClave(ObjetoEnvio objeto){
+        //publica
+        
+        String receptor = objeto.getReceptor();
+        try {
+            Clave clave = new Clave();
+            String publica = clave.getPublica(receptor);
+            objeto.setPublica(publica);
+        } catch (Exception ex) {
+            Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        mensajes.setObjeto(objeto);
+        
+        
+    }*/
+    
     public void procesaCadena(ObjetoEnvio objeto) throws IOException {
         
         String tipo = objeto.getTipo();
@@ -174,9 +211,12 @@ public class SocketThread extends Thread implements Observer{
             iniciarChat(objeto);   
         }else if(tipo.equals("SALIR")){
             desconectarUsuario(objeto);
+        }else if(tipo.equals("CLAVE")){
+            desconectarUsuario(objeto);
            
         }else{
-            
+            //ESTE ES EL CASO QUE YA EXISTA EL CHAT
+           
             try {
                 Conversacion con = new Conversacion();
                 int chat = con.existeChat(objeto.getEmisor(), objeto.getReceptor());

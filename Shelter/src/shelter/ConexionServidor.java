@@ -54,6 +54,30 @@ public class ConexionServidor implements ActionListener {
     public void print(String mensaje){
         System.out.println(mensaje);
     }
+    
+    
+    public String getPublica(RSA rsa){
+        BigInteger publica= rsa.getPublicKey();
+        String stringPublica = rsa.toString(publica);
+        return stringPublica;
+    }
+    
+    public String getPrivada(RSA rsa){
+        BigInteger privada= rsa.getPrivateKey();
+           
+        String stringPrivada = rsa.toString(privada);
+        print("privada sin cifrar:" + stringPrivada);
+        String password = usuario.getPassword();
+        stringPrivada = doEncryptedAES(stringPrivada,password);
+        
+        return stringPrivada;
+    }
+    
+    public String getModulus(RSA rsa){
+        BigInteger modulus= rsa.getModulus();
+        String stringModulus = rsa.toString(modulus);
+        return stringModulus;
+    }
 
     //registra el usuario en el servidor
     public ConexionServidor(Usuario usuario, String key) {
@@ -66,39 +90,16 @@ public class ConexionServidor implements ActionListener {
         try {
             socket = new Socket(ip, port);
             System.out.println("Socket creado correctamente.");
-            //registro al usuario en el servidor
-            
-            RSA objetoRSA = new RSA(1024);
-            
-            
-                       
-            //PASAMOS DE BIGINTEGER A STRING
             ObjetoEnvio objeto = new ObjetoEnvio(user,"servidor","","REGISTRO");
-            //pasamos la privada a string y le encriptados AES
-            BigInteger privada= objetoRSA.getPrivateKey();
-           
-            String stringPrivada = objetoRSA.toString(privada);
-            print("privada sin cifrar:" + stringPrivada);
-            String password = usuario.getPassword();
-            stringPrivada = doEncryptedAES(stringPrivada,password);
-            print("privada con cifrar:" + stringPrivada);
             
-           
-            
-            
-            
-            //publica
-            BigInteger publica= objetoRSA.getPublicKey();
-            String stringPublica = objetoRSA.toString(publica);
-            print("publica:" + stringPublica);
-            //modulus
-            BigInteger modulus= objetoRSA.getModulus();
-            String stringModulus = objetoRSA.toString(modulus);
-            print("modulus:" + stringModulus);
-            objeto.setPrivada(stringPrivada);
-            objeto.setPublica(stringPublica);
-            objeto.setModulus(stringModulus);
-            
+            //Parte de RSA
+            RSA objetoRSA = new RSA(1024);
+            String privada = getPrivada(objetoRSA);
+            String publica = getPublica(objetoRSA);
+            String modulus = getModulus(objetoRSA);
+            objeto.setPrivada(privada);
+            objeto.setPublica(publica);
+            objeto.setModulus(modulus);
             escribirSocket(objeto);
 
         } catch (IOException ex) {

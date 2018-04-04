@@ -200,12 +200,21 @@ public class Shelter extends javax.swing.JFrame {
         String pass = "inventada";
         
         BigInteger publica = rsa.getPublicKey();
+        //necesito la key publica del receptor
         
         
         mensaje.setVisible(true);
         mensaje.getJTextArea().setText("");
         ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, key, "CHAT");
         cs.escribirSocket(obj);
+    }
+    
+    
+    public void devolverClave(String receptor){
+        
+        ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, key, "CLAVE");
+        cs.escribirSocket(obj);
+        
     }
     
     public void print(String mensaje){
@@ -291,7 +300,11 @@ public class Shelter extends javax.swing.JFrame {
                     if (objeto.getReceptor().equals(usuario.getUsuario())) {
                         listarUsuarios(objeto.getMensaje());
                     }
-                } else if (objeto.getTipo().equals("CHAT")) {
+                } else if (objeto.getTipo().equals("CLAVE")) {
+                    
+                    
+                    
+                }else if (objeto.getTipo().equals("CHAT")) {
 
                     System.out.println("LLEGA MENSAJE DE TIPO CHAT");
                     
