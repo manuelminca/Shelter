@@ -273,6 +273,69 @@ public class Shelter extends javax.swing.JFrame {
         return resultado;
     }
     
+    
+    public void ACK(ObjetoEnvio objeto){
+        BigInteger publica;
+        BigInteger privada;
+        BigInteger modulus;
+
+        publica = rsa.toBigInteger(objeto.getPublicaEmisor());
+        rsa.setPublicKey(publica);                  
+        String privadaAES  = doDecryptedAES(objeto.getPrivada(), usuario.getPassword());
+        privada = rsa.toBigInteger(privadaAES);
+        rsa.setPrivateKey(privada);
+        modulus = rsa.toBigInteger(objeto.getModulus());
+        rsa.setModulus(modulus);
+    }
+    
+    
+    public void LISTAR(ObjetoEnvio objeto){
+        if (objeto.getReceptor().equals(usuario.getUsuario()))
+            listarUsuarios(objeto.getMensaje());
+        
+    }
+    
+    public void CLAVE(ObjetoEnvio objeto){
+        String emisor = objeto.getEmisor();        
+        if(emisor.equals(usuario.getUsuario())){
+            String receptor = objeto.getReceptor();
+            String publicaReceptor = objeto.getPublicaReceptor();
+            iniciarConversacion(receptor,publicaReceptor);
+        }
+        
+    }
+    
+    public void CHAT(ObjetoEnvio objeto,JTextArea textChat){
+        System.out.println("LLEGA MENSAJE DE TIPO CHAT");
+                    
+        if (objeto.getReceptor().equals(usuario.getUsuario())) {
+
+            String[] partes = objeto.getMensaje().split(":");
+
+            print(partes[0]);
+            print(partes[1]);
+            key = partes[0];
+            String texto = prepararChat(partes[1], key);
+            JTextArea chat = new JTextArea();
+            textChat.append(texto);
+            mensaje.setJTextArea(chat);
+            textChat.setText(texto);
+
+        }
+        
+    }
+    
+    public void DEFAULT(ObjetoEnvio objeto,JTextArea textChat){
+        
+        if ((objeto.getEmisor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getReceptor()))
+                || (objeto.getReceptor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getEmisor()))) {
+            String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
+             System.out.println("mensajeDescifrado: " + mensajeDescifrado);
+            textChat.append(mensajeDescifrado + System.lineSeparator());
+            mensaje.setJTextArea(textChat);
+        }
+        
+    }
 
     
     public void recibirMensajesServidor() {
@@ -285,60 +348,24 @@ public class Shelter extends javax.swing.JFrame {
         while (conectado) {
             try {
                 objeto = cs.leerSocket(socket);
-                if (objeto.getTipo().equals("ACK")) {
-                    BigInteger publica;
-                    BigInteger privada;
-                    BigInteger modulus;
-                    
-                    publica = rsa.toBigInteger(objeto.getPublicaEmisor());
-                    rsa.setPublicKey(publica);                  
-                    String privadaAES  = doDecryptedAES(objeto.getPrivada(), usuario.getPassword());
-                    privada = rsa.toBigInteger(privadaAES);
-                    rsa.setPrivateKey(privada);
-                    modulus = rsa.toBigInteger(objeto.getModulus());
-                    rsa.setModulus(modulus);
-                    
-                } else if (objeto.getTipo().equals("LISTAR")) {
-                    if (objeto.getReceptor().equals(usuario.getUsuario())) {
-                        listarUsuarios(objeto.getMensaje());
-                    }
-                } else if (objeto.getTipo().equals("CLAVE")) {
-                    String emisor = objeto.getEmisor();
-                    
-                    if(emisor.equals(usuario.getUsuario())){
-
-                        String receptor = objeto.getReceptor();
-                        String publicaReceptor = objeto.getPublicaReceptor();
-                        iniciarConversacion(receptor,publicaReceptor);
-                    }
-                    
-                }else if (objeto.getTipo().equals("CHAT")) {
-
-                    System.out.println("LLEGA MENSAJE DE TIPO CHAT");
-                    
-                    if (objeto.getReceptor().equals(usuario.getUsuario())) {
-                        
-                        String[] partes = objeto.getMensaje().split(":");
-                        
-                        print(partes[0]);
-                        print(partes[1]);
-                        key = partes[0];
-                        String texto = prepararChat(partes[1], key);
-                        JTextArea chat = new JTextArea();
-                        textChat.append(texto);
-                        mensaje.setJTextArea(chat);
-                        textChat.setText(texto);
-                        
-                    }
-                } else if ((objeto.getEmisor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getReceptor())) || (objeto.getReceptor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getEmisor()))) {
-                    String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
-                     System.out.println("mensajeDescifrado: " + mensajeDescifrado);
-                    textChat.append(mensajeDescifrado + System.lineSeparator());
-                    mensaje.setJTextArea(textChat);
-                }else{
-                    //Nothing to do here bro
-                }
                 
+                switch(objeto.getTipo()){
+                    case "ACK":
+                         ACK(objeto);
+                         break;
+                    case "LISTAR":
+                        LISTAR(objeto);
+                        break;
+                    case "CLAVE":
+                        CLAVE(objeto);
+                        break;
+                    case "CHAT":
+                        CHAT(objeto,textChat);
+                        break;
+                    default:
+                        DEFAULT(objeto,textChat);
+                        break;     
+                }     
             } catch (IOException ex) {
                 System.out.println("Error al leer del stream de entrada: " + ex.getMessage());
                 conectado = false;
