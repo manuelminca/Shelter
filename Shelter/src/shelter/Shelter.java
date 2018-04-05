@@ -195,9 +195,10 @@ public class Shelter extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    private void iniciarConversacion(String receptor){
+    private void iniciarConversacion(String receptor,String publicaReceptor){
         
         String pass = "inventada";
+        print("clave publica: " + publicaReceptor);
         
         BigInteger publica = rsa.getPublicKey();
         //necesito la key publica del receptor
@@ -239,7 +240,8 @@ public class Shelter extends javax.swing.JFrame {
                     public void mouseClicked(MouseEvent e) {
                         mensaje.setReceptor(receptor);
                         
-                        iniciarConversacion(receptor);
+                        //iniciarConversacion(receptor);
+                        devolverClave(receptor);
                     }
                 });
                 panelUsuarios.add(user);
@@ -290,10 +292,10 @@ public class Shelter extends javax.swing.JFrame {
                     
                     publica = rsa.toBigInteger(objeto.getPublicaEmisor());
                     rsa.setPublicKey(publica);                  
-                    String privadaAES  = doDecryptedAES(objeto.getPrivadaEmisor(), usuario.getPassword());
+                    String privadaAES  = doDecryptedAES(objeto.getPrivada(), usuario.getPassword());
                     privada = rsa.toBigInteger(privadaAES);
                     rsa.setPrivateKey(privada);
-                    modulus = rsa.toBigInteger(objeto.getModulusEmisor());
+                    modulus = rsa.toBigInteger(objeto.getModulus());
                     rsa.setModulus(modulus);
                     
                 } else if (objeto.getTipo().equals("LISTAR")) {
@@ -301,8 +303,14 @@ public class Shelter extends javax.swing.JFrame {
                         listarUsuarios(objeto.getMensaje());
                     }
                 } else if (objeto.getTipo().equals("CLAVE")) {
+                    String emisor = objeto.getEmisor();
                     
-                    
+                    if(emisor.equals(usuario.getUsuario())){
+
+                        String receptor = objeto.getReceptor();
+                        String publicaReceptor = objeto.getPublicaReceptor();
+                        iniciarConversacion(receptor,publicaReceptor);
+                    }
                     
                 }else if (objeto.getTipo().equals("CHAT")) {
 

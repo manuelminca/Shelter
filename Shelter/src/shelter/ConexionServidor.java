@@ -56,26 +56,28 @@ public class ConexionServidor implements ActionListener {
     }
     
     
-    public String getPublica(RSA rsa){
+    public void getPublica(RSA rsa,ObjetoEnvio objeto){
         BigInteger publica= rsa.getPublicKey();
         String stringPublica = rsa.toString(publica);
-        return stringPublica;
+        objeto.setPublicaEmisor(stringPublica);
     }
     
-    public String getPrivada(RSA rsa){
+    public void getPrivada(RSA rsa,ObjetoEnvio objeto){
         BigInteger privada= rsa.getPrivateKey();
            
         String stringPrivada = rsa.toString(privada);
         String password = usuario.getPassword();
         stringPrivada = doEncryptedAES(stringPrivada,password);
+        objeto.setPrivada(stringPrivada);
         
-        return stringPrivada;
+        
     }
     
-    public String getModulus(RSA rsa){
+    public void getModulus(RSA rsa,ObjetoEnvio objeto){
         BigInteger modulus= rsa.getModulus();
         String stringModulus = rsa.toString(modulus);
-        return stringModulus;
+        objeto.setModulus(stringModulus);
+        
     }
 
     //registra el usuario en el servidor
@@ -93,12 +95,9 @@ public class ConexionServidor implements ActionListener {
             
             //Parte de RSA
             RSA objetoRSA = new RSA(1024);
-            String privada = getPrivada(objetoRSA);
-            String publica = getPublica(objetoRSA);
-            String modulus = getModulus(objetoRSA);
-            objeto.setPrivadaEmisor(privada);
-            objeto.setPublicaEmisor(publica);
-            objeto.setModulusEmisor(modulus);
+            getPrivada(objetoRSA,objeto);
+            getPublica(objetoRSA,objeto);
+            getModulus(objetoRSA,objeto);
             escribirSocket(objeto);
 
         } catch (IOException ex) {

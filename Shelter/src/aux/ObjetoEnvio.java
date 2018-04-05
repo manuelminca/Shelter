@@ -22,11 +22,9 @@ public class ObjetoEnvio implements Serializable{
     private String mensaje;
     private String tipo;
     private String publicaEmisor;
-    private String privadaEmisor;
-    private String modulusEmisor;
+    private String privada;
+    private String modulus;
     private String publicaReceptor;
-    private String privadaReceptor;
-    private String modulusReceptor;
     
     
     
@@ -82,46 +80,35 @@ public class ObjetoEnvio implements Serializable{
     public void setPublicaEmisor(String pub){
         publicaEmisor = pub;
     }
-    public void setPrivadaEmisor(String priv){
-        privadaEmisor = priv;
+    public void setPrivada(String priv){
+        privada = priv;
     }
     
     public void setPublicaReceptor(String pub){
         publicaReceptor = pub;
     }
-    public void setPrivadaReceptor(String priv){
-        privadaReceptor = priv;
-    }
-    
+
     public String getPublicaEmisor(){
         return publicaEmisor;
     }
-    public String getPrivadaEmisor(){
-        return privadaEmisor;
+    public String getPrivada(){
+        return privada;
     }
     
     public String getPublicaReceptor(){
         return publicaReceptor;
     }
-    public String getPrivadaReceptor(){
-        return privadaReceptor;
+  
+    
+    public void setModulus(String mod){
+        modulus = mod;
     }
     
-    public void setModulusEmisor(String mod){
-        modulusEmisor = mod;
+    public String getModulus(){
+        return modulus;
     }
     
-    public void setModulusReceptor(String mod){
-        modulusReceptor = mod;
-    }
-    
-    public String getModulusEmisor(){
-        return modulusEmisor;
-    }
-    
-    public String getModulusReceptor(){
-        return modulusReceptor;
-    }
+   
     
     public BigInteger toBigInteger(String foo){
         return new BigInteger(foo);
