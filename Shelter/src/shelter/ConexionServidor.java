@@ -66,7 +66,6 @@ public class ConexionServidor implements ActionListener {
         BigInteger privada= rsa.getPrivateKey();
            
         String stringPrivada = rsa.toString(privada);
-        print("privada sin cifrar:" + stringPrivada);
         String password = usuario.getPassword();
         stringPrivada = doEncryptedAES(stringPrivada,password);
         
@@ -97,9 +96,9 @@ public class ConexionServidor implements ActionListener {
             String privada = getPrivada(objetoRSA);
             String publica = getPublica(objetoRSA);
             String modulus = getModulus(objetoRSA);
-            objeto.setPrivada(privada);
-            objeto.setPublica(publica);
-            objeto.setModulus(modulus);
+            objeto.setPrivadaEmisor(privada);
+            objeto.setPublicaEmisor(publica);
+            objeto.setModulusEmisor(modulus);
             escribirSocket(objeto);
 
         } catch (IOException ex) {

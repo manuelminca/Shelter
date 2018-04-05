@@ -21,9 +21,12 @@ public class ObjetoEnvio implements Serializable{
     private String receptor;
     private String mensaje;
     private String tipo;
-    private String publica;
-    private String privada;
-    private String modulus;
+    private String publicaEmisor;
+    private String privadaEmisor;
+    private String modulusEmisor;
+    private String publicaReceptor;
+    private String privadaReceptor;
+    private String modulusReceptor;
     
     
     
@@ -76,26 +79,48 @@ public class ObjetoEnvio implements Serializable{
         this.mensaje = mensaje; 
     }
     
-    public void setPublica(String pub){
-        publica = pub;
+    public void setPublicaEmisor(String pub){
+        publicaEmisor = pub;
     }
-    public void setPrivada(String priv){
-        privada = priv;
-    }
-    
-    public String getPublica(){
-        return publica;
-    }
-    public String getPrivada(){
-        return privada;
+    public void setPrivadaEmisor(String priv){
+        privadaEmisor = priv;
     }
     
-    public void setModulus(String mod){
-        modulus = mod;
+    public void setPublicaReceptor(String pub){
+        publicaReceptor = pub;
+    }
+    public void setPrivadaReceptor(String priv){
+        privadaReceptor = priv;
     }
     
-    public String getModulus(){
-        return modulus;
+    public String getPublicaEmisor(){
+        return publicaEmisor;
+    }
+    public String getPrivadaEmisor(){
+        return privadaEmisor;
+    }
+    
+    public String getPublicaReceptor(){
+        return publicaReceptor;
+    }
+    public String getPrivadaReceptor(){
+        return privadaReceptor;
+    }
+    
+    public void setModulusEmisor(String mod){
+        modulusEmisor = mod;
+    }
+    
+    public void setModulusReceptor(String mod){
+        modulusReceptor = mod;
+    }
+    
+    public String getModulusEmisor(){
+        return modulusEmisor;
+    }
+    
+    public String getModulusReceptor(){
+        return modulusReceptor;
     }
     
     public BigInteger toBigInteger(String foo){

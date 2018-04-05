@@ -288,12 +288,12 @@ public class Shelter extends javax.swing.JFrame {
                     BigInteger privada;
                     BigInteger modulus;
                     
-                    publica = rsa.toBigInteger(objeto.getPublica());
+                    publica = rsa.toBigInteger(objeto.getPublicaEmisor());
                     rsa.setPublicKey(publica);                  
-                    String privadaAES  = doDecryptedAES(objeto.getPrivada(), usuario.getPassword());
+                    String privadaAES  = doDecryptedAES(objeto.getPrivadaEmisor(), usuario.getPassword());
                     privada = rsa.toBigInteger(privadaAES);
                     rsa.setPrivateKey(privada);
-                    modulus = rsa.toBigInteger(objeto.getModulus());
+                    modulus = rsa.toBigInteger(objeto.getModulusEmisor());
                     rsa.setModulus(modulus);
                     
                 } else if (objeto.getTipo().equals("LISTAR")) {

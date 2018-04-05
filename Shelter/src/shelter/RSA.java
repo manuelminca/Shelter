@@ -101,7 +101,7 @@ public class RSA {
 
     //PARA QUE VEAS COMO FUNCIONA RAFA
     
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         int N = Integer.parseInt("1024");
         RSA key = new RSA(N);
         System.out.println(key);
@@ -115,7 +115,7 @@ public class RSA {
         BigInteger message = new BigInteger(bytes);
         System.out.println("encrypted2 = " + message);
 
-    }
+    }*/
     
 
 
