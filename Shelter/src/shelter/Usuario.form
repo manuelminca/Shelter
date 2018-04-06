@@ -7,6 +7,11 @@
         <Property name="label" type="java.lang.String" value="button1"/>
       </Properties>
     </Component>
+    <Component class="javax.swing.JButton" name="jButton1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jButton1"/>
+      </Properties>
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
@@ -33,18 +38,25 @@
           <Group type="102" attributes="0">
               <EmptySpace min="-2" pref="79" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="labelUsuario" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelIP" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelPuerto" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelClave" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="textUsuario" max="32767" attributes="0"/>
-                  <Component id="textIP" alignment="0" pref="125" max="32767" attributes="0"/>
-                  <Component id="textPuerto" max="32767" attributes="0"/>
-                  <Component id="buttonEnviar" alignment="0" max="32767" attributes="0"/>
-                  <Component id="textClave" alignment="0" max="32767" attributes="0"/>
+                  <Component id="labelMensaje" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="labelUsuario" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelIP" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelPuerto" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelClave" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="botonEnviar" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="textUsuario" max="32767" attributes="0"/>
+                              <Component id="textIP" alignment="0" pref="125" max="32767" attributes="0"/>
+                              <Component id="textPuerto" max="32767" attributes="0"/>
+                              <Component id="textClave" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
               </Group>
               <EmptySpace pref="77" max="32767" attributes="0"/>
           </Group>
@@ -63,19 +75,21 @@
                   <Component id="textClave" min="-2" max="-2" attributes="0"/>
                   <Component id="labelClave" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="22" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="textIP" min="-2" max="-2" attributes="0"/>
                   <Component id="labelIP" min="-2" max="-2" attributes="0"/>
+                  <Component id="textIP" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="textPuerto" alignment="1" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelPuerto" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelPuerto" min="-2" max="-2" attributes="0"/>
+                  <Component id="textPuerto" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-              <Component id="buttonEnviar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+              <Component id="botonEnviar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="25" max="32767" attributes="0"/>
+              <Component id="labelMensaje" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -96,14 +110,6 @@
         <Property name="text" type="java.lang.String" value="Puerto"/>
       </Properties>
     </Component>
-    <Component class="java.awt.Button" name="buttonEnviar">
-      <Properties>
-        <Property name="label" type="java.lang.String" value="Enviar"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonEnviarActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="java.awt.TextField" name="textUsuario">
     </Component>
     <Component class="java.awt.TextField" name="textIP">
@@ -121,6 +127,16 @@
     <Component class="java.awt.Label" name="labelClave">
       <Properties>
         <Property name="text" type="java.lang.String" value="Contrase&#xf1;a"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelMensaje">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="botonEnviar">
+      <Properties>
+        <Property name="label" type="java.lang.String" value="Enviar"/>
       </Properties>
     </Component>
   </SubComponents>

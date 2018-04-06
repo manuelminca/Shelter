@@ -8,6 +8,8 @@ package shelter;
 import aux.ObjetoEnvio;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -27,7 +29,7 @@ import static shelter.AES.doDecryptedAES;
  *
  * @author rafaelsoriadiez
  */
-public class Shelter extends javax.swing.JFrame {
+public class Shelter extends javax.swing.JFrame implements ActionListener{
 
     /**
      * Creates new form Shelter
@@ -46,13 +48,13 @@ public class Shelter extends javax.swing.JFrame {
 
 
     public Shelter() {
-        super("selter");
+        super("Shelter");
         this.setVisible(true);
         initComponents();
         key = "1234567890000";
         //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        usuario = new Usuario(this, true);
-        usuario.dispose();
+        usuario = new Usuario(this, true,this);
+        usuario.Visible();
         //registro el usuario en servidor
         cs = new ConexionServidor(usuario, key);
         //mensaje = new Mensaje(this,true,usuario,cs);
@@ -403,6 +405,12 @@ public class Shelter extends javax.swing.JFrame {
     private javax.swing.JLabel reloadUsers;
     private javax.swing.JScrollPane scrollPane;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        usuario.setUsuario();
+        usuario.setMensaje("funciona");
+    }
 }
 
 

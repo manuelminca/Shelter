@@ -18,6 +18,7 @@ import java.math.BigInteger;
 public class ObjetoEnvio implements Serializable{
     
     private String emisor;
+    private String password;
     private String receptor;
     private String mensaje;
     private String tipo;
@@ -108,6 +109,13 @@ public class ObjetoEnvio implements Serializable{
         return modulus;
     }
     
+    public String getPassword(){
+        return password;
+    }
+    
+    public void setPassword(String a){
+        password = a;
+    }
    
     
     public BigInteger toBigInteger(String foo){
