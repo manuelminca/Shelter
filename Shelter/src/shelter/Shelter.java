@@ -29,7 +29,7 @@ import static shelter.AES.doDecryptedAES;
  *
  * @author rafaelsoriadiez
  */
-public class Shelter extends javax.swing.JFrame implements ActionListener{
+public class Shelter extends javax.swing.JFrame {
 
     /**
      * Creates new form Shelter
@@ -49,14 +49,14 @@ public class Shelter extends javax.swing.JFrame implements ActionListener{
 
     public Shelter() {
         super("Shelter");
-        this.setVisible(true);
+        this.setVisible(false);
         initComponents();
         key = "1234567890000";
         //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        usuario = new Usuario(this, true,this);
+        usuario = new Usuario(this, true);
         usuario.Visible();
         //registro el usuario en servidor
-        cs = new ConexionServidor(usuario, key);
+        cs = new ConexionServidor(usuario);
         //mensaje = new Mensaje(this,true,usuario,cs);
         mensaje = new Mensaje(usuario, cs);
         cs.setMensaje(mensaje);
@@ -338,6 +338,13 @@ public class Shelter extends javax.swing.JFrame implements ActionListener{
         }
         
     }
+    
+    
+    public void NOACK(ObjetoEnvio objeto){
+        String m = "Error, el usuario y/o contraseña es incorrecto.Intentalo de nuevo.";
+        usuario.setMensaje(m);
+        usuario.setVisible(true);
+    }
 
     
     public void recibirMensajesServidor() {
@@ -354,6 +361,9 @@ public class Shelter extends javax.swing.JFrame implements ActionListener{
                 switch(objeto.getTipo()){
                     case "ACK":
                          ACK(objeto);
+                         break;
+                        case "!ACK":
+                         NOACK(objeto);
                          break;
                     case "LISTAR":
                         LISTAR(objeto);
@@ -406,11 +416,6 @@ public class Shelter extends javax.swing.JFrame implements ActionListener{
     private javax.swing.JScrollPane scrollPane;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        usuario.setUsuario();
-        usuario.setMensaje("funciona");
-    }
 }
 
 

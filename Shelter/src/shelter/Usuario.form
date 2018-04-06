@@ -138,6 +138,9 @@
       <Properties>
         <Property name="label" type="java.lang.String" value="Enviar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonEnviarActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

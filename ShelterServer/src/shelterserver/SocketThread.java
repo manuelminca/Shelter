@@ -69,6 +69,39 @@ public class SocketThread extends Thread implements Observer{
         ObjectOutputStream flujo = new ObjectOutputStream(aux);
         flujo.writeObject(objeto);
     }
+    
+    
+    private void login(ObjetoEnvio objeto){
+        
+        String usuario = objeto.getEmisor();
+        String password = objeto.getPassword();
+        
+        if(us.validarUsuario(usuario,password)){
+ 
+            us.setOnline(usuario,true);
+            Clave clave;
+            try {
+                clave = new Clave();
+                String modulus = clave.getModulus(usuario);
+                String privada = clave.getPrivada(usuario);
+                String publica = clave.getPublica(usuario);
+                objeto.setModulus(modulus);
+                objeto.setPrivada(privada);
+                objeto.setPublicaEmisor(publica);
+                objeto.setTipo("ACK");
+               
+                objeto.setMensaje("Usuario " + usuario + "registrado");
+            } catch (SQLException ex) {
+                Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }else{
+            objeto.setTipo("!ACK");
+        }
+        
+         mensajes.setObjeto(objeto);
+        
+    }
 
     private void addUsuario(ObjetoEnvio objeto) {
         // Creamos en la base de datos el usuario
@@ -96,19 +129,7 @@ public class SocketThread extends Thread implements Observer{
         objeto.setTipo("ACK");
         String mensaje = "Usuario " + user + "registrado";
         objeto.setMensaje("Usuario " + user + "registrado");
-        
-        Clave clave;
-        try {
-            clave = new Clave();
-            String modulus = clave.getModulus(user);
-            String privada = clave.getPrivada(user);
-            String publica = clave.getPublica(user);
-            objeto.setModulus(modulus);
-            objeto.setPrivada(privada);
-            objeto.setPublicaEmisor(publica);
-        } catch (Exception ex) {
-            Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
+               
         mensajes.setObjeto(objeto);
     }
     
@@ -222,6 +243,8 @@ public class SocketThread extends Thread implements Observer{
             desconectarUsuario(objeto);
         }else if(tipo.equals("CLAVE")){
             getClaveReceptor(objeto);
+        }else if(tipo.equals("LOGIN")){
+            login(objeto);
            
         }else{
             //ESTE ES EL CASO QUE YA EXISTA EL CHAT

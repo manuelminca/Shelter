@@ -120,6 +120,25 @@ public class Usuario {
     }
     
     
+    public boolean validarUsuario(String usuario,String password){
+        boolean encontrado = false;
+        try {
+            String consulta = "SELECT  NOMBRE FROM ROOT.USUARIO WHERE NOMBRE = ? and PASSWORD = ?";
+            PreparedStatement st = myObjCon.prepareStatement(consulta);
+            st.setString(1, usuario);
+            st.setString(2, password);
+            result = st.executeQuery();
+            while (result.next()) { 
+                if(result.getString(1).equals(usuario)) encontrado = true;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return encontrado;
+    }
+    
+    
 
     public void deleteUsuario(String usuario) {
         try {

@@ -105,6 +105,30 @@ public class ConexionServidor implements ActionListener {
         }
 
     }
+    
+    //login
+    public ConexionServidor(Usuario usuario) {
+        this.usuario = usuario;
+        String user = usuario.getUsuario();
+        String password = usuario.getPassword();
+        String ip = usuario.getIP();
+        int port = usuario.getPuerto();
+        this.key = key;
+
+        try {
+            socket = new Socket(ip, port);
+            System.out.println("Socket creado correctamente.");
+            ObjetoEnvio objeto = new ObjetoEnvio(user,"servidor","","LOGIN");
+            objeto.setPassword(password);
+            
+           
+            escribirSocket(objeto);
+
+        } catch (IOException ex) {
+            System.out.println("Error al crear socket");
+        }
+
+    }
 
     public void setJTextField(JTextField tfMensaje) {
         this.tfMensaje = tfMensaje;

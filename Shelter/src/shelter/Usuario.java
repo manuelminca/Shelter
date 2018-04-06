@@ -21,12 +21,12 @@ public class Usuario extends javax.swing.JDialog {
     private int puerto;
     private String password;
     
-    public Usuario(java.awt.Frame parent, boolean modal,Shelter s) {
+    public Usuario(java.awt.Frame parent, boolean modal) {
 
         super(parent,"Usuario", modal);
         initComponents();
         this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-        botonEnviar.addActionListener(s);
+       
         
         
         
@@ -94,6 +94,11 @@ public class Usuario extends javax.swing.JDialog {
         labelMensaje.setText("jLabel1");
 
         botonEnviar.setLabel("Enviar");
+        botonEnviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonEnviarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,6 +152,14 @@ public class Usuario extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void botonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviarActionPerformed
+        usuario = textUsuario.getText();
+        ip = textIP.getText();
+        puerto = Integer.parseInt(textPuerto.getText());
+        password = textClave.getText();
+        this.setVisible(false);
+    }//GEN-LAST:event_botonEnviarActionPerformed
 
 
 
