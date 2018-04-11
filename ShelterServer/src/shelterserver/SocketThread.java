@@ -125,7 +125,7 @@ public class SocketThread extends Thread implements Observer{
         objeto.setEmisor("servidor");
         objeto.setReceptor(user);
         //ACK ok del servidor que se ha registrado
-        objeto.setTipo("ACK");
+        objeto.setTipo("REGISTRO");
         String mensaje = "Usuario " + user + "registrado";
         objeto.setMensaje("Usuario " + user + "registrado");
                

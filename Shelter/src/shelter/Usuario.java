@@ -23,19 +23,15 @@ public class Usuario extends javax.swing.JDialog {
     private int puerto;
     private String password;
     
-    public Usuario(java.awt.Frame parent, boolean modal) {
+    public Usuario(java.awt.Frame parent, boolean modal,boolean registro) {
 
         super(parent,"Usuario", modal);
         initComponents();
+        if(registro) setMensaje("Usuario registrado con exicto.");
         this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
     }
     
-    public Usuario(String nombre,String password,String ip,int puerto){
-        usuario = nombre;
-        this.password = password;
-        this.ip = ip;
-        this.puerto = puerto;
-    }
+    
     
     public Usuario(Login login){
         usuario = login.getUsuario();
