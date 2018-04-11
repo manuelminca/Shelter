@@ -56,11 +56,13 @@ public class ConexionServidor implements ActionListener {
         System.out.println(mensaje);
     }
     
+    public void setKey(String a){ key = a;}
     
     public void getPublica(RSA rsa,ObjetoEnvio objeto){
         BigInteger publica= rsa.getPublicKey();
         String stringPublica = rsa.toString(publica);
         objeto.setPublicaEmisor(stringPublica);
+        key = stringPublica;
     }
     
     public void getPrivada(RSA rsa,ObjetoEnvio objeto){
@@ -88,10 +90,6 @@ public class ConexionServidor implements ActionListener {
         String ip = usuario.getIP();
         String password = usuario.getPassword();
         int port = usuario.getPuerto();
-        
-        this.key = key;
-        
-
         try {
             socket = new Socket(ip, port);
             System.out.println("Socket creado correctamente.");
@@ -102,9 +100,6 @@ public class ConexionServidor implements ActionListener {
             getPrivada(objetoRSA,objeto);
             getPublica(objetoRSA,objeto);
             getModulus(objetoRSA,objeto);
-            
-            
-            
             escribirSocket(objeto);
 
         } catch (IOException ex) {
@@ -113,14 +108,14 @@ public class ConexionServidor implements ActionListener {
 
     }
     
-    //login
+    //login del usuario
     public ConexionServidor(Usuario usuario) {
         this.usuario = usuario;
         String user = usuario.getUsuario();
         String password = usuario.getPassword();
         String ip = usuario.getIP();
         int port = usuario.getPuerto();
-        this.key = key;
+        
         
         try {
             socket = new Socket(ip, port);
@@ -151,14 +146,17 @@ public class ConexionServidor implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         
         String user = usuario.getUsuario();
+        print("usuario: " + user);
         String receptor = mensaje.getReceptor();
+        print("receptor: " + receptor);
         ObjetoEnvio objeto = new ObjetoEnvio();
         objeto.setEmisor(user);
         objeto.setReceptor(receptor);
         objeto.setTipo("MENSAJE");
         
+        print("key: " + key);
         String mensajeCifrado = doEncryptedAES(user + ": " + tfMensaje.getText(), key);
-        
+        print("mensaje cifrado: " + mensajeCifrado);
         objeto.setMensaje(mensajeCifrado);
         escribirSocket(objeto);
         tfMensaje.setText("");

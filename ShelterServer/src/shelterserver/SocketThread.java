@@ -59,9 +59,6 @@ public class SocketThread extends Thread implements Observer{
         objeto = (ObjetoEnvio) flujo.readObject();
         return objeto;
     }
-    
-    
-    
     //le envio la informacion al cliente
     public void escribirSocket(Socket socket, ObjetoEnvio objeto) throws IOException {
 
@@ -71,7 +68,7 @@ public class SocketThread extends Thread implements Observer{
     }
     
     
-    private void login(ObjetoEnvio objeto){
+    private void LOGIN(ObjetoEnvio objeto){
         
         String usuario = objeto.getEmisor();
         String password = objeto.getPassword();
@@ -89,7 +86,9 @@ public class SocketThread extends Thread implements Observer{
                 objeto.setPrivada(privada);
                 objeto.setPublicaEmisor(publica);
                 objeto.setTipo("ACK");
-               
+                objeto.setEmisor("servidor");
+                objeto.setReceptor(usuario);
+
                 objeto.setMensaje("Usuario " + usuario + "registrado");
             } catch (SQLException ex) {
                 Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
@@ -97,43 +96,54 @@ public class SocketThread extends Thread implements Observer{
             
         }else{
             objeto.setTipo("!ACK");
+            objeto.setEmisor("servidor");
+            objeto.setReceptor(usuario);
         }
         
-         mensajes.setObjeto(objeto);
-        
-    }
-
-    private void addUsuario(ObjetoEnvio objeto) {
-        // Creamos en la base de datos el usuario
-        String usuario = objeto.getEmisor();
-        String pass = objeto.getPassword();
-       
-        us.createUsuario(usuario,pass);
-        try {
-            Clave clave = new Clave();
-            clave.createClave(usuario, objeto.getPublicaEmisor(), objeto.getPrivada(), objeto.getModulus());
-
-        } catch (SQLException ex) {
-            Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            
-        
-        //aádimos el mensaje en el array (Ver si es util)
-        objeto.setMensaje("");
-        //recojo el usuario
-        String user = objeto.getEmisor();
-        objeto.setEmisor("servidor");
-        objeto.setReceptor(user);
-        //ACK ok del servidor que se ha registrado
-        objeto.setTipo("REGISTRO");
-        String mensaje = "Usuario " + user + "registrado";
-        objeto.setMensaje("Usuario " + user + "registrado");
-               
         mensajes.setObjeto(objeto);
+        
+    }
+
+    private void REGISTRO(ObjetoEnvio objeto) {
+        
+        String usuario = objeto.getEmisor();
+        
+        //si existe no se crea
+        if(!us.buscarUsuario(usuario)){
+            // Creamos en la base de datos el usuario
+            
+            String pass = objeto.getPassword();
+
+            us.createUsuario(usuario,pass);
+            try {
+                Clave clave = new Clave();
+                clave.createClave(usuario, objeto.getPublicaEmisor(), objeto.getPrivada(), objeto.getModulus());
+
+            } catch (SQLException ex) {
+                Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+           
+            objeto.setEmisor("servidor");
+            objeto.setReceptor(usuario);
+            //ACK ok del servidor que se ha registrado
+            objeto.setTipo("REGISTRO");
+            objeto.setMensaje("Usuario " + usuario + "registrado");
+
+            mensajes.setObjeto(objeto);
+        }else{
+            System.out.println("hola");
+            objeto.setEmisor("servidor");
+            objeto.setReceptor(usuario);
+            //ACK ok del servidor que se ha registrado
+            objeto.setTipo("REGISTRO");
+            objeto.setMensaje("USUARIO REGISTRADO");
+            mensajes.setObjeto(objeto);
+        }
     }
     
     
-    public void devolverUsuarios(ObjetoEnvio objeto){
+    public void LISTAR(ObjetoEnvio objeto){
         
         String cadenaClientes = "";
         //buscamos los usuarios online
@@ -147,7 +157,7 @@ public class SocketThread extends Thread implements Observer{
     }
     
     
-    public String getClaveReceptor(ObjetoEnvio objeto){
+    public void CLAVE(ObjetoEnvio objeto){
         String clave = "";
         
         try {
@@ -159,9 +169,7 @@ public class SocketThread extends Thread implements Observer{
         } catch (SQLException ex) {
             Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        return clave;
+
     }
     
     public int crearChat(ObjetoEnvio objeto,Conversacion con) throws SQLException{
@@ -188,7 +196,7 @@ public class SocketThread extends Thread implements Observer{
     }
 
     
-    public void iniciarChat(ObjetoEnvio objeto){
+    public void CHAT(ObjetoEnvio objeto){
         
         Conversacion con;
         String receptor = objeto.getReceptor();
@@ -221,46 +229,55 @@ public class SocketThread extends Thread implements Observer{
         
     }
     
-    public void desconectarUsuario(ObjetoEnvio objeto){
+    public void SALIR(ObjetoEnvio objeto){
         us.setOnline(objeto.getEmisor(),false);
        
     }
     
-  
-    
+    //cuando es el mensaje
+    public void DEFAULT(ObjetoEnvio objeto){
+        try {
+            Conversacion con = new Conversacion();
+            int chat = con.existeChat(objeto.getEmisor(), objeto.getReceptor());
+
+            Mensaje msj = new Mensaje();
+            msj.createMensaje(objeto.getMensaje(), chat);
+
+
+            mensajes.setObjeto(objeto);
+        } catch (SQLException ex) {
+            Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+    } 
     public void procesaCadena(ObjetoEnvio objeto) throws IOException {
         
         String tipo = objeto.getTipo();
         System.out.println("tipo: " + tipo);
-        if (tipo.equals("REGISTRO")) {
-            addUsuario(objeto);
-        }else if(tipo.equals("LISTAR")){
-            devolverUsuarios(objeto);         
-        }else if(tipo.equals("CHAT")){
-            iniciarChat(objeto);   
-        }else if(tipo.equals("SALIR")){
-            desconectarUsuario(objeto);
-        }else if(tipo.equals("CLAVE")){
-            getClaveReceptor(objeto);
-        }else if(tipo.equals("LOGIN")){
-            login(objeto);
-           
-        }else{
-            //ESTE ES EL CASO QUE YA EXISTA EL CHAT
-           
-            try {
-                Conversacion con = new Conversacion();
-                int chat = con.existeChat(objeto.getEmisor(), objeto.getReceptor());
-
-                Mensaje msj = new Mensaje();
-                msj.createMensaje(objeto.getMensaje(), chat);
-                
-                
-                mensajes.setObjeto(objeto);
-            } catch (SQLException ex) {
-                Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        switch(objeto.getTipo()){
+            case "REGISTRO":
+                REGISTRO(objeto);
+                break;
+            case "LISTAR":
+                LISTAR(objeto);
+                break;
+            case "CHAT":
+                CHAT(objeto);
+                break;
+            case "SALIR":
+                SALIR(objeto);
+                break;
+            case "CLAVE":
+                CLAVE(objeto);
+                break;
+            case "LOGIN":
+                LOGIN(objeto);
+                break;
+            default:
+                DEFAULT(objeto);
+                break;
         }
+ 
     }
 
     @Override

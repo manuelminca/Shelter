@@ -22,11 +22,13 @@ public class Usuario extends javax.swing.JDialog {
     private String ip;
     private int puerto;
     private String password;
+    private boolean ok;
     
     public Usuario(java.awt.Frame parent, boolean modal,boolean registro) {
 
         super(parent,"Usuario", modal);
         initComponents();
+        ok = true;
         if(registro) setMensaje("Usuario registrado con exicto.");
         this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
     }
@@ -53,7 +55,9 @@ public class Usuario extends javax.swing.JDialog {
     public String getIP(){return ip;}
     public int getPuerto(){return puerto;}
     public String getPassword(){return password;}
+    public boolean getOK(){return ok;}
     public void setPassword(String a){password = a;}
+    public void setOK(boolean a){ok = a;}
 
     
     public void setUsuario(){
@@ -166,7 +170,7 @@ public class Usuario extends javax.swing.JDialog {
                                 .addComponent(textIP, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                                 .addComponent(textPuerto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(textClave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addContainerGap(134, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -191,7 +195,7 @@ public class Usuario extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonEnviar)
                     .addComponent(buttonRegistro))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
                 .addComponent(labelMensaje)
                 .addGap(19, 19, 19))
         );
