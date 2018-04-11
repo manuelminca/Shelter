@@ -1,7 +1,7 @@
-Fri Apr 06 13:04:56 CEST 2018 : Servidor de red Apache Derby: Se ha iniciado 10.10.2.0 - (1582446) y está listo para aceptar las conexiones en el puerto 1527
+Wed Apr 11 11:43:17 CEST 2018 : Servidor de red Apache Derby: Se ha iniciado 10.10.2.0 - (1582446) y está listo para aceptar las conexiones en el puerto 1527
 ----------------------------------------------------------------
-Fri Apr 06 13:05:01 CEST 2018:
- Iniciando instancia a816c00e-0162-9aa1-7ab9-0000563d01db de Derby, versión The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): 
+Wed Apr 11 11:43:17 CEST 2018:
+ Iniciando instancia a816c00e-0162-b416-851c-0000563d01db de Derby, versión The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): 
 en el directorio de base de datos /Users/rafaelsoriadiez/MEGA/Uni/Especialidad/Estrategia de Seguridad/Prac_Est_Seg/ShelterDB/ShelterDB con el cargador de clases sun.misc.Launcher$AppClassLoader@66d3c617
 Cargado desde file:/Applications/NetBeans/glassfish-4.1.1/javadb/lib/derby.jar
 java.vendor=Oracle Corporation
@@ -12,28 +12,3 @@ os.arch=x86_64
 os.version=10.13.4
 derby.system.home=/Users/rafaelsoriadiez/MEGA/Uni/Especialidad/Estrategia de Seguridad/Prac_Est_Seg/ShelterDB
 Cargador de clases de base de datos iniciado - derby.database.classpath=''
-----------------------------------------------------------------
-Fri Apr 06 13:24:28 CEST 2018: cerrando motor de Derby
-----------------------------------------------------------------
-Fri Apr 06 13:24:28 CEST 2018:
-Cerrando la instancia a816c00e-0162-9aa1-7ab9-0000563d01db en el directorio de base de datos /Users/rafaelsoriadiez/MEGA/Uni/Especialidad/Estrategia de Seguridad/Prac_Est_Seg/ShelterDB/ShelterDB con cargador de clases sun.misc.Launcher$AppClassLoader@66d3c617
-Fri Apr 06 13:24:28 CEST 2018 : Excepción inesperada:
- {0}
-Fri Apr 06 13:24:28 CEST 2018 : For input string: "1 2"
-java.lang.NumberFormatException: For input string: "1 2"
-	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
-	at java.lang.Long.parseLong(Long.java:589)
-	at java.lang.Long.parseLong(Long.java:631)
-	at org.apache.derby.impl.store.raw.log.LogToFile.deleteObsoleteLogfiles(Unknown Source)
-	at org.apache.derby.impl.store.raw.log.LogToFile.stop(Unknown Source)
-	at org.apache.derby.impl.services.monitor.TopService.stop(Unknown Source)
-	at org.apache.derby.impl.services.monitor.TopService.shutdown(Unknown Source)
-	at org.apache.derby.impl.services.monitor.BaseMonitor.shutdown(Unknown Source)
-	at org.apache.derby.impl.services.monitor.BaseMonitor.shutdown(Unknown Source)
-	at org.apache.derby.jdbc.InternalDriver.connect(Unknown Source)
-	at org.apache.derby.jdbc.Driver20.connect(Unknown Source)
-	at org.apache.derby.jdbc.EmbeddedDriver.connect(Unknown Source)
-	at org.apache.derby.impl.drda.NetworkServerControlImpl.blockingStart(Unknown Source)
-	at org.apache.derby.impl.drda.NetworkServerControlImpl.executeWork(Unknown Source)
-	at org.apache.derby.drda.NetworkServerControl.main(Unknown Source)
-Fri Apr 06 13:24:28 CEST 2018 : Servidor de red Apache Derby: cierre de 10.10.2.0 - (1582446)

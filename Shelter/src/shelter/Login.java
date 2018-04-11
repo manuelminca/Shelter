@@ -11,15 +11,20 @@ package shelter;
  */
 public class Login extends javax.swing.JPanel {
 
+    private Usuario us;
     private String usuario;
     private String ip;
     private int puerto;
     private String password;
     private String confirmar;
+    private boolean ok;
+    private ConexionServidor cs;
     
     
-    public Login() {
+    public Login(Usuario us) {
         initComponents();
+        this.us = us;
+        setMensaje("hoka");
     }
     
     public void Visible(){
@@ -31,6 +36,7 @@ public class Login extends javax.swing.JPanel {
     public String getIP(){return ip;}
     public int getPuerto(){return puerto;}
     public String getPassword(){return password;}
+    public boolean getOk(){return ok;}
 
     
     public void setUsuario(){
@@ -43,6 +49,21 @@ public class Login extends javax.swing.JPanel {
     public void setMensaje(String m){
         labelMensaje.setText(m);
     }
+    
+    public boolean iguales(String p1,String p2){
+        if(p1.equals(p2)) return true;
+        return false;
+    }
+    
+    //validamos si hay datos para mandarselo al servidor
+    public boolean comprobar(){
+        if(iguales(password,confirmar)){
+            if(usuario != null && ip != null) return true;
+        }
+        return false;
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -65,6 +86,7 @@ public class Login extends javax.swing.JPanel {
         textPuerto = new javax.swing.JTextField();
         botonEnviar = new javax.swing.JButton();
         labelMensaje = new javax.swing.JLabel();
+        butonAtras = new javax.swing.JButton();
 
         labelText.setText("Nombre");
 
@@ -82,9 +104,26 @@ public class Login extends javax.swing.JPanel {
             }
         });
 
+        textIP.setText("localhost");
+
+        textPuerto.setText("4000");
+        textPuerto.setToolTipText("");
+
         botonEnviar.setText("Enviar");
+        botonEnviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonEnviarActionPerformed(evt);
+            }
+        });
 
         labelMensaje.setText("jLabel4");
+
+        butonAtras.setText("Atras");
+        butonAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                butonAtrasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -92,9 +131,6 @@ public class Login extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(botonEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(99, 99, 99)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,7 +146,12 @@ public class Login extends javax.swing.JPanel {
                             .addComponent(textPassword)
                             .addComponent(textConfirmar)
                             .addComponent(textIP)
-                            .addComponent(textPuerto, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))))
+                            .addComponent(textPuerto, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(85, 85, 85)
+                        .addComponent(butonAtras)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(botonEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(62, 62, 62))
         );
         layout.setVerticalGroup(
@@ -137,20 +178,54 @@ public class Login extends javax.swing.JPanel {
                     .addComponent(jLabel3)
                     .addComponent(textPuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(botonEnviar)
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botonEnviar)
+                    .addComponent(butonAtras))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addComponent(labelMensaje)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addGap(26, 26, 26))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void textPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPasswordActionPerformed
-        // TODO add your handling code here:
+        
+        
     }//GEN-LAST:event_textPasswordActionPerformed
+
+    private void butonAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butonAtrasActionPerformed
+        this.setVisible(false);
+        us.setVisibleALL(true);
+        
+    }//GEN-LAST:event_butonAtrasActionPerformed
+
+    private void botonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviarActionPerformed
+        usuario = textNombre.getText();
+        ip = textIP.getText();
+        password = textPassword.getText();
+        confirmar = textConfirmar.getText();
+        labelMensaje.setText("asdas.");
+        
+        if(!iguales(password,confirmar)){
+            setMensaje("Error, las contraseñas son distintas.");
+        }else{
+            try{
+                puerto = Integer.parseInt(textPuerto.getText());
+                //Usuario actual = new Usuario(usuario,password,ip,puerto);
+                //cs = new ConexionServidor(actual,password);
+                this.setVisible(false);
+                us.setVisible(false);
+                //us.setVisibleALL(true);
+            } catch (NumberFormatException nfe){
+                setMensaje("En el campo puerto hay que introducir un número.");
+            }
+            
+        }
+    }//GEN-LAST:event_botonEnviarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonEnviar;
+    private javax.swing.JButton butonAtras;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

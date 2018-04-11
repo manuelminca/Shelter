@@ -5,6 +5,7 @@
  */
 package shelter;
 
+import java.awt.BorderLayout;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
@@ -16,6 +17,7 @@ import javax.swing.JFrame;
  */
 public class Usuario extends javax.swing.JDialog {
 
+    private Login login;
     private String usuario;
     private String ip;
     private int puerto;
@@ -26,16 +28,28 @@ public class Usuario extends javax.swing.JDialog {
         super(parent,"Usuario", modal);
         initComponents();
         this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-       
-        
-        
-        
-        
-       
+    }
+    
+    public Usuario(String nombre,String password,String ip,int puerto){
+        usuario = nombre;
+        this.password = password;
+        this.ip = ip;
+        this.puerto = puerto;
+    }
+    
+    public Usuario(Login login){
+        usuario = login.getUsuario();
+        this.password = login.getPassword();
+        this.ip = login.getIP();
+        this.puerto = login.getPuerto();
     }
     
     public void Visible(){
         this.setVisible(true);
+    }
+    
+    public Login getLogin(){
+        return login;
     }
     
     //metodos gets
@@ -43,6 +57,7 @@ public class Usuario extends javax.swing.JDialog {
     public String getIP(){return ip;}
     public int getPuerto(){return puerto;}
     public String getPassword(){return password;}
+    public void setPassword(String a){password = a;}
 
     
     public void setUsuario(){
@@ -56,6 +71,23 @@ public class Usuario extends javax.swing.JDialog {
         labelMensaje.setText(m);
     }
 
+    public void setVisibleALL(boolean visible){
+        
+    botonEnviar.setVisible(visible);
+    button1.setVisible(visible);
+    buttonRegistro.setVisible(visible);
+    jButton1.setVisible(visible);
+    labelClave.setVisible(visible);
+    labelIP.setVisible(visible);
+    labelMensaje.setVisible(visible);
+    labelPuerto.setVisible(visible);
+    labelUsuario.setVisible(visible);
+    textClave.setVisible(visible);
+    textIP.setVisible(visible);
+    textPuerto.setVisible(visible);
+    textUsuario.setVisible(visible);
+        
+    }
  
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -72,6 +104,7 @@ public class Usuario extends javax.swing.JDialog {
         labelClave = new java.awt.Label();
         labelMensaje = new javax.swing.JLabel();
         botonEnviar = new javax.swing.JButton();
+        buttonRegistro = new javax.swing.JButton();
 
         button1.setLabel("button1");
 
@@ -100,21 +133,36 @@ public class Usuario extends javax.swing.JDialog {
             }
         });
 
+        buttonRegistro.setText("Registrarse");
+        buttonRegistro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRegistroActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(79, 79, 79)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelMensaje)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(79, 79, 79)
+                        .addComponent(labelMensaje))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelPuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(29, 29, 29)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(79, 79, 79)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(labelUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(labelIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(labelPuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(labelClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(29, 29, 29))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(buttonRegistro)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(botonEnviar)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -144,7 +192,9 @@ public class Usuario extends javax.swing.JDialog {
                     .addComponent(labelPuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(textPuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
-                .addComponent(botonEnviar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botonEnviar)
+                    .addComponent(buttonRegistro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addComponent(labelMensaje)
                 .addGap(19, 19, 19))
@@ -158,12 +208,24 @@ public class Usuario extends javax.swing.JDialog {
         ip = textIP.getText();
         puerto = Integer.parseInt(textPuerto.getText());
         password = textClave.getText();
+        
         this.setVisible(false);
+        
+        
     }//GEN-LAST:event_botonEnviarActionPerformed
 
+    private void buttonRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRegistroActionPerformed
+        login = new Login(this);
+        
+        login.setSize(400,300); //tamaño del jpanel
+        login.setLocation(5,5); //posicion dentro del panel principal
+        
+        this.setVisibleALL(false);
+        this.add(login,BorderLayout.CENTER);
+        this.revalidate();
+        this.repaint();
+    }//GEN-LAST:event_buttonRegistroActionPerformed
 
-
-    
     /**
      * @param args the command line arguments
      */
@@ -172,6 +234,7 @@ public class Usuario extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonEnviar;
     private java.awt.Button button1;
+    private javax.swing.JButton buttonRegistro;
     private javax.swing.JButton jButton1;
     private java.awt.Label labelClave;
     private java.awt.Label labelIP;

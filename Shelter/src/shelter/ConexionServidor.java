@@ -23,6 +23,7 @@ public class ConexionServidor implements ActionListener {
     private JTextField tfMensaje;
     private String key;
     private Mensaje mensaje;
+    
 
     public void escribirSocket(ObjetoEnvio objeto) {
 
@@ -85,19 +86,25 @@ public class ConexionServidor implements ActionListener {
         this.usuario = usuario;
         String user = usuario.getUsuario();
         String ip = usuario.getIP();
+        String password = usuario.getPassword();
         int port = usuario.getPuerto();
+        
         this.key = key;
+        
 
         try {
             socket = new Socket(ip, port);
             System.out.println("Socket creado correctamente.");
             ObjetoEnvio objeto = new ObjetoEnvio(user,"servidor","","REGISTRO");
-            
+            objeto.setPassword(password);
             //Parte de RSA
             RSA objetoRSA = new RSA(1024);
             getPrivada(objetoRSA,objeto);
             getPublica(objetoRSA,objeto);
             getModulus(objetoRSA,objeto);
+            
+            
+            
             escribirSocket(objeto);
 
         } catch (IOException ex) {
@@ -114,7 +121,7 @@ public class ConexionServidor implements ActionListener {
         String ip = usuario.getIP();
         int port = usuario.getPuerto();
         this.key = key;
-
+        
         try {
             socket = new Socket(ip, port);
             System.out.println("Socket creado correctamente.");

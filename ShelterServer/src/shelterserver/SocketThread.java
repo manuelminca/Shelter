@@ -106,18 +106,17 @@ public class SocketThread extends Thread implements Observer{
     private void addUsuario(ObjetoEnvio objeto) {
         // Creamos en la base de datos el usuario
         String usuario = objeto.getEmisor();
-        if(us.buscarUsuario(usuario)) us.setOnline(usuario,true);
-        else{ 
-            us.createUsuario(usuario);
-            try {
-                Clave clave = new Clave();
-                clave.createClave(usuario, objeto.getPublicaEmisor(), objeto.getPrivada(), objeto.getModulus());
-                 
-            } catch (SQLException ex) {
-                Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
+        String pass = objeto.getPassword();
+       
+        us.createUsuario(usuario,pass);
+        try {
+            Clave clave = new Clave();
+            clave.createClave(usuario, objeto.getPublicaEmisor(), objeto.getPrivada(), objeto.getModulus());
+
+        } catch (SQLException ex) {
+            Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
         }
+            
         
         //aádimos el mensaje en el array (Ver si es util)
         objeto.setMensaje("");

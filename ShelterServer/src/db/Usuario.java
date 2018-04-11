@@ -35,9 +35,9 @@ public class Usuario {
         }
     }
 
-    public void createUsuario(String usuario) {
+    public void createUsuario(String usuario,String pass) {
         try {
-            stmt.executeUpdate("INSERT INTO ROOT.USUARIO VALUES ('" + usuario + "', true)");
+            stmt.executeUpdate("INSERT INTO ROOT.USUARIO VALUES ('" + usuario + "', true," + "'" + pass + "') ");
         } catch (SQLException ex) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
         }

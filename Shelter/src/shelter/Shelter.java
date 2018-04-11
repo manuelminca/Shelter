@@ -37,6 +37,7 @@ public class Shelter extends javax.swing.JFrame {
      *
      */
     private Usuario usuario;
+   
     //el mensaje Actual del usuario
     private Mensaje mensaje;
     private ConexionServidor cs;
@@ -56,7 +57,15 @@ public class Shelter extends javax.swing.JFrame {
         usuario = new Usuario(this, true);
         usuario.Visible();
         //registro el usuario en servidor
-        cs = new ConexionServidor(usuario);
+        
+        //miro a ver si hay login para invocar un constructor o otro
+        Login login = usuario.getLogin();
+        if(login.comprobar()){
+            Usuario actual = new Usuario(login);
+            cs = new ConexionServidor(actual,key);
+        } else cs = new ConexionServidor(usuario);
+       
+        
         //mensaje = new Mensaje(this,true,usuario,cs);
         mensaje = new Mensaje(usuario, cs);
         cs.setMensaje(mensaje);
@@ -281,13 +290,26 @@ public class Shelter extends javax.swing.JFrame {
         BigInteger privada;
         BigInteger modulus;
 
+        //le ponemos los datos del objeto al usuario
+        usuario.setName(objeto.getReceptor());
+        usuario.setPassword(objeto.getPassword());
+        print(objeto.getEmisor());
+        print(objeto.getPassword());
+        
+        
         publica = rsa.toBigInteger(objeto.getPublicaEmisor());
-        rsa.setPublicKey(publica);                  
+        rsa.setPublicKey(publica);
+       
         String privadaAES  = doDecryptedAES(objeto.getPrivada(), usuario.getPassword());
+        print(privadaAES);
         privada = rsa.toBigInteger(privadaAES);
         rsa.setPrivateKey(privada);
         modulus = rsa.toBigInteger(objeto.getModulus());
         rsa.setModulus(modulus);
+        
+        usuario.setMensaje("Usuario registrado correctamente.");
+        usuario.setVisibleALL(true);
+        usuario.Visible();
     }
     
     
