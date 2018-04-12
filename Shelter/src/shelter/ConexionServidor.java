@@ -23,6 +23,7 @@ public class ConexionServidor implements ActionListener {
     private JTextField tfMensaje;
     private String key;
     private Mensaje mensaje;
+    
 
     public void escribirSocket(ObjetoEnvio objeto) {
 
@@ -54,51 +55,75 @@ public class ConexionServidor implements ActionListener {
     public void print(String mensaje){
         System.out.println(mensaje);
     }
+    
+    public void setKey(String a){ key = a;}
+    
+    public void getPublica(RSA rsa,ObjetoEnvio objeto){
+        BigInteger publica= rsa.getPublicKey();
+        String stringPublica = rsa.toString(publica);
+        objeto.setPublicaEmisor(stringPublica);
+        key = stringPublica;
+    }
+    
+    public void getPrivada(RSA rsa,ObjetoEnvio objeto){
+        BigInteger privada= rsa.getPrivateKey();
+           
+        String stringPrivada = rsa.toString(privada);
+        String password = usuario.getPassword();
+        stringPrivada = doEncryptedAES(stringPrivada,password);
+        objeto.setPrivada(stringPrivada);
+        
+        
+    }
+    
+    public void getModulus(RSA rsa,ObjetoEnvio objeto){
+        BigInteger modulus= rsa.getModulus();
+        String stringModulus = rsa.toString(modulus);
+        objeto.setModulus(stringModulus);
+        
+    }
 
     //registra el usuario en el servidor
     public ConexionServidor(Usuario usuario, String key) {
         this.usuario = usuario;
         String user = usuario.getUsuario();
         String ip = usuario.getIP();
+        String password = usuario.getPassword();
         int port = usuario.getPuerto();
-        this.key = key;
-
         try {
             socket = new Socket(ip, port);
             System.out.println("Socket creado correctamente.");
-            //registro al usuario en el servidor
-            
-            RSA objetoRSA = new RSA(1024);
-            
-            
-                       
-            //PASAMOS DE BIGINTEGER A STRING
             ObjetoEnvio objeto = new ObjetoEnvio(user,"servidor","","REGISTRO");
-            //pasamos la privada a string y le encriptados AES
-            BigInteger privada= objetoRSA.getPrivateKey();
-           
-            String stringPrivada = objetoRSA.toString(privada);
-            print("privada sin cifrar:" + stringPrivada);
-            String password = usuario.getPassword();
-            stringPrivada = doEncryptedAES(stringPrivada,password);
-            print("privada con cifrar:" + stringPrivada);
+            objeto.setPassword(password);
+            //Parte de RSA
+            RSA objetoRSA = new RSA(1024);
+            getPrivada(objetoRSA,objeto);
+            getPublica(objetoRSA,objeto);
+            getModulus(objetoRSA,objeto);
+            escribirSocket(objeto);
+
+        } catch (IOException ex) {
+            System.out.println("Error al crear socket");
+        }
+
+    }
+    
+    //login del usuario
+    public ConexionServidor(Usuario usuario) {
+        this.usuario = usuario;
+        String user = usuario.getUsuario();
+        String password = usuario.getPassword();
+        String ip = usuario.getIP();
+        int port = usuario.getPuerto();
+        
+        
+        try {
+            socket = new Socket(ip, port);
+            System.out.println("Socket creado correctamente.");
+            ObjetoEnvio objeto = new ObjetoEnvio(user,"servidor","","LOGIN");
+            objeto.setPassword(password);
             
            
-            
-            
-            
-            //publica
-            BigInteger publica= objetoRSA.getPublicKey();
-            String stringPublica = objetoRSA.toString(publica);
-            print("publica:" + stringPublica);
-            //modulus
-            BigInteger modulus= objetoRSA.getModulus();
-            String stringModulus = objetoRSA.toString(modulus);
-            print("modulus:" + stringModulus);
-            objeto.setPrivada(stringPrivada);
-            objeto.setPublica(stringPublica);
-            objeto.setModulus(stringModulus);
-            
             escribirSocket(objeto);
 
         } catch (IOException ex) {
@@ -121,14 +146,17 @@ public class ConexionServidor implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         
         String user = usuario.getUsuario();
+        print("usuario: " + user);
         String receptor = mensaje.getReceptor();
+        print("receptor: " + receptor);
         ObjetoEnvio objeto = new ObjetoEnvio();
         objeto.setEmisor(user);
         objeto.setReceptor(receptor);
         objeto.setTipo("MENSAJE");
         
+        print("key: " + key);
         String mensajeCifrado = doEncryptedAES(user + ": " + tfMensaje.getText(), key);
-        
+        print("mensaje cifrado: " + mensajeCifrado);
         objeto.setMensaje(mensajeCifrado);
         escribirSocket(objeto);
         tfMensaje.setText("");

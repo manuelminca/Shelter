@@ -62,9 +62,7 @@ public class Mensaje {
             while(result.next()){
                 msj = msj + result.getString("MENSAJE") + "\n";
             }
-            
-            
-            
+ 
         } catch (SQLException ex) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
         }
