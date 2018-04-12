@@ -111,7 +111,7 @@ public class Conversacion {
         return -1;
     }
     
-    public int crearChat(String emisor, String receptor, String keyReceptor,String keyEmisor) throws SQLException{
+    public int crearChat(String emisor, String receptor, String keyEmisor,String keyReceptor) throws SQLException{
         Chat chat = new Chat();
         int id_chat = chat.createChat();
         createConversacion(id_chat, emisor, keyEmisor);

@@ -192,24 +192,34 @@ public class Shelter extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    private void iniciarConversacion(String receptor,String publicaReceptor){
+    private void iniciarConversacion(String receptor,String publicaReceptor, String modulusReceptor ){
         
-        String pass = "inventada";
         print("clave publica: " + publicaReceptor);
-        
-       
         
         mensaje.setVisible(true);
         mensaje.getJTextArea().setText("");
-        ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, key, "CHAT");
+        
+        BigInteger publica = rsa.toBigInteger(publicaReceptor);
+        BigInteger modulus = rsa.toBigInteger(modulusReceptor);
+        
+        
+        BigInteger claveSesionReceptor = rsa.encrypt(key,publica , modulus);
+        
+        
+        print("publica: " + publicaReceptor + ": modulus receptor" + modulusReceptor);
+        
+        BigInteger claveSesionEmisor = rsa.encrypt(key,rsa.getPublicKey() , rsa.getModulus());
+        
+        String cadena = rsa.toString(claveSesionEmisor) + ":" + rsa.toString(claveSesionReceptor);
+        
+        ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, cadena, "CHAT");
         cs.escribirSocket(obj);
     }
    
     public void devolverClave(String receptor){
         
-        ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, key, "CLAVE");
+        ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, "", "CLAVE");
         cs.escribirSocket(obj);
-        
     }
     
     public void print(String mensaje){
@@ -302,9 +312,9 @@ public class Shelter extends javax.swing.JFrame {
         publica = rsa.toBigInteger(objeto.getPublicaEmisor());
         rsa.setPublicKey(publica);
        
-        String privadaAES  = doDecryptedAES(objeto.getPrivada(), usuario.getPassword());
-        print(privadaAES);
-        privada = rsa.toBigInteger(privadaAES);
+        String privadaRSA  = doDecryptedAES(objeto.getPrivada(), usuario.getPassword());
+        print(privadaRSA);
+        privada = rsa.toBigInteger(privadaRSA);
         rsa.setPrivateKey(privada);
         modulus = rsa.toBigInteger(objeto.getModulus());
         rsa.setModulus(modulus);
@@ -340,9 +350,10 @@ public class Shelter extends javax.swing.JFrame {
         if(emisor.equals(usuario.getUsuario())){
             String receptor = objeto.getReceptor();
             String publicaReceptor = objeto.getPublicaReceptor();
-            key = publicaReceptor;
-            cs.setKey(key);
-            iniciarConversacion(receptor,publicaReceptor);
+            print("CLAVE PUBLICA: " + publicaReceptor);
+            String modulusReceptor = objeto.getModulusReceptor();
+            print("CLAVE modulus: " + modulusReceptor);
+            iniciarConversacion(receptor,publicaReceptor, modulusReceptor);
         }
         
     }
@@ -356,7 +367,12 @@ public class Shelter extends javax.swing.JFrame {
 
             print(partes[0]);
             print(partes[1]);
-            key = partes[0];
+            
+            
+            key = rsa.decrypt(rsa.toBigInteger(partes[0]));
+            
+            print("La clave AES de la conversacion es: " + key);
+            
             String texto = prepararChat(partes[1], key);
             JTextArea chat = new JTextArea();
             textChat.append(texto);
