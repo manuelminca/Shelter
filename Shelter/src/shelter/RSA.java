@@ -39,7 +39,7 @@ public class RSA {
         privateKey = publicKey.modInverse(m);
   }
 
-    public BigInteger encrypt(String s) {
+    public BigInteger encrypt(String s, BigInteger publicKey, BigInteger modulus) {
         byte[] bytes = s.getBytes();
         BigInteger message = new BigInteger(bytes);
         return message.modPow(publicKey, modulus);

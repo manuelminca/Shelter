@@ -25,9 +25,9 @@ public class ShelterServer {
      */
     public static void main(String[] args) throws SQLException {
         
-        Clave cl = new Clave();
+        //Clave cl = new Clave();
         
-        System.out.println(cl.getModulus("user1"));
+        //System.out.println(cl.getModulus("1"));
         
         SocketConcurrente sk_concurrente = new SocketConcurrente();
         sk_concurrente.inicio();

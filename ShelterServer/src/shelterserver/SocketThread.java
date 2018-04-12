@@ -165,6 +165,8 @@ public class SocketThread extends Thread implements Observer{
             String receptor = objeto.getReceptor();
             clave = key.getPublica(receptor);
             objeto.setPublicaReceptor(clave);
+            String modulus = key.getModulus(receptor);
+            objeto.setModulusReceptor(modulus);
             mensajes.setObjeto(objeto);
         } catch (SQLException ex) {
             Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
@@ -176,21 +178,14 @@ public class SocketThread extends Thread implements Observer{
         String receptor = objeto.getReceptor();
         String emisor = objeto.getEmisor();
         int chat = -1;
-        Clave clave = new Clave();
+
+        String[] partes = objeto.getMensaje().split(":");
+        String claveEmisor = partes[0];
+        String claveReceptor = partes[1];
         
-        //recupero las claves publicas del emisor y receptor
+        System.out.println("clave emisor: " + claveEmisor + " clave receptor: " + claveReceptor );
         
-        String publicaReceptor  = clave.getPublica(receptor);
-        String publicaEmisor  = clave.getPublica(emisor);
-        
-        chat = con.crearChat(emisor, receptor,publicaReceptor,publicaEmisor);
-        
-       
-        String privada = clave.getPrivada(receptor);
-        String modulus = clave.getModulus(receptor);
-        objeto.setPublicaEmisor(publicaReceptor);
-        objeto.setPrivada(privada);
-        objeto.setModulus(modulus);
+        chat = con.crearChat(emisor, receptor,claveEmisor,claveReceptor);
         
         return chat;
     }

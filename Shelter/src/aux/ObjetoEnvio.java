@@ -8,15 +8,12 @@ package aux;
 import java.io.Serializable;
 import java.math.BigInteger;
 
- 
-
-
 /**
  *
  * @author minguez
  */
-public class ObjetoEnvio implements Serializable{
-    
+public class ObjetoEnvio implements Serializable {
+
     private String emisor;
     private String password;
     private String receptor;
@@ -26,24 +23,21 @@ public class ObjetoEnvio implements Serializable{
     private String privada;
     private String modulus;
     private String publicaReceptor;
-    
-    
-    
+    private String modulusReceptor;
+
     // id de la conversación
     //private int id;
-    
-    
-    public ObjetoEnvio(String emisor,String receptor,String mensaje,String tipo){
+    public ObjetoEnvio(String emisor, String receptor, String mensaje, String tipo) {
         this.emisor = emisor;
         this.receptor = receptor;
         this.mensaje = mensaje;
         this.tipo = tipo;
     }
-    
-    public ObjetoEnvio(){
+
+    public ObjetoEnvio() {
 
     }
-   
+
     public String getEmisor() {
         return emisor;
     }
@@ -53,15 +47,15 @@ public class ObjetoEnvio implements Serializable{
     }
 
     public String getMensaje() {
-        
-        return mensaje;  
+
+        return mensaje;
     }
-    
+
     public String getTipo() {
-        
-        return tipo;  
+
+        return tipo;
     }
-    
+
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
@@ -73,58 +67,65 @@ public class ObjetoEnvio implements Serializable{
     public void setReceptor(String receptor) {
         this.receptor = receptor;
     }
-    
+
     public void setMensaje(String mensaje) {
-        this.mensaje = mensaje; 
+        this.mensaje = mensaje;
     }
-    
-    public void setPublicaEmisor(String pub){
+
+    public void setPublicaEmisor(String pub) {
         publicaEmisor = pub;
     }
-    public void setPrivada(String priv){
+
+    public void setPrivada(String priv) {
         privada = priv;
     }
-    
-    public void setPublicaReceptor(String pub){
+
+    public void setPublicaReceptor(String pub) {
         publicaReceptor = pub;
     }
 
-    public String getPublicaEmisor(){
+    public void setModulusReceptor(String pub) {
+        modulusReceptor = pub;
+    }
+
+    public String getPublicaEmisor() {
         return publicaEmisor;
     }
-    public String getPrivada(){
+
+    public String getModulusReceptor() {
+        return modulusReceptor;
+    }
+
+    public String getPrivada() {
         return privada;
     }
-    
-    public String getPublicaReceptor(){
+
+    public String getPublicaReceptor() {
         return publicaReceptor;
     }
-  
-    
-    public void setModulus(String mod){
+
+    public void setModulus(String mod) {
         modulus = mod;
     }
-    
-    public String getModulus(){
+
+    public String getModulus() {
         return modulus;
     }
-    
-    public String getPassword(){
+
+    public String getPassword() {
         return password;
     }
-    
-    public void setPassword(String a){
+
+    public void setPassword(String a) {
         password = a;
     }
-   
-    
-    public BigInteger toBigInteger(String foo){
+
+    public BigInteger toBigInteger(String foo) {
         return new BigInteger(foo);
     }
 
-    public String toString(BigInteger bar){
+    public String toString(BigInteger bar) {
         return bar.toString();
     }
-    
-    
+
 }
