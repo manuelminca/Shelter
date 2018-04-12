@@ -24,15 +24,20 @@ public class RSA {
     private BigInteger modulus;
 
     // generate an N-bit (roughly) public and private key
-    public RSA(int N) {
-        BigInteger p = BigInteger.probablePrime(N / 2, random);
-        BigInteger q = BigInteger.probablePrime(N / 2, random);
-        BigInteger phi = (p.subtract(one)).multiply(q.subtract(one));
-
+    public RSA(int bits) {
+        int bitlen = bits;
+        SecureRandom r = new SecureRandom();
+        BigInteger p = new BigInteger(bitlen / 2, 100, r);
+        BigInteger q = new BigInteger(bitlen / 2, 100, r);
         modulus = p.multiply(q);
-        publicKey = new BigInteger("65537");     // common value in practice = 2^16 + 1
-        privateKey = publicKey.modInverse(phi);
-    }
+        BigInteger m = (p.subtract(BigInteger.ONE)).multiply(q
+            .subtract(BigInteger.ONE));
+        publicKey = new BigInteger("3");
+        while (m.gcd(publicKey).intValue() > 1) {
+          publicKey = publicKey.add(new BigInteger("2"));
+        }
+        privateKey = publicKey.modInverse(m);
+  }
 
     public BigInteger encrypt(String s) {
         byte[] bytes = s.getBytes();
@@ -44,6 +49,16 @@ public class RSA {
         BigInteger decrypt = encrypted.modPow(privateKey, modulus);
         String resultado = new String(decrypt.toByteArray());
         return resultado;
+    }
+    
+    public String random(){
+        String result;
+        int valorEntero = (int) Math.floor(Math.random()*(50000-90000+1)+90000);
+        
+        result = valorEntero + "";
+        
+        return result;
+        
     }
     
     public String decryptAux(BigInteger encrypted) {
@@ -86,39 +101,21 @@ public class RSA {
 
     //PARA QUE VEAS COMO FUNCIONA RAFA
     
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         int N = Integer.parseInt("1024");
         RSA key = new RSA(N);
         System.out.println(key);
 
         BigInteger encrypt = key.encrypt("hola");
-        
-        
-        //DOS FORMAS DE PASARLO A STRING:
-       
-        //String cadena = String.valueOf(encrypt);
-        String cadena = String.valueOf(encrypt);
-        System.out.println("cadena: " + cadena);
-        String cadena1 = encrypt.toString();
-        System.out.println("cadena: " + cadena1);
-        
-        //FORMA DE PASAR STRING A BIGINTEFER
-        BigInteger copia = new BigInteger(cadena1);
-        System.out.println("bi: " + copia);
-        
-      
         String decrypt = key.decrypt(encrypt);
         System.out.println("encrypted = " + encrypt);
-
         System.out.println("decrypted = " + decrypt);
-
         String resultado = new String(encrypt.toByteArray());
-
         byte[] bytes = resultado.getBytes();
         BigInteger message = new BigInteger(bytes);
         System.out.println("encrypted2 = " + message);
 
-    }*/
+    }
     
 
 

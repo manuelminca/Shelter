@@ -19,6 +19,7 @@ public class Usuario extends javax.swing.JDialog {
     private String usuario;
     private String ip;
     private int puerto;
+    private String password;
     
     public Usuario(java.awt.Frame parent, boolean modal) {
 
@@ -34,6 +35,7 @@ public class Usuario extends javax.swing.JDialog {
     public String getUsuario(){return usuario;}
     public String getIP(){return ip;}
     public int getPuerto(){return puerto;}
+    public String getPassword(){return password;}
 
 
  
@@ -125,6 +127,7 @@ public class Usuario extends javax.swing.JDialog {
         usuario = textUsuario.getText();
         ip = textIP.getText();
         puerto = Integer.parseInt(textPuerto.getText());
+        password = textClave.getText();
         this.setVisible(false);
     }//GEN-LAST:event_buttonEnviarActionPerformed
 
