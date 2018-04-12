@@ -35,9 +35,9 @@ public class Usuario {
         }
     }
 
-    public void createUsuario(String usuario) {
+    public void createUsuario(String usuario,String pass) {
         try {
-            stmt.executeUpdate("INSERT INTO ROOT.USUARIO VALUES ('" + usuario + "', true)");
+            stmt.executeUpdate("INSERT INTO ROOT.USUARIO VALUES ('" + usuario + "', true," + "'" + pass + "') ");
         } catch (SQLException ex) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -108,6 +108,25 @@ public class Usuario {
             String consulta = "SELECT  NOMBRE FROM ROOT.USUARIO WHERE NOMBRE = ?";
             PreparedStatement st = myObjCon.prepareStatement(consulta);
             st.setString(1, usuario);
+            result = st.executeQuery();
+            while (result.next()) { 
+                if(result.getString(1).equals(usuario)) encontrado = true;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return encontrado;
+    }
+    
+    
+    public boolean validarUsuario(String usuario,String password){
+        boolean encontrado = false;
+        try {
+            String consulta = "SELECT  NOMBRE FROM ROOT.USUARIO WHERE NOMBRE = ? and PASSWORD = ?";
+            PreparedStatement st = myObjCon.prepareStatement(consulta);
+            st.setString(1, usuario);
+            st.setString(2, password);
             result = st.executeQuery();
             while (result.next()) { 
                 if(result.getString(1).equals(usuario)) encontrado = true;

@@ -8,6 +8,8 @@ package shelter;
 import aux.ObjetoEnvio;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -35,6 +37,7 @@ public class Shelter extends javax.swing.JFrame {
      *
      */
     private Usuario usuario;
+   
     //el mensaje Actual del usuario
     private Mensaje mensaje;
     private ConexionServidor cs;
@@ -46,26 +49,20 @@ public class Shelter extends javax.swing.JFrame {
 
 
     public Shelter() {
-        super("selter");
-        this.setVisible(true);
+        super("Shelter");
+        this.setVisible(false);
         initComponents();
         key = "1234567890000";
         //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        usuario = new Usuario(this, true);
-        usuario.dispose();
+        usuario = new Usuario(this, true,false);
+        usuario.Visible();
         //registro el usuario en servidor
-        cs = new ConexionServidor(usuario, key);
+        
+        //miro a ver si hay login para invocar un constructor o otro
+        reiniciar();
+        
         //mensaje = new Mensaje(this,true,usuario,cs);
-        mensaje = new Mensaje(usuario, cs);
-        cs.setMensaje(mensaje);
-        DynamicPanel.setLayout(layout);
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 0;
-        DynamicPanel.add(mensaje, c);
-        mensaje.setVisible(false);
-        labelUsuario.setText("Usuario: " + usuario.getUsuario());
-        rsa = new RSA(1024);
+        
         
         
         //SALIMOS
@@ -195,17 +192,24 @@ public class Shelter extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    private void iniciarConversacion(String receptor){
+    private void iniciarConversacion(String receptor,String publicaReceptor){
         
         String pass = "inventada";
+        print("clave publica: " + publicaReceptor);
         
-        BigInteger publica = rsa.getPublicKey();
-        
+       
         
         mensaje.setVisible(true);
         mensaje.getJTextArea().setText("");
         ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, key, "CHAT");
         cs.escribirSocket(obj);
+    }
+   
+    public void devolverClave(String receptor){
+        
+        ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, key, "CLAVE");
+        cs.escribirSocket(obj);
+        
     }
     
     public void print(String mensaje){
@@ -228,9 +232,11 @@ public class Shelter extends javax.swing.JFrame {
                 //se crea "la conversacion" por cada usuario conectado
                 user.addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent e) {
+                        print("el receptor es: " + receptor);
                         mensaje.setReceptor(receptor);
-                        
-                        iniciarConversacion(receptor);
+                        cs.setMensaje(mensaje);
+                        //iniciarConversacion(receptor);
+                        devolverClave(receptor);
                     }
                 });
                 panelUsuarios.add(user);
@@ -240,8 +246,6 @@ public class Shelter extends javax.swing.JFrame {
         }
     }
     
-
-
     private void reloadUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reloadUsersMouseClicked
         //pedir la lista de usuarios
         String user = usuario.getUsuario();
@@ -249,8 +253,32 @@ public class Shelter extends javax.swing.JFrame {
         ObjetoEnvio objeto = new ObjetoEnvio(user, "servidor", "", "LISTAR");
         cs.escribirSocket(objeto);
     }//GEN-LAST:event_reloadUsersMouseClicked
-    
-    
+     
+    public void reiniciar(){
+        Login login = usuario.getLogin();
+        try{
+            if(login.comprobar()){
+                //registro
+                Usuario actual = new Usuario(login);
+                usuario = actual;
+                cs = new ConexionServidor(actual,key);
+            }
+        }catch(NullPointerException e){
+            //loginmens
+            cs = new ConexionServidor(usuario);
+        }
+        mensaje = new Mensaje(usuario, cs);
+        cs.setMensaje(mensaje);
+        DynamicPanel.setLayout(layout);
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        DynamicPanel.add(mensaje, c);
+        mensaje.setVisible(false);
+        labelUsuario.setText("Usuario: " + usuario.getUsuario());
+        rsa = new RSA(1024);
+    }
+     
     public String prepararChat(String mensaje, String key){
         String[] partes = mensaje.split("\n");
        print(mensaje);
@@ -262,8 +290,110 @@ public class Shelter extends javax.swing.JFrame {
         return resultado;
     }
     
+    //Para login
+    public void ACK(ObjetoEnvio objeto){
+        BigInteger publica;
+        BigInteger privada;
+        BigInteger modulus;
 
+        //le ponemos los datos del objeto al usuario
+        usuario.setName(objeto.getReceptor());
+        usuario.setPassword(objeto.getPassword());
+        publica = rsa.toBigInteger(objeto.getPublicaEmisor());
+        rsa.setPublicKey(publica);
+       
+        String privadaAES  = doDecryptedAES(objeto.getPrivada(), usuario.getPassword());
+        print(privadaAES);
+        privada = rsa.toBigInteger(privadaAES);
+        rsa.setPrivateKey(privada);
+        modulus = rsa.toBigInteger(objeto.getModulus());
+        rsa.setModulus(modulus);
+        cs.setMensaje(mensaje);
+        this.setVisible(true);
+        
+    }
     
+    public void REGISTRO(ObjetoEnvio objeto){
+        
+        
+        if(objeto.getReceptor().equals(usuario.getUsuario())){   
+            String mens = objeto.getMensaje();
+            usuario = new Usuario(this,true,true);
+            if(mens.equals("USUARIO REGISTRADO")) usuario.setMensaje("Error, usuario registrado, intentaolo con otro.");
+            else usuario.setMensaje("Usuario registrado correctamente.");
+            usuario.Visible();
+            reiniciar();
+            
+        }
+        
+        
+    }
+    
+    public void LISTAR(ObjetoEnvio objeto){
+        if (objeto.getReceptor().equals(usuario.getUsuario()))
+            listarUsuarios(objeto.getMensaje());
+        
+    }
+    
+    public void CLAVE(ObjetoEnvio objeto){
+        String emisor = objeto.getEmisor();        
+        if(emisor.equals(usuario.getUsuario())){
+            String receptor = objeto.getReceptor();
+            String publicaReceptor = objeto.getPublicaReceptor();
+            key = publicaReceptor;
+            cs.setKey(key);
+            iniciarConversacion(receptor,publicaReceptor);
+        }
+        
+    }
+    
+    public void CHAT(ObjetoEnvio objeto,JTextArea textChat){
+        System.out.println("LLEGA MENSAJE DE TIPO CHAT");
+                    
+        if (objeto.getReceptor().equals(usuario.getUsuario())) {
+
+            String[] partes = objeto.getMensaje().split(":");
+
+            print(partes[0]);
+            print(partes[1]);
+            key = partes[0];
+            String texto = prepararChat(partes[1], key);
+            JTextArea chat = new JTextArea();
+            textChat.append(texto);
+            mensaje.setJTextArea(chat);
+            textChat.setText(texto);
+
+        }
+        
+    }
+    
+    public void DEFAULT(ObjetoEnvio objeto,JTextArea textChat){
+        
+        if ((objeto.getEmisor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getReceptor()))
+                || (objeto.getReceptor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getEmisor()))) {
+            print("mensaje cifrado:" + objeto.getMensaje());
+            print("key:" + key);
+            String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
+            System.out.println("mensajeDescifrado: " + mensajeDescifrado);
+            textChat.append(mensajeDescifrado + System.lineSeparator());
+            mensaje.setJTextArea(textChat);
+        }
+        
+    }
+    
+    public void NOACK(ObjetoEnvio objeto){
+        String m = "Error, el usuario y/o contraseña es incorrecto.Intentalo de nuevo.";
+        
+        boolean ok = usuario.getOK();
+        if(objeto.getReceptor().equals(usuario.getUsuario())){
+            usuario = new Usuario(this,true,true);
+            usuario.setMensaje(m);
+            usuario.setOK(false);
+            usuario.Visible();
+            reiniciar();
+        }
+    }
+
     public void recibirMensajesServidor() {
         Socket socket = cs.getSocket();
         JTextArea textChat = mensaje.getJTextArea();
@@ -274,50 +404,31 @@ public class Shelter extends javax.swing.JFrame {
         while (conectado) {
             try {
                 objeto = cs.leerSocket(socket);
-                if (objeto.getTipo().equals("ACK")) {
-                    BigInteger publica;
-                    BigInteger privada;
-                    BigInteger modulus;
-                    
-                    publica = rsa.toBigInteger(objeto.getPublica());
-                    rsa.setPublicKey(publica);                  
-                    String privadaAES  = doDecryptedAES(objeto.getPrivada(), usuario.getPassword());
-                    privada = rsa.toBigInteger(privadaAES);
-                    rsa.setPrivateKey(privada);
-                    modulus = rsa.toBigInteger(objeto.getModulus());
-                    rsa.setModulus(modulus);
-                    
-                } else if (objeto.getTipo().equals("LISTAR")) {
-                    if (objeto.getReceptor().equals(usuario.getUsuario())) {
-                        listarUsuarios(objeto.getMensaje());
-                    }
-                } else if (objeto.getTipo().equals("CHAT")) {
-
-                    System.out.println("LLEGA MENSAJE DE TIPO CHAT");
-                    
-                    if (objeto.getReceptor().equals(usuario.getUsuario())) {
-                        
-                        String[] partes = objeto.getMensaje().split(":");
-                        
-                        print(partes[0]);
-                        print(partes[1]);
-                        key = partes[0];
-                        String texto = prepararChat(partes[1], key);
-                        JTextArea chat = new JTextArea();
-                        textChat.append(texto);
-                        mensaje.setJTextArea(chat);
-                        textChat.setText(texto);
-                        
-                    }
-                } else if ((objeto.getEmisor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getReceptor())) || (objeto.getReceptor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getEmisor()))) {
-                    String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
-                     System.out.println("mensajeDescifrado: " + mensajeDescifrado);
-                    textChat.append(mensajeDescifrado + System.lineSeparator());
-                    mensaje.setJTextArea(textChat);
-                }else{
-                    //Nothing to do here bro
-                }
                 
+                switch(objeto.getTipo()){
+                    //login
+                    case "ACK":
+                         ACK(objeto);
+                         break;
+                    case "REGISTRO":
+                         REGISTRO(objeto);
+                         break;
+                    case "!ACK":
+                         NOACK(objeto);
+                         break;
+                    case "LISTAR":
+                        LISTAR(objeto);
+                        break;
+                    case "CLAVE":
+                        CLAVE(objeto);
+                        break;
+                    case "CHAT":
+                        CHAT(objeto,textChat);
+                        break;
+                    default:
+                        DEFAULT(objeto,textChat);
+                        break;     
+                }     
             } catch (IOException ex) {
                 System.out.println("Error al leer del stream de entrada: " + ex.getMessage());
                 conectado = false;
@@ -335,13 +446,6 @@ public class Shelter extends javax.swing.JFrame {
         
         Shelter shelter = new Shelter();
         shelter.recibirMensajesServidor();
-        
-        //boton de eliminar (le envia al servidor que se desconecta)
-        
-        
-           
-        
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -355,6 +459,7 @@ public class Shelter extends javax.swing.JFrame {
     private javax.swing.JLabel reloadUsers;
     private javax.swing.JScrollPane scrollPane;
     // End of variables declaration//GEN-END:variables
+
 }
 
 

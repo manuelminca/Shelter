@@ -39,7 +39,6 @@ public class Mensaje extends javax.swing.JPanel {
         
         this.usuario = usuario;
         this.cs = cs;
-        System.out.println("recibiendo asdadsads...");
         cs.setJTextField(jTextField1);
         
         jButton1.addActionListener(cs);

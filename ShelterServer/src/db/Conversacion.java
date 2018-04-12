@@ -102,17 +102,22 @@ public class Conversacion {
                 }  
             }
 
-            Chat chat = new Chat();
-            int id_chat = chat.createChat();
-            createConversacion(id_chat, user1, key);
-            createConversacion(id_chat, user2, key);
-            return id_chat;
+           
             
             
         } catch (SQLException ex) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
         }
         return -1;
+    }
+    
+    public int crearChat(String emisor, String receptor, String keyReceptor,String keyEmisor) throws SQLException{
+        Chat chat = new Chat();
+        int id_chat = chat.createChat();
+        createConversacion(id_chat, emisor, keyEmisor);
+        createConversacion(id_chat, receptor, keyReceptor);
+        return id_chat;
+        
     }
     
     

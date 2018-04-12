@@ -18,12 +18,14 @@ import java.math.BigInteger;
 public class ObjetoEnvio implements Serializable{
     
     private String emisor;
+    private String password;
     private String receptor;
     private String mensaje;
     private String tipo;
-    private String publica;
+    private String publicaEmisor;
     private String privada;
     private String modulus;
+    private String publicaReceptor;
     
     
     
@@ -76,19 +78,28 @@ public class ObjetoEnvio implements Serializable{
         this.mensaje = mensaje; 
     }
     
-    public void setPublica(String pub){
-        publica = pub;
+    public void setPublicaEmisor(String pub){
+        publicaEmisor = pub;
     }
     public void setPrivada(String priv){
         privada = priv;
     }
     
-    public String getPublica(){
-        return publica;
+    public void setPublicaReceptor(String pub){
+        publicaReceptor = pub;
+    }
+
+    public String getPublicaEmisor(){
+        return publicaEmisor;
     }
     public String getPrivada(){
         return privada;
     }
+    
+    public String getPublicaReceptor(){
+        return publicaReceptor;
+    }
+  
     
     public void setModulus(String mod){
         modulus = mod;
@@ -97,6 +108,15 @@ public class ObjetoEnvio implements Serializable{
     public String getModulus(){
         return modulus;
     }
+    
+    public String getPassword(){
+        return password;
+    }
+    
+    public void setPassword(String a){
+        password = a;
+    }
+   
     
     public BigInteger toBigInteger(String foo){
         return new BigInteger(foo);
