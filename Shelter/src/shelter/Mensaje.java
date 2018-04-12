@@ -6,11 +6,18 @@
 package shelter;
 
 import aux.ObjetoEnvio;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import static shelter.AES.doEncryptedAES;
 
@@ -18,7 +25,7 @@ import static shelter.AES.doEncryptedAES;
  *
  * @author minguez
  */
-public class Mensaje extends javax.swing.JPanel {
+public class Mensaje extends JPanel {
 
     /**
      * Creates new form Mensaje
@@ -44,7 +51,6 @@ public class Mensaje extends javax.swing.JPanel {
         jButton1.addActionListener(cs);
         jTextField1.addActionListener(cs);
     } 
-    
     
     public Mensaje(Usuario us,String r,ConexionServidor cs){
         initComponents();
@@ -87,6 +93,7 @@ public class Mensaje extends javax.swing.JPanel {
     
     public ConexionServidor getCS(){return cs;}
    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -287,7 +287,7 @@ public class SocketThread extends Thread implements Observer{
                 procesaCadena(objeto); 
             }           
         } catch (Exception ex) {
-            System.out.println("Ha fallado el try del run()");
+            
         }
     }
     
