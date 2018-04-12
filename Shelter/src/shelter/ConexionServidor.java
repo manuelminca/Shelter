@@ -62,7 +62,6 @@ public class ConexionServidor implements ActionListener {
         BigInteger publica= rsa.getPublicKey();
         String stringPublica = rsa.toString(publica);
         objeto.setPublicaEmisor(stringPublica);
-        key = stringPublica;
     }
     
     public void getPrivada(RSA rsa,ObjetoEnvio objeto){
