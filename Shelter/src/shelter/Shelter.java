@@ -197,8 +197,7 @@ public class Shelter extends javax.swing.JFrame {
         String pass = "inventada";
         print("clave publica: " + publicaReceptor);
         
-        BigInteger publica = rsa.getPublicKey();
-        //necesito la key publica del receptor
+       
         
         mensaje.setVisible(true);
         mensaje.getJTextArea().setText("");
@@ -447,13 +446,6 @@ public class Shelter extends javax.swing.JFrame {
         
         Shelter shelter = new Shelter();
         shelter.recibirMensajesServidor();
-        
-        //boton de eliminar (le envia al servidor que se desconecta)
-        
-        
-           
-        
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
