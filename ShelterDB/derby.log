@@ -1,7 +1,7 @@
-Tue Apr 03 17:22:37 CEST 2018 : Apache Derby Network Server - 10.10.2.0 - (1582446) started and ready to accept connections on port 1527
+Thu Apr 12 16:34:51 CEST 2018 : Apache Derby Network Server - 10.10.2.0 - (1582446) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Tue Apr 03 17:22:53 CEST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0162-8c1a-4e93-ffffb4c3d645 
+Thu Apr 12 16:34:51 CEST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0162-ba47-cfa9-ffffb4c3d645 
 on database directory /Users/minguez/MEGA/Mega-Universidad/UNIVERSIDAD/CUARTO CURSO/Segundo Cuatrimestre/Estrategias de seguridad/Prácticas/Prac_Est_Seg/ShelterDB/ShelterDB with class loader sun.misc.Launcher$AppClassLoader@66d3c617 
 Loaded from file:/Applications/NetBeans/glassfish-4.1.1/javadb/lib/derby.jar
 java.vendor=Oracle Corporation
@@ -9,29 +9,6 @@ java.runtime.version=1.8.0_131-b11
 user.dir=/Applications/NetBeans/glassfish-4.1.1/javadb
 os.name=Mac OS X
 os.arch=x86_64
-os.version=10.13.3
+os.version=10.13.4
 derby.system.home=/Users/minguez/MEGA/Mega-Universidad/UNIVERSIDAD/CUARTO CURSO/Segundo Cuatrimestre/Estrategias de seguridad/Prácticas/Prac_Est_Seg/ShelterDB
 Database Class Loader started - derby.database.classpath=''
-----------------------------------------------------------------
-Tue Apr 03 17:22:54 CEST 2018:
-Shutting down instance a816c00e-0162-8c1a-4e93-ffffb4c3d645 on database directory /Users/minguez/MEGA/Mega-Universidad/UNIVERSIDAD/CUARTO CURSO/Segundo Cuatrimestre/Estrategias de seguridad/Prácticas/Prac_Est_Seg/ShelterDB/ShelterDB with class loader sun.misc.Launcher$AppClassLoader@66d3c617 
-Tue Apr 03 17:22:54 CEST 2018 Thread[DRDAConnThread_3,5,main] (DATABASE = ShelterDB), (DRDAID = {2}), Database 'ShelterDB' shutdown.
-----------------------------------------------------------------
-Tue Apr 03 17:22:57 CEST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance 560740aa-0162-8c1a-4e93-ffffb4c3d645 
-on database directory /Users/minguez/MEGA/Mega-Universidad/UNIVERSIDAD/CUARTO CURSO/Segundo Cuatrimestre/Estrategias de seguridad/Prácticas/Prac_Est_Seg/ShelterDB/ShelterDB with class loader sun.misc.Launcher$AppClassLoader@66d3c617 
-Loaded from file:/Applications/NetBeans/glassfish-4.1.1/javadb/lib/derby.jar
-java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_131-b11
-user.dir=/Applications/NetBeans/glassfish-4.1.1/javadb
-os.name=Mac OS X
-os.arch=x86_64
-os.version=10.13.3
-derby.system.home=/Users/minguez/MEGA/Mega-Universidad/UNIVERSIDAD/CUARTO CURSO/Segundo Cuatrimestre/Estrategias de seguridad/Prácticas/Prac_Est_Seg/ShelterDB
-Database Class Loader started - derby.database.classpath=''
-----------------------------------------------------------------
-Tue Apr 03 17:23:06 CEST 2018: Shutting down Derby engine
-----------------------------------------------------------------
-Tue Apr 03 17:23:06 CEST 2018:
-Shutting down instance 560740aa-0162-8c1a-4e93-ffffb4c3d645 on database directory /Users/minguez/MEGA/Mega-Universidad/UNIVERSIDAD/CUARTO CURSO/Segundo Cuatrimestre/Estrategias de seguridad/Prácticas/Prac_Est_Seg/ShelterDB/ShelterDB with class loader sun.misc.Launcher$AppClassLoader@66d3c617 
-----------------------------------------------------------------
