@@ -101,6 +101,7 @@ public class Shelter extends javax.swing.JFrame {
 
         labelUsuarios.setText("Usuarios conectados");
 
+        icono.setBackground(new java.awt.Color(255, 127, 80));
         icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shelter/img/home (1).png"))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("PingFang SC", 0, 24)); // NOI18N
@@ -160,6 +161,7 @@ public class Shelter extends javax.swing.JFrame {
         );
 
         DynamicPanel.setBackground(new java.awt.Color(236, 229, 221));
+<<<<<<< Updated upstream
 
         jLabel2.setFont(new java.awt.Font("Malayalam Sangam MN", 0, 36)); // NOI18N
         jLabel2.setText("Bienvenido a Shelter");
@@ -169,6 +171,8 @@ public class Shelter extends javax.swing.JFrame {
         jLabel4.setText("Para comenzar haz click en \"Actualizar\" para ver la lista de");
 
         jLabel5.setText("usuarios conectados con los que podrás hablar.");
+=======
+>>>>>>> Stashed changes
 
         javax.swing.GroupLayout DynamicPanelLayout = new javax.swing.GroupLayout(DynamicPanel);
         DynamicPanel.setLayout(DynamicPanelLayout);

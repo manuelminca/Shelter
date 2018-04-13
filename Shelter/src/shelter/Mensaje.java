@@ -108,6 +108,8 @@ public class Mensaje extends JPanel {
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
+        jScrollPane1.setBorder(new javax.swing.border.MatteBorder(null));
+
         textChat.setColumns(20);
         textChat.setRows(5);
         jScrollPane1.setViewportView(textChat);
