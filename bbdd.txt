@@ -3,3 +3,6 @@ delete from mensaje;
 delete from conversacion;
 delete from chat;
 delete from usuario;
+
+
+Cuando se crea una consersación, el panel de mensaje se puede abrir en uno usuario (en el q inicia la conversación) pero en el otro no

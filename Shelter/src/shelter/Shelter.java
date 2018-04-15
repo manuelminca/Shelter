@@ -57,7 +57,7 @@ public class Shelter extends javax.swing.JFrame {
         usuario.Visible();
         setExtendedState(MAXIMIZED_BOTH);
         //registro el usuario en servidor
-
+        labelUsuario.setText("Usuario: " + usuario.getUsuario());
         //miro a ver si hay login para invocar un constructor o otro
         reiniciar();
 
