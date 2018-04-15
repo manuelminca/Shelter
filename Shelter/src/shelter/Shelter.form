@@ -108,6 +108,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="icono">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="50" green="7f" red="ff" type="rgb"/>
+            </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/shelter/img/home (1).png"/>
             </Property>
