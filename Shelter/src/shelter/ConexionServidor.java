@@ -1,3 +1,7 @@
+
+
+
+
 package shelter;
 
 import aux.ObjetoEnvio;

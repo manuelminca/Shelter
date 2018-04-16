@@ -43,9 +43,9 @@ public class Shelter extends javax.swing.JFrame {
     private ConexionServidor cs;
     private String key;
     GridBagLayout layout = new GridBagLayout();
-    private int indiceUsuarios;
     private List<Mensaje> listaMensajes;
     RSA rsa;
+    private int contador;
 
     public Shelter() {
         super("Shelter");
@@ -55,6 +55,7 @@ public class Shelter extends javax.swing.JFrame {
         //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         usuario = new Usuario(this, true, false);
         usuario.Visible();
+        setExtendedState(MAXIMIZED_BOTH);
         //registro el usuario en servidor
 
         //miro a ver si hay login para invocar un constructor o otro
@@ -101,6 +102,7 @@ public class Shelter extends javax.swing.JFrame {
 
         labelUsuarios.setText("Usuarios conectados");
 
+        icono.setBackground(new java.awt.Color(255, 127, 80));
         icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shelter/img/home (1).png"))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("PingFang SC", 0, 24)); // NOI18N
@@ -245,7 +247,25 @@ public class Shelter extends javax.swing.JFrame {
     }
 
     public void devolverClave(String receptor) {
+        if(contador == 0){
+            DynamicPanel.setLayout(layout);
+            DynamicPanel.setSize(400, 400);
+            GridBagConstraints c = new GridBagConstraints();
+            c.gridx = 0;
+            c.gridy = 0;
+            //mensaje.setExtendedState();
 
+            DynamicPanel.add(mensaje, c);
+            mensaje.setVisible(false);
+            
+            labelUsuario.setText("Usuario: " + usuario.getUsuario());
+            jLabel2.setVisible(false);
+            jLabel3.setVisible(false);
+            jLabel4.setVisible(false);
+            jLabel5.setVisible(false);
+        }
+        contador++;
+       
         ObjetoEnvio obj = new ObjetoEnvio(usuario.getUsuario(), receptor, "", "CLAVE");
         cs.escribirSocket(obj);
     }
@@ -260,7 +280,7 @@ public class Shelter extends javax.swing.JFrame {
         System.out.println("lista: " + lista);
         String[] partes = lista.split(":");
         panelUsuarios.removeAll();
-        indiceUsuarios = 0;
+        
 
         for (int i = 0; i < partes.length; i++) {
             if (!partes[i].equals(usuario.getUsuario())) {
@@ -270,6 +290,7 @@ public class Shelter extends javax.swing.JFrame {
                 //se crea "la conversacion" por cada usuario conectado
                 user.addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent e) {
+                       
                         print("el receptor es: " + receptor);
                         mensaje.setReceptor(receptor);
                         cs.setMensaje(mensaje);
@@ -312,14 +333,16 @@ public class Shelter extends javax.swing.JFrame {
         }
         mensaje = new Mensaje(usuario, cs);
         cs.setMensaje(mensaje);
-        DynamicPanel.setLayout(layout);
+        DynamicPanel.setLayout(null);
+        /*DynamicPanel.setSize(400, 400);
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
         DynamicPanel.add(mensaje, c);
         mensaje.setVisible(false);
-        labelUsuario.setText("Usuario: " + usuario.getUsuario());
+        labelUsuario.setText("Usuario: " + usuario.getUsuario());*/
         rsa = new RSA(1024);
+        
     }
 
     public String prepararChat(String mensaje, String key) {
@@ -380,6 +403,7 @@ public class Shelter extends javax.swing.JFrame {
     }
 
     public void CLAVE(ObjetoEnvio objeto) {
+        
         String emisor = objeto.getEmisor();
         if (emisor.equals(usuario.getUsuario())) {
             String receptor = objeto.getReceptor();
