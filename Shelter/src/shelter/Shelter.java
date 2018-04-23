@@ -46,20 +46,19 @@ public class Shelter extends javax.swing.JFrame {
     private List<Mensaje> listaMensajes;
     RSA rsa;
     private int contador;
+    private String receptor;
 
     public Shelter() {
         super("Shelter");
         this.setVisible(false);
         initComponents();
-        key = "1234567890000";
-        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         usuario = new Usuario(this, true, false);
         usuario.Visible();
-        setExtendedState(MAXIMIZED_BOTH);
         //registro el usuario en servidor
 
         //miro a ver si hay login para invocar un constructor o otro
         reiniciar();
+        labelUsuario.setText("Usuario: " + usuario.getUsuario());
 
         //mensaje = new Mensaje(this,true,usuario,cs);
         //SALIMOS
@@ -176,30 +175,29 @@ public class Shelter extends javax.swing.JFrame {
         DynamicPanel.setLayout(DynamicPanelLayout);
         DynamicPanelLayout.setHorizontalGroup(
             DynamicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(DynamicPanelLayout.createSequentialGroup()
-                .addGap(110, 110, 110)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(DynamicPanelLayout.createSequentialGroup()
-                .addGap(98, 98, 98)
-                .addComponent(jLabel3))
-            .addGroup(DynamicPanelLayout.createSequentialGroup()
-                .addGap(98, 98, 98)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(DynamicPanelLayout.createSequentialGroup()
-                .addGap(98, 98, 98)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, DynamicPanelLayout.createSequentialGroup()
+                .addContainerGap(52, Short.MAX_VALUE)
+                .addGroup(DynamicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(DynamicPanelLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(46, 46, 46))
         );
         DynamicPanelLayout.setVerticalGroup(
             DynamicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(DynamicPanelLayout.createSequentialGroup()
-                .addGap(77, 77, 77)
+                .addGap(74, 74, 74)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addComponent(jLabel4)
                 .addGap(6, 6, 6)
-                .addComponent(jLabel5))
+                .addComponent(jLabel5)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -228,6 +226,7 @@ public class Shelter extends javax.swing.JFrame {
 
         mensaje.setVisible(true);
         mensaje.getJTextArea().setText("");
+        mensaje.setReceptor(receptor);
 
         BigInteger publica = rsa.toBigInteger(publicaReceptor);
         BigInteger modulus = rsa.toBigInteger(modulusReceptor);
@@ -247,6 +246,7 @@ public class Shelter extends javax.swing.JFrame {
     }
 
     public void devolverClave(String receptor) {
+        this.receptor = receptor;
         if(contador == 0){
             DynamicPanel.setLayout(layout);
             DynamicPanel.setSize(400, 400);
@@ -258,7 +258,6 @@ public class Shelter extends javax.swing.JFrame {
             DynamicPanel.add(mensaje, c);
             mensaje.setVisible(false);
             
-            labelUsuario.setText("Usuario: " + usuario.getUsuario());
             jLabel2.setVisible(false);
             jLabel3.setVisible(false);
             jLabel4.setVisible(false);
@@ -290,19 +289,15 @@ public class Shelter extends javax.swing.JFrame {
                 //se crea "la conversacion" por cada usuario conectado
                 user.addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent e) {
-                       
+                       print("HOLAHOLAHOLAHOLAHOLAHOLAHOLAKS FGKLJHSG KJSHFG KSJFHG KSJFHG KLSJFGLKDSFJGLSKDFJLFJG KLJGHDS LKFJGHSDFKLJH");
                         print("el receptor es: " + receptor);
                         mensaje.setReceptor(receptor);
+                        print(mensaje.getReceptor());
                         cs.setMensaje(mensaje);
-                        //iniciarConversacion(receptor);
                         devolverClave(receptor);
                     }
                 });
-                
-                // Import ImageIcon     
 
-                user.setIcon(new ImageIcon("/shelter/img/1.png"));
-                
                 panelUsuarios.add(user);
                 panelUsuarios.updateUI();
                 validate();
@@ -328,19 +323,12 @@ public class Shelter extends javax.swing.JFrame {
                 cs = new ConexionServidor(actual, key);
             }
         } catch (NullPointerException e) {
-            //loginmens
+            
             cs = new ConexionServidor(usuario);
         }
         mensaje = new Mensaje(usuario, cs);
         cs.setMensaje(mensaje);
         DynamicPanel.setLayout(null);
-        /*DynamicPanel.setSize(400, 400);
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 0;
-        DynamicPanel.add(mensaje, c);
-        mensaje.setVisible(false);
-        labelUsuario.setText("Usuario: " + usuario.getUsuario());*/
         rsa = new RSA(1024);
         
     }
@@ -405,7 +393,8 @@ public class Shelter extends javax.swing.JFrame {
     public void CLAVE(ObjetoEnvio objeto) {
         
         String emisor = objeto.getEmisor();
-        if (emisor.equals(usuario.getUsuario())) {
+        String usuarioActual = usuario.getUsuario();
+        if (emisor.equals(usuarioActual)) {
             String receptor = objeto.getReceptor();
             String publicaReceptor = objeto.getPublicaReceptor();
             print("CLAVE PUBLICA: " + publicaReceptor);
@@ -418,13 +407,17 @@ public class Shelter extends javax.swing.JFrame {
 
     public void CHAT(ObjetoEnvio objeto, JTextArea textChat) {
         System.out.println("LLEGA MENSAJE DE TIPO CHAT");
-
+        
+        print(objeto.getReceptor() + " usuario getusuario " + usuario.getUsuario());
+        
         if (objeto.getReceptor().equals(usuario.getUsuario())) {
-
+            print("Hemos entrado dentro del if");
             String[] partes = objeto.getMensaje().split(":");
 
             print(partes[0]);
             print(partes[1]);
+            
+            print("hemos acabado de hacer las partes");
 
             key = rsa.decrypt(rsa.toBigInteger(partes[0]));
             cs.setKey(key);
@@ -442,9 +435,16 @@ public class Shelter extends javax.swing.JFrame {
     }
 
     public void DEFAULT(ObjetoEnvio objeto, JTextArea textChat) {
-
-        if ((objeto.getEmisor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getReceptor()))
-                || (objeto.getReceptor().equals(usuario.getUsuario()) && mensaje.getReceptor().equals(objeto.getEmisor()))) {
+        
+        print(objeto.getEmisor());
+        print(objeto.getReceptor());
+        print(mensaje.getReceptor());
+        print(usuario.getUsuario());
+        
+        
+        
+        if ((objeto.getEmisor().equals(usuario.getUsuario()) && receptor.equals(objeto.getReceptor()))
+                || (objeto.getReceptor().equals(usuario.getUsuario()) && receptor.equals(objeto.getEmisor()))) {
             print("mensaje cifrado:" + objeto.getMensaje());
             print("key:" + key);
             String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);

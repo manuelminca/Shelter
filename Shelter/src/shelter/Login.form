@@ -81,7 +81,7 @@
                   <Component id="botonEnviar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="butonAtras" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="31" max="32767" attributes="0"/>
+              <EmptySpace pref="47" max="32767" attributes="0"/>
               <Component id="labelMensaje" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
           </Group>
@@ -143,9 +143,6 @@
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="labelMensaje">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jLabel4"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="butonAtras">
       <Properties>

@@ -116,8 +116,6 @@ public class Login extends javax.swing.JPanel {
             }
         });
 
-        labelMensaje.setText("jLabel4");
-
         butonAtras.setText("Atras");
         butonAtras.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -181,7 +179,7 @@ public class Login extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonEnviar)
                     .addComponent(butonAtras))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(labelMensaje)
                 .addGap(26, 26, 26))
         );
