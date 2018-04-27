@@ -24,7 +24,7 @@ public class Login extends javax.swing.JPanel {
     public Login(Usuario us) {
         initComponents();
         this.us = us;
-        setMensaje("hoka");
+        setMensaje("  ");
     }
     
     public void Visible(){
@@ -80,13 +80,13 @@ public class Login extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         textNombre = new javax.swing.JTextField();
-        textPassword = new javax.swing.JTextField();
-        textConfirmar = new javax.swing.JTextField();
         textIP = new javax.swing.JTextField();
         textPuerto = new javax.swing.JTextField();
         botonEnviar = new javax.swing.JButton();
         labelMensaje = new javax.swing.JLabel();
         butonAtras = new javax.swing.JButton();
+        textPassword = new javax.swing.JPasswordField();
+        textConfirmar = new javax.swing.JPasswordField();
 
         labelText.setText("Nombre");
 
@@ -97,12 +97,6 @@ public class Login extends javax.swing.JPanel {
         jLabel2.setText("IP");
 
         jLabel3.setText("Puerto");
-
-        textPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textPasswordActionPerformed(evt);
-            }
-        });
 
         textIP.setText("localhost");
 
@@ -123,6 +117,12 @@ public class Login extends javax.swing.JPanel {
             }
         });
 
+        textConfirmar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textConfirmarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -132,25 +132,31 @@ public class Login extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(99, 99, 99)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelText)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(labelPassword)
-                            .addComponent(labelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(textNombre)
-                            .addComponent(textPassword)
-                            .addComponent(textConfirmar)
-                            .addComponent(textIP)
-                            .addComponent(textPuerto, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(labelText)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel1)
+                                    .addComponent(labelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(textPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(textNombre)
+                                        .addComponent(textIP)
+                                        .addComponent(textPuerto, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
+                                    .addComponent(textConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(labelPassword)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(85, 85, 85)
                         .addComponent(butonAtras)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(botonEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(62, 62, 62))
+                        .addComponent(botonEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49)))
+                .addGap(13, 13, 13))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -163,14 +169,16 @@ public class Login extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelPassword)
                     .addComponent(textPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(textConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(textIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(textConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(57, 57, 57)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(textIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -179,16 +187,11 @@ public class Login extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonEnviar)
                     .addComponent(butonAtras))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addComponent(labelMensaje)
                 .addGap(26, 26, 26))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void textPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPasswordActionPerformed
-        
-        
-    }//GEN-LAST:event_textPasswordActionPerformed
 
     private void butonAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butonAtrasActionPerformed
         this.setVisible(false);
@@ -199,8 +202,10 @@ public class Login extends javax.swing.JPanel {
     private void botonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviarActionPerformed
         usuario = textNombre.getText();
         ip = textIP.getText();
-        password = textPassword.getText();
-        confirmar = textConfirmar.getText();
+        
+        password = org.apache.commons.codec.digest.DigestUtils.sha256Hex(textPassword.getText() +"salt");
+        confirmar = org.apache.commons.codec.digest.DigestUtils.sha256Hex(textConfirmar.getText() +"salt");
+        
         labelMensaje.setText("asdas.");
         
         if(!iguales(password,confirmar)){
@@ -213,12 +218,17 @@ public class Login extends javax.swing.JPanel {
                 this.setVisible(false);
                 us.setVisible(false);
                 //us.setVisibleALL(true);
+                
             } catch (NumberFormatException nfe){
                 setMensaje("En el campo puerto hay que introducir un número.");
             }
             
         }
     }//GEN-LAST:event_botonEnviarActionPerformed
+
+    private void textConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textConfirmarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textConfirmarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -230,10 +240,10 @@ public class Login extends javax.swing.JPanel {
     private javax.swing.JLabel labelMensaje;
     private javax.swing.JLabel labelPassword;
     private javax.swing.JLabel labelText;
-    private javax.swing.JTextField textConfirmar;
+    private javax.swing.JPasswordField textConfirmar;
     private javax.swing.JTextField textIP;
     private javax.swing.JTextField textNombre;
-    private javax.swing.JTextField textPassword;
+    private javax.swing.JPasswordField textPassword;
     private javax.swing.JTextField textPuerto;
     // End of variables declaration//GEN-END:variables
 }

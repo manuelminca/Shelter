@@ -154,9 +154,11 @@ public class ConexionServidor implements ActionListener {
         print("receptor: " + receptor);
         ObjetoEnvio objeto = new ObjetoEnvio();
         objeto.setEmisor(user);
+        System.out.println("Conexion Servidor-- El receptor es " + receptor);
         objeto.setReceptor(receptor);
         objeto.setTipo("MENSAJE");
-        
+        mensaje.setEmisor(user);
+        mensaje.setReceptor(receptor);
         print("key: " + key);
         String mensajeCifrado = doEncryptedAES(user + ": " + tfMensaje.getText(), key);
         print("mensaje cifrado: " + mensajeCifrado);
@@ -164,6 +166,12 @@ public class ConexionServidor implements ActionListener {
         escribirSocket(objeto);
         tfMensaje.setText("");
     }
+    
+    
+    public Mensaje getMensaje(){
+        return mensaje;
+    }
+    
     
 
 }

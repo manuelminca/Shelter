@@ -224,9 +224,10 @@ public class Shelter extends javax.swing.JFrame {
 
     private void iniciarConversacion(String receptor, String publicaReceptor, String modulusReceptor) {
 
-        mensaje.setVisible(true);
-        mensaje.getJTextArea().setText("");
-        mensaje.setReceptor(receptor);
+        cs.getMensaje().setVisible(true);
+        cs.getMensaje().getJTextArea().setText("");
+        cs.getMensaje().setReceptor(receptor);
+        cs.getMensaje().setEmisor(usuario.getUsuario());
 
         BigInteger publica = rsa.toBigInteger(publicaReceptor);
         BigInteger modulus = rsa.toBigInteger(modulusReceptor);
@@ -255,8 +256,8 @@ public class Shelter extends javax.swing.JFrame {
             c.gridy = 0;
             //mensaje.setExtendedState();
 
-            DynamicPanel.add(mensaje, c);
-            mensaje.setVisible(false);
+            DynamicPanel.add(cs.getMensaje(), c);
+            cs.getMensaje().setVisible(false);
             
             jLabel2.setVisible(false);
             jLabel3.setVisible(false);
@@ -291,9 +292,9 @@ public class Shelter extends javax.swing.JFrame {
                     public void mouseClicked(MouseEvent e) {
                        print("HOLAHOLAHOLAHOLAHOLAHOLAHOLAKS FGKLJHSG KJSHFG KSJFHG KSJFHG KLSJFGLKDSFJGLSKDFJLFJG KLJGHDS LKFJGHSDFKLJH");
                         print("el receptor es: " + receptor);
-                        mensaje.setReceptor(receptor);
-                        print(mensaje.getReceptor());
-                        cs.setMensaje(mensaje);
+                        cs.getMensaje().setReceptor(receptor);
+                        print(cs.getMensaje().getReceptor());
+                        //cs.setMensaje(mensaje);
                         devolverClave(receptor);
                     }
                 });
@@ -427,7 +428,7 @@ public class Shelter extends javax.swing.JFrame {
             String texto = prepararChat(partes[1], key);
             JTextArea chat = new JTextArea();
             textChat.append(texto);
-            mensaje.setJTextArea(chat);
+            cs.getMensaje().setJTextArea(chat);
             textChat.setText(texto);
 
         }
@@ -435,14 +436,14 @@ public class Shelter extends javax.swing.JFrame {
     }
 
     public void DEFAULT(ObjetoEnvio objeto, JTextArea textChat) {
-        
+        print("entramos en default");
         print(objeto.getEmisor());
         print(objeto.getReceptor());
-        print(mensaje.getReceptor());
+        
+        print(cs.getMensaje().getReceptor());
         print(usuario.getUsuario());
         
-        
-        
+       
         if ((objeto.getEmisor().equals(usuario.getUsuario()) && receptor.equals(objeto.getReceptor()))
                 || (objeto.getReceptor().equals(usuario.getUsuario()) && receptor.equals(objeto.getEmisor()))) {
             print("mensaje cifrado:" + objeto.getMensaje());
@@ -450,7 +451,7 @@ public class Shelter extends javax.swing.JFrame {
             String mensajeDescifrado = doDecryptedAES(objeto.getMensaje(), key);
             System.out.println("mensajeDescifrado: " + mensajeDescifrado);
             textChat.append(mensajeDescifrado + System.lineSeparator());
-            mensaje.setJTextArea(textChat);
+            cs.getMensaje().setJTextArea(textChat);
         }
 
     }
@@ -470,7 +471,7 @@ public class Shelter extends javax.swing.JFrame {
 
     public void recibirMensajesServidor() {
         Socket socket = cs.getSocket();
-        JTextArea textChat = mensaje.getJTextArea();
+        JTextArea textChat = cs.getMensaje().getJTextArea();
 
         ObjetoEnvio objeto;
         // Bucle infinito que recibe mensajes del servidor
@@ -502,7 +503,10 @@ public class Shelter extends javax.swing.JFrame {
                         CHAT(objeto, textChat);
                         break;
                     default:
-                        DEFAULT(objeto, textChat);
+                        if(cs.getMensaje().getReceptor() != null){
+                            DEFAULT(objeto, textChat);
+                        }
+                        
                         break;
                 }
 
