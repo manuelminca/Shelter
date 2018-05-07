@@ -90,6 +90,7 @@ public class Mensaje extends JPanel {
     }
     
     public void setReceptor(String r){receptor = r;}
+    public void setEmisor(String r){emisor = r;}
     
     public ConexionServidor getCS(){return cs;}
    
