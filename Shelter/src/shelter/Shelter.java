@@ -414,10 +414,6 @@ public class Shelter extends javax.swing.JFrame {
             print("Hemos entrado dentro del if");
             String[] partes = objeto.getMensaje().split(":");
 
-            print(partes[0]);
-            print(partes[1]);
-            
-            print("hemos acabado de hacer las partes");
 
             key = rsa.decrypt(rsa.toBigInteger(partes[0]));
             cs.setKey(key);
