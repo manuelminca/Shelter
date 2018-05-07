@@ -52,6 +52,7 @@ public class Shelter extends javax.swing.JFrame {
         super("Shelter");
         this.setVisible(false);
         initComponents();
+        setSize(500,500);
         usuario = new Usuario(this, true, false);
         usuario.Visible();
         //registro el usuario en servidor
