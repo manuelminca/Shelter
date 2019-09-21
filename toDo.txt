@@ -1,0 +1,16 @@
+-He pensado que la contraseña publica RSA siempre se va a generar de forma simple con el nombre de usuario así cada cliente va a saber como cifrar con la clave publica del usuario.
+-La clave privada del usuario se va a generar en el momento tras poner el usuario a mano una master key.
+- Para seguir los pasos de como cifrar y descifrar aquí esta genial explicado https://stackoverflow.com/questions/13500368/encrypt-and-decrypt-large-string-in-java-using-rsa
+
+-Cuando un usuario se registra en el servidor, tiene que decirle su nombre de usuario como estábamos haciendo.
+
+Cuando un usuario pide la lista de los usuarios conectados este recibirá una lista con dichos usuarios. Entonces cuando el cliente 1 quiere contactar con el cliente 2 cifrará una contraseña AES que haya generado con la K pub de B.
+
+B la recibe y ya sabra como poder comunicarse entre ellos.
+
+-Tenemos que hacer que el servidor almacene la contraseña AES generada dos veces, cifrados con las dos contraseñas publicas de los clientes.
+
+
+Cuando un cliente A quiere hablar de nuevo con uno B si ya tiene el servidor la contraseña de la conversación se la da a los clientes sin tener que generarse una nueva contraseña.
+
+Así resolvemos el problema con la BD ya que una conversación siempre va a tener la misma contraseña AES de principio a fin

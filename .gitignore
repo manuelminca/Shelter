@@ -1,4 +1,5 @@
 /Shelter/nbproject/private/
+/Shelter/nbproject/private/private.xml
 /Shelter/build/
 /ShelterServer/nbproject/private/
 /ShelterServer/build/
@@ -11,3 +12,6 @@
 /ShelterClient/build/
 /ShelterClient/dist/
 /Shelter/dist/
+/ShelterServer/dist/
+/HASHCODE2018/nbproject/private/
+/ShelterDB/
